@@ -19,8 +19,8 @@ class Board:
         board_printout = ""
         for row in range(0,8):
             row_printout = ""
-            for square in range(0,8):
-                occupant = self.state[row][square]
+            for position in range(0,8):
+                occupant = self.state[row][position]
                 if occupant == "":
                     row_printout += "[ ]"
                 else:
@@ -34,19 +34,14 @@ class Board:
 
 
     def piece_at(self, position: str):
-        if len(position) != 2:
-            raise Exception("Position length ", len(position), " expected 2")
-        if not position[0].isalpha():
-            raise Exception("Position " + position + " in unexpected format.")
-        if not position[1].isdigit():
-            raise Exception("Position " + position + " in unexpected format.")
-        
-        #When playing as white, we want to call bottom up
-        column_index = ord(position[0]) - 97
-        row_index = 8 - int(position[1])
-        print(row_index, column_index)
-        return self.state[row_index][column_index]
+        try:
+            column_index = ord(position[0]) - 97
+            row_index = 8 - int(position[1])
+            return self.state[row_index][column_index]
+        except:
+            raise Exception("Position in unexpected format")
     
 
 test = Board(None)
+print(test.piece_at("as"))
 print(test)
