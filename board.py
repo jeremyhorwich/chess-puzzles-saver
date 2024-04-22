@@ -15,6 +15,7 @@ class Board:
 
 
     def __str__(self):
+        #Pretty print self.state
         board_printout = ""
         for row in range(0,8):
             row_printout = ""
