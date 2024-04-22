@@ -31,7 +31,3 @@ class Knight(Piece):
 
 class Pawn(Piece):
     pass
-
-
-piece_one = Queen("White")
-print(piece_one)
