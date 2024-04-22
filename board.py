@@ -1,17 +1,31 @@
 import piece
 
 class Board:
-    state = [[[],[],[],[],[],[],[],[]],
-             [[],[],[],[],[],[],[],[]],
-             [[],[],[],[],[],[],[],[]],
-             [[],[],[],[],[],[],[],[]],
-             [[],[],[],[],[],[],[],[]],
-             [[],[],[],[],[],[],[],[]],
-             [[],[],[],[],[],[],[],[]],
-             [[],[],[],[],[],[],[],[]] ]
+    state = [["","","","","","","",""],
+             ["","","","","","","",""],
+             ["","","","","","","",""],
+             ["","","","","","","",""],
+             ["","","","","","","",""],
+             ["","","","","","","",""],
+             ["","","","","","","",""],
+             ["","","","","","","",""]]
     
     def __init__(self, pos_data):
         pass
+
+
+    def __str__(self):
+        board_printout = ""
+        for row in range(0,8):
+            row_printout = ""
+            for square in range(0,8):
+                occupant = self.state[row][square]
+                if occupant == "":
+                    row_printout += "[ ]"
+                else:
+                    row_printout += "[" + occupant + "]"
+            board_printout += row_printout + "\n"
+        return board_printout
 
 
     def insert_piece(self, position, piece: piece):
@@ -31,3 +45,7 @@ class Board:
         row_index = 8 - int(position[1])
         print(row_index, column_index)
         return self.state[row_index][column_index]
+    
+
+test = Board(None)
+print(test)
