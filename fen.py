@@ -1,27 +1,35 @@
-def load(fen):
-    pass
+#Format of FEN:
+#(1) Piece positions, (2) Whose move (3) Castling rights
+#(4) En passant availability (5) Halfmoves (6) FulllMoves
 
-#Change piece position to array object
-def covert_raw_to_array_readable(raw: str, 
-                                 row_offset: int,
-                                 column_offset) -> list[tuple]:
-    true_row = 8 - row_offset
-    column_offset
-    return (raw, row_offset, column_offset)
-    #TODO - is this function doing anything useful?
+#Sample FEN (for reference):
+#8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50
 
-class Fen():
-    def __init__(self, raw: str):
-        char_generator = enumerate(raw)
-        next_char = next(char_generator)
+#TODO: Format error handling
 
-        #TODO: Handle errors
+def get_piece_coordinates(raw: str) -> list[tuple]:
+    coordinates = list()
+    current_row = 0
+    current_column = 0
+    for char in raw:
+        if char == "/":
+            current_row += 1
+            current_column = 0
+            continue
+        if char.isdigit():
+            current_column += int(char)
+            continue
+        coordinates.append((current_row,current_column,char))
+        current_column += 1
+    return coordinates
 
-        while (next_char != " "):
-            current_char = next_char
-            #Interact with the board
+def get_turn(raw: str) -> str:
+    if raw == "w":
+        return 0
+    return 1
 
-            #"piece" "a" "1"
-            next_char = next(char_generator)
-
-    pass
+def load(fen: str):
+    fields = fen.split()
+    fields[0] = get_piece_coordinates(fields[0])
+    fields[1] = get_turn(fields[1])
+    return fields
