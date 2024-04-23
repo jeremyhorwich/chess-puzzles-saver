@@ -15,8 +15,10 @@ class Board:
     halfmoves = 0
     fullmoves = 0
     
-    def __init__(self, **position_data):
-        for key, value in position_data.items():
+    #TODO: Protect this from being able to update ANY attribute
+    def __init__(self, piece_coordinates, **extrapositional_data):
+        self.insert_pieces(piece_coordinates)
+        for key, value in extrapositional_data.items():
             setattr(self, key, value)
 
 
@@ -43,8 +45,10 @@ class Board:
         return printout
 
 
-    def insert_piece(self, position, piece: piece):
-        pass
+    def insert_pieces(self, piece_coordinates: list):
+        for location_info in piece_coordinates:            
+            row,column,piece = location_info[0], location_info[1], location_info[2]
+            self.state[row][column] = piece
 
 
     def piece_at(self, position: str):
@@ -54,7 +58,8 @@ class Board:
             return self.state[row_index][column_index]
         except:
             raise Exception("Position in unexpected format")
-    
-
-test = Board()
-print(test)
+        
+from fen import load
+test_data = load("8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50")
+new_board = Board(test_data[0], castling=test_data[2], en_passant=test_data[3], halfmoves=test_data[4], turn=test_data[1], fullmoves=test_data[5])
+print(new_board)
