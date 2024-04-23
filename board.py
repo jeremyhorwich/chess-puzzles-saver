@@ -9,14 +9,28 @@ class Board:
              ["","","","","","","",""],
              ["","","","","","","",""],
              ["","","","","","","",""]]
+    turn = 0
+    castling = "-"
+    en_passant = "-"
+    halfmoves = 0
+    fullmoves = 0
     
-    def __init__(self, pos_data):
-        pass
+    def __init__(self, **position_data):
+        for key, value in position_data.items():
+            setattr(self, key, value)
 
 
     def __str__(self):
-        #Pretty print self.state
-        board_printout = ""
+        printout = ""
+        if self.turn == 0:
+            printout += "White to move     "
+        else:
+            printout += "Black to move     "
+        printout += "Castling: " + self.castling + "     "
+        printout += "En Passant: " + self.en_passant + "\n"
+        printout += "Halfmoves: " + str(self.halfmoves) + "     "
+        printout += "Fullmoves: " + str(self.fullmoves) + "\n"
+
         for row in range(0,8):
             row_printout = ""
             for position in range(0,8):
@@ -25,8 +39,8 @@ class Board:
                     row_printout += "[ ]"
                 else:
                     row_printout += "[" + occupant + "]"
-            board_printout += row_printout + "\n"
-        return board_printout
+            printout += row_printout + "\n"
+        return printout
 
 
     def insert_piece(self, position, piece: piece):
@@ -42,6 +56,5 @@ class Board:
             raise Exception("Position in unexpected format")
     
 
-test = Board(None)
-print(test.piece_at("as"))
+test = Board()
 print(test)
