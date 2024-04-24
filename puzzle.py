@@ -1,12 +1,10 @@
-from board import Board
-
 class Puzzle:
-    position = Board()
+    position = None
     solution = None
     explanation = None
 
-    def __init__(self, position: Board, solution: str, explanation: str):
-        self.position = position
+    def __init__(self, fen: str, solution: str, explanation: str):
+        self.fen = fen
         self.solution = solution
         self.explanation = explanation
         
