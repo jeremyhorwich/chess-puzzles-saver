@@ -1,4 +1,8 @@
-import piece
+#TODO: Format error handling
+def algebraic_to_coord(algebraic_position: str) -> tuple[int, int]:
+    column = ord(algebraic_position[0]) - 97
+    row = 8 - int(algebraic_position[1])
+    return row, column
 
 class Board:
     state = [["","","","","","","",""],
@@ -51,13 +55,9 @@ class Board:
             self.state[row][column] = piece
 
 
-    def piece_at(self, position: str):
-        try:
-            column_index = ord(position[0]) - 97
-            row_index = 8 - int(position[1])
-            return self.state[row_index][column_index]
-        except:
-            raise Exception("Position in unexpected format")
+    def piece_at(self, algebraic_position: str):
+        row, column = algebraic_to_coord(algebraic_position)
+        return self.state[row][column]
         
 from fen import load
 test_data = load("8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50")
