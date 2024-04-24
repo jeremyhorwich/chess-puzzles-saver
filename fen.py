@@ -6,8 +6,9 @@
 #8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50
 
 #TODO: Format error handling
-
-def get_piece_coordinates(raw: str) -> list[tuple]:
+#TODO: Change to convert to algebraic notation, then in Board convert
+#   to coordinates. We don't need to know coords outside of board
+def _get_piece_coordinates(raw: str) -> list[tuple]:
     coordinates = list()
     current_row = 0
     current_column = 0
@@ -23,13 +24,13 @@ def get_piece_coordinates(raw: str) -> list[tuple]:
         current_column += 1
     return coordinates
 
-def get_turn(raw: str) -> str:
+def _get_turn(raw: str) -> str:
     if raw == "w":
         return 0
     return 1
 
 def load(fen: str):
     fields = fen.split()
-    fields[0] = get_piece_coordinates(fields[0])
-    fields[1] = get_turn(fields[1])
+    fields[0] = _get_piece_coordinates(fields[0])
+    fields[1] = _get_turn(fields[1])
     return fields
