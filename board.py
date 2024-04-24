@@ -4,6 +4,8 @@ def _algebraic_to_coord(algebraic_position: str) -> tuple[int, int]:
     row = 8 - int(algebraic_position[1])
     return row, column
 
+#TODO: Should fen functionality be in here instead? 
+
 class Board:
     state = [["","","","","","","",""],
              ["","","","","","","",""],
@@ -68,12 +70,3 @@ class Board:
         self.state[origin_row][origin_column] = ""
         self.state[target_row][target_column] = piece
         #NOTE: Here is where we would log the capture
-        
-from fen import load
-test_data = load("8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50")
-new_board = Board(test_data[0], castling=test_data[2], en_passant=test_data[3], halfmoves=test_data[4], turn=test_data[1], fullmoves=test_data[5])
-print(new_board)
-new_board.move_piece("f7", "g7")
-print(new_board) 
-
-#Desired state: new_board.move_piece("f7", "g7")
