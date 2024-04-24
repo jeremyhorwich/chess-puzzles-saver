@@ -1,5 +1,5 @@
 #TODO: Format error handling
-def algebraic_to_coord(algebraic_position: str) -> tuple[int, int]:
+def _algebraic_to_coord(algebraic_position: str) -> tuple[int, int]:
     column = ord(algebraic_position[0]) - 97
     row = 8 - int(algebraic_position[1])
     return row, column
@@ -51,15 +51,29 @@ class Board:
 
     def insert_pieces(self, piece_coordinates: list):
         for location_info in piece_coordinates:            
-            row,column,piece = location_info[0], location_info[1], location_info[2]
+            row,column = location_info[0], location_info[1]
+            piece = location_info[2]
             self.state[row][column] = piece
 
 
     def piece_at(self, algebraic_position: str):
-        row, column = algebraic_to_coord(algebraic_position)
+        row, column = _algebraic_to_coord(algebraic_position)
         return self.state[row][column]
+    
+    #TODO: Legality
+    def move_piece(self, origin: str, target: str):
+        origin_row, origin_column = _algebraic_to_coord(origin)
+        target_row, target_column = _algebraic_to_coord(target)
+        piece = self.state[origin_row][origin_column]
+        self.state[origin_row][origin_column] = ""
+        self.state[target_row][target_column] = piece
+        #NOTE: Here is where we would log the capture
         
 from fen import load
 test_data = load("8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50")
 new_board = Board(test_data[0], castling=test_data[2], en_passant=test_data[3], halfmoves=test_data[4], turn=test_data[1], fullmoves=test_data[5])
 print(new_board)
+new_board.move_piece("f7", "g7")
+print(new_board) 
+
+#Desired state: new_board.move_piece("f7", "g7")
