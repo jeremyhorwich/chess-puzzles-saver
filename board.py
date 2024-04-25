@@ -6,26 +6,25 @@ def _algebraic_to_coord(algebraic_position: str) -> tuple[int, int]:
 
 #TODO: Should fen functionality be in here instead? 
 
-class Board:
-    state = [["","","","","","","",""],
-             ["","","","","","","",""],
-             ["","","","","","","",""],
-             ["","","","","","","",""],
-             ["","","","","","","",""],
-             ["","","","","","","",""],
-             ["","","","","","","",""],
-             ["","","","","","","",""]]
-    turn = 0
-    castling = "-"
-    en_passant = "-"
-    halfmoves = 0
-    fullmoves = 0
-    
+class Board: 
     #TODO: Protect this from being able to update ANY attribute
-    def __init__(self, piece_coordinates, **extrapositional_data):
+    def __init__(self, piece_coordinates, turn="w", castling="-",
+                 en_passant="-", halfmoves=0, fullmoves=0):
+        self.state = [["","","","","","","",""],
+                      ["","","","","","","",""],
+                      ["","","","","","","",""],
+                      ["","","","","","","",""],
+                      ["","","","","","","",""],
+                      ["","","","","","","",""],
+                      ["","","","","","","",""],
+                      ["","","","","","","",""]]
+        self.turn = turn
+        self.castling = castling
+        self.en_passant = en_passant
+        self.halfmoves = halfmoves
+        self.fullmoves = fullmoves
+        
         self.insert_pieces(piece_coordinates)
-        for key, value in extrapositional_data.items():
-            setattr(self, key, value)
 
 
     def __str__(self):
