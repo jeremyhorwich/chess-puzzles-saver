@@ -1,4 +1,5 @@
 import os
+from board import Board
 
 PUZZLESET_DIRECTORY = "sets/"
 
@@ -9,10 +10,18 @@ class Puzzle:
         self.explanation = explanation
     
     def test(self):
-        #Load the board
-        #Input a potential solution
-        #If solution is wrong then display correct and explanation
-        pass
+        board = Board(self.fen)
+        print(board)
+        guess = input("Solution? ")
+        if guess == self.solution:
+            #Test on the rest of the variation?
+            print("Correct!")
+        else:
+            print(f"Wrong. Correct is {self.solution}")
+            #Show the rest of the variation?
+    
+    def raw(self) -> str:
+        return f"{self.fen}|{self.solution}|{self.explanation}"
 
 
 def save(puzzle: Puzzle, filename: str):
@@ -23,9 +32,8 @@ def save(puzzle: Puzzle, filename: str):
     #TODO: Eventually we swtich to JSON formats
     #TODO: Loop through group of puzzles (so we don't open and close
     #   repeatedly)
-    export = puzzle.fen + "|" + puzzle.solution + "|" + puzzle.explanation
-
-    puzzleset.write("\n" + export)
+    
+    puzzleset.write("\n" + puzzle.raw())
     puzzleset.close()
 
 
