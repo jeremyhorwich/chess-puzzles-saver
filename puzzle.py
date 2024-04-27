@@ -7,6 +7,12 @@ class Puzzle:
         self.fen = fen
         self.solution = solution
         self.explanation = explanation
+    
+    def test(self):
+        #Load the board
+        #Input a potential solution
+        #If solution is wrong then display correct and explanation
+        pass
 
 
 def save(puzzle: Puzzle, filename: str):
