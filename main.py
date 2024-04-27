@@ -21,17 +21,19 @@ def load_starting_menu():
         case "4":
             display_import_puzzle_menu()
 
-def display_load_puzzleset_menu() -> list[Puzzle]:
+
+def display_load_puzzleset_menu():
     puzzlesets = os.listdir(PUZZLESET_DIRECTORY)
     puzzlesets_to_display = ""
     for each in puzzlesets:                 #TODO String comprehension?
         puzzlesets_to_display += each + " "
     print(puzzlesets_to_display)
     choice = input("Load which set? ")
-    load_set(choice)
+    puzzles_to_play = load_set(choice)
+    for puzzle in puzzles_to_play:
+        puzzle.test()
 
     
-
 def display_import_puzzle_menu():
     print("1. Many (from file)") 
     print("2. One")
@@ -40,6 +42,7 @@ def display_import_puzzle_menu():
     match choice:
         case "2":
             display_create_new_puzzle_menu()
+
 
 def display_create_new_puzzle_menu():
     fen = input("Fen? ")
