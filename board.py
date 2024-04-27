@@ -4,12 +4,46 @@ def _algebraic_to_coord(algebraic_position: str) -> tuple[int, int]:
     row = 8 - int(algebraic_position[1])
     return row, column
 
-#TODO: Should fen functionality be in here instead? 
+#TODO: Format error handling
+#TODO: Change to convert to algebraic notation, then in Board convert
+#   to coordinates. We don't need to know coords outside of board
+def _get_piece_coordinates(raw: str) -> list[tuple]:
+    coordinates = list()
+    current_row = 0
+    current_column = 0
+    for char in raw:
+        if char == "/":
+            current_row += 1
+            current_column = 0
+            continue
+        if char.isdigit():
+            current_column += int(char)
+            continue
+        coordinates.append((current_row,current_column,char))
+        current_column += 1
+    return coordinates
+
+def _get_turn(raw: str) -> str:
+    if raw == "w":
+        return 0
+    return 1
+
+#Format of FEN:
+#(1) Piece positions, (2) Whose move (3) Castling rights
+#(4) En passant availability (5) Halfmoves (6) FullMoves
+
+#Sample FEN (for reference):
+#8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50
+
+def _load(fen: str) -> list:
+    fields = fen.split()
+    fields[0] = _get_piece_coordinates(fields[0])
+    fields[1] = _get_turn(fields[1])
+    return fields
 
 class Board: 
     #TODO: Protect this from being able to update ANY attribute
-    def __init__(self, piece_coordinates, turn="w", castling="-",
-                 en_passant="-", halfmoves=0, fullmoves=0):
+    def __init__(self, fen: str):
         self.state = [["","","","","","","",""],
                       ["","","","","","","",""],
                       ["","","","","","","",""],
@@ -18,13 +52,16 @@ class Board:
                       ["","","","","","","",""],
                       ["","","","","","","",""],
                       ["","","","","","","",""]]
-        self.turn = turn
-        self.castling = castling
-        self.en_passant = en_passant
-        self.halfmoves = halfmoves
-        self.fullmoves = fullmoves
         
-        self.insert_pieces(piece_coordinates)
+        unpacked_fen = _load(fen)
+
+        self.turn = unpacked_fen[1]
+        self.castling = unpacked_fen[2]
+        self.en_passant = unpacked_fen[3]
+        self.halfmoves = unpacked_fen[4]
+        self.fullmoves = unpacked_fen[5]
+        
+        self.insert_pieces(unpacked_fen[0])
 
 
     def __str__(self):
