@@ -98,6 +98,7 @@ class Board:
         row, column = _algebraic_to_coord(algebraic_position)
         return self.state[row][column]
     
+    
     #TODO: Legality
     def move_piece(self, origin: str, target: str):
         origin_row, origin_column = _algebraic_to_coord(origin)
