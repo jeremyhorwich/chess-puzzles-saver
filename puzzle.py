@@ -23,16 +23,15 @@ class Puzzle:
     def raw(self) -> str:
         return f"{self.fen}|{self.solution}|{self.explanation}"
 
-
+#TODO: Eventually we swtich to JSON formats
+#TODO: Loop through group of puzzles (so we don't open and close
+#   repeatedly)
 def save(puzzle: Puzzle, filename: str):
     filepath = os.path.join(PUZZLESET_DIRECTORY, filename + ".txt")
     puzzleset = open(filepath,"a")
 
     #TODO: Don't put in newline if file doesn't exist
-    #TODO: Eventually we swtich to JSON formats
-    #TODO: Loop through group of puzzles (so we don't open and close
-    #   repeatedly)
-    
+
     puzzleset.write("\n" + puzzle.raw())
     puzzleset.close()
 
