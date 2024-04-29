@@ -1,8 +1,6 @@
-from puzzle import Puzzle, save, PUZZLESET_DIRECTORY, load_set
+import puzzle
+import random
 import os
-
-def create_new_puzzleset():
-    pass
 
 def load_starting_menu():
     print("1. Load Set")
@@ -20,19 +18,48 @@ def load_starting_menu():
 
 
 def display_load_puzzleset_menu():
-    puzzlesets = os.listdir(PUZZLESET_DIRECTORY)
-    puzzlesets_to_display = ""
-    for each in puzzlesets:                 #TODO String comprehension?
-        puzzlesets_to_display += each + " "
-    print(puzzlesets_to_display)
+    print("Current puzzles: " + puzzle.current_saved())
     choice = input("Load which set? ")
-    puzzles_to_play = load_set(choice)
-    for puzzle in puzzles_to_play:
-        puzzle.play()
+    puzzles_to_play = puzzle.load_set(choice)
+    for p in puzzles_to_play:
+        p.play()
 
-    
+
 def display_generate_random_menu():
-    pass
+    size = int(input("Number of puzzles to include? "))
+    print("Current puzzles: " + puzzle.current_saved())
+    tags_raw = input("Which sets do you want to include? ")
+    tags = tags_raw.split()
+    proportion_limit = size // len(tags)
+
+    loaded_sets = list()
+    for tag in tags:
+        loaded_sets.append(puzzle.load_set(tag))
+    
+    generated = set()
+    number_of_puzzles_represented = [0]*len(loaded_sets)
+
+    while (len(generated) < size):
+        tag_to_add_from = random.randint(0,len(loaded_sets) - 1)
+        if number_of_puzzles_represented[tag_to_add_from] > proportion_limit:
+            loaded_sets.pop(tag_to_add_from)
+            number_of_puzzles_represented.pop(tag_to_add_from)
+            continue
+        
+        current_puzzles_to_choose = loaded_sets[tag_to_add_from]
+        number_of_puzzles_represented[tag_to_add_from] += 1
+
+        added = False
+        while (not added):
+            #TODO: Not good - what happens if we add the last of 50 puzzles?
+            index_to_add = random.int(0,len(current_puzzles_to_choose) - 1)
+            puzzle_to_add = current_puzzles_to_choose[index_to_add]
+            if puzzle_to_add not in generated:
+                generated.add(puzzle_to_add)
+                added = True
+    
+    for p in generated:
+        p.play()
 
 
 def display_import_puzzle_menu():
@@ -49,11 +76,11 @@ def display_create_new_puzzle_menu():
     fen = input("Fen? ")
     solution = input("Solution? ")
     explanation = input("Explanation? ")
-    new_puzzle = Puzzle(fen, solution, explanation)
+    new_puzzle = puzzle.Puzzle(fen, solution, explanation)
     tags_raw = input("\nTags? ")
     tags = tags_raw.split(", ")
     for tag in tags:
-        save(new_puzzle, tag)
+        puzzle.save(new_puzzle, tag)
 
 
 if __name__ == "__main__":
