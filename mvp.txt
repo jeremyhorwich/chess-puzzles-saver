@@ -1,14 +1,15 @@
 Minimum viable product:
 
 From the board:
-- Enter a move, see correct move and explanation
-- Be able to tag board after the fact (buttons: next, add tag, retry?)
+- Enter a move, see correct move and explanation                        DONE
+- Be able to tag board after the fact (buttons: next, add tag, retry?)  DONE
 
 From the main menu:
-- Load a new board or set of boards
+- Load a new board or set of boards                                     DONE
 - Create a new board from blank or starting position
 - Generate a set based on tags
 -   With options for size, difficulty rating
+- Play existing set                                                     DONE
 
 Extras:
 
