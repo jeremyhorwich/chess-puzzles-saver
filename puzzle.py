@@ -14,12 +14,18 @@ class Puzzle:
         print(board)
         guess = input("Solution? ")
         if guess == self.solution:
-            #Test on the rest of the variation?
+            #TODO: Test on the rest of the variation?
             print("Correct!")
         else:
             print(f"Wrong. Correct is {self.solution}")
-            #Show the rest of the variation?
-        #Adjust tags: difficulty, add new tag
+            #TODO: Show the rest of the variation?
+        adjust = input("Adjust tags? Y/N ")
+        if adjust.lower() != "y":
+            return
+        tags_raw = input("Tags to add? ")
+        tags = tags_raw.split(", ")
+        for tag in tags:
+            save(self, tag)
     
     def raw(self) -> str:
         return f"{self.fen}|{self.solution}|{self.explanation}"
