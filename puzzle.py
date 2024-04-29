@@ -9,7 +9,7 @@ class Puzzle:
         self.solution = solution
         self.explanation = explanation
     
-    def test(self):
+    def play(self):
         board = Board(self.fen)
         print(board)
         guess = input("Solution? ")
@@ -19,6 +19,7 @@ class Puzzle:
         else:
             print(f"Wrong. Correct is {self.solution}")
             #Show the rest of the variation?
+        #Adjust tags: difficulty, add new tag
     
     def raw(self) -> str:
         return f"{self.fen}|{self.solution}|{self.explanation}"
