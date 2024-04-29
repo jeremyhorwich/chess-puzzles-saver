@@ -7,7 +7,6 @@ From the board:
 From the main menu:
 - Load a new board or set of boards
 - Create a new board from blank or starting position
-- Construct a custom set
 - Generate a set based on tags
 -   With options for size, difficulty rating
 
