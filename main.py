@@ -1,6 +1,5 @@
 import puzzle
 import random
-import os
 
 def load_starting_menu():
     print("1. Load Set")
@@ -52,6 +51,7 @@ def display_generate_random_menu():
         added = False
         while (not added):
             #TODO: Not good - what happens if we add the last of 50 puzzles?
+            #Instead we should remove each from the list
             index_to_add = random.int(0,len(current_puzzles_to_choose) - 1)
             puzzle_to_add = current_puzzles_to_choose[index_to_add]
             if puzzle_to_add not in generated:

@@ -35,7 +35,7 @@ def _get_turn(raw: str) -> str:
 #Sample FEN (for reference):
 #8/5k2/3p4/1p1Pp2p/pP2Pp1P/P4P1K/8/8 b - - 99 50
 
-def _load(fen: str) -> list:
+def _fen_to_fields(fen: str) -> list:
     fields = fen.split()
     fields[0] = _get_piece_coordinates(fields[0])
     fields[1] = _get_turn(fields[1])
@@ -53,7 +53,7 @@ class Board:
                       ["","","","","","","",""],
                       ["","","","","","","",""]]
         
-        unpacked_fen = _load(fen)
+        unpacked_fen = _fen_to_fields(fen)
 
         self.turn = unpacked_fen[1]
         self.castling = unpacked_fen[2]

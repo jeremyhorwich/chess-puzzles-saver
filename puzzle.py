@@ -30,6 +30,7 @@ class Puzzle:
     def raw(self) -> str:
         return f"{self.fen}|{self.solution}|{self.explanation}"
 
+
 #TODO: Eventually we swtich to JSON formats
 #TODO: Loop through group of puzzles (so we don't open and close
 #   repeatedly)
@@ -51,3 +52,11 @@ def load_set(filename: str) -> list[Puzzle]:
         puzzle_data = line.split("|")
         loaded.append(Puzzle(puzzle_data[0],puzzle_data[1],puzzle_data[2]))
     return loaded
+
+
+def current_saved():
+    puzzlesets = os.listdir(PUZZLESET_DIRECTORY)
+    puzzlesets_to_display = ""
+    for each in puzzlesets:
+        puzzlesets_to_display += each + " "
+    return puzzlesets_to_display
