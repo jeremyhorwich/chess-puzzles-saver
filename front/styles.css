@@ -5,3 +5,25 @@
     color: #ffffff;
     font-family: Helvetica;
 }
+
+.board{
+    background-color: #bdbd8889;
+    width: 50%;
+    height: 0;
+    padding-bottom: 50%;
+    float: left;
+}
+
+.notation{
+    background-color: #8282e9fe;
+    width: 50%;
+    height: 200px;
+    float: left;
+}
+
+.otheroptions{
+    background-color: #067906;
+    width: 50%;
+    height: 100px;
+    float: left;
+}
