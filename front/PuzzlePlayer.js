@@ -1,4 +1,4 @@
-function App() {
+function PuzzlePlayer() {
   return (
     ShowPGN("Hello")
   );
@@ -10,4 +10,4 @@ function ShowPGN({ pgn }) {
     )
 }
 
-export default App;
+export default PuzzlePlayer;
