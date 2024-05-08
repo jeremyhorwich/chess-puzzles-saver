@@ -32,10 +32,10 @@ function Board() {
 
 
 function PuzzleMeta() {
-  const pgn = "1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. Nf3 d6 5. Bb5+ Bd7 6. Bc4 Bc6 7. O-O e6 8. d4"
+  const game1 = "1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. Nf3 d6 5. Bb5+ Bd7 6. Bc4 Bc6 7. O-O e6 8. d4"
   return (
     <div className="puzzleMeta">
-      <Notation/>
+      <Notation pgn={game1}/>
       <OtherOptions/>
     </div>
   )
