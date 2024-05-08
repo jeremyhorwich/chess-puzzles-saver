@@ -1,4 +1,6 @@
 import './styles.css'
+import './Components/PuzzleQuestionDisplay'
+import PuzzleQuestionDisplay from './Components/PuzzleQuestionDisplay'
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function PuzzleMeta() {
   return (
     <div className="puzzleMeta">
       <Notation pgn={game1}/>
+      <PuzzleQuestionDisplay question="placeholder" correctAnswer="button"/>
       <OtherOptions/>
     </div>
   )
