@@ -1,0 +1,22 @@
+Which components do I need?
+
+1. Chessboard
+- Load in position
+- Click and drag pieces
+- Click piece and target square to move
+- Illegal moves not allowed
+- Some indicator for checkmate
+2. PGN
+- Lists all the moves for the game
+    - If FEN then start at move 1
+- Scrollable when list gets too large
+- Click on move to show it on the board
+3. Options
+- Link out to various functionalities
+    - Such as play against computer, save puzzle to collection, etc.
+4. Header/Toolbar
+- Link out to different webpages
+5. Positional question / prompt
+- Display question
+- Buttons for answer (if move on board is not answer)
+- Display whether correct or incorrect
