@@ -1,6 +1,8 @@
 import { useState } from "react";
 import './puzzleQuestionStyle.css'
 
+export default PuzzleQuestionDisplay;
+
 type puzzleQuestion = {
     question: string;
     correctAnswer: string;
@@ -13,31 +15,32 @@ function PuzzleQuestionDisplay(props: puzzleQuestion) {
     function handleClick(key: number) {
         setSelectedAnswer(() => 
             (key === 0) ? "Correct!" : "Incorrect"
-        )
-    }
+        );
+    };
 
     return (
         <div className="puzzleQuestionDisplay">
             {props.question}
 
-            <ShuffledAnswers correctAnswer= {props.correctAnswer} 
-            wrongAnswers={props.wrongAnswers} handleClick={handleClick} />
+            <ShuffledAnswers correctAnswer={props.correctAnswer} 
+                wrongAnswers={props.wrongAnswers} handleClick={handleClick} />
             {selectedAnswer}            
         </div>
     )
 };
 
 type PuzzleAnswers = {
-    correctAnswer: string
-    wrongAnswers: Array<string>
-    handleClick: Function
+    correctAnswer: string;
+    wrongAnswers: Array<string>;
+    handleClick: Function;
 };
 
 function ShuffledAnswers(props: PuzzleAnswers) {
-    let nullAnswersArray = Array(props.wrongAnswers.length).fill(null);
+    const nullAnswersArray = Array(props.wrongAnswers.length).fill(null);
     const [randomizedAnswers, setAnswersState] = useState<Array<JSX.Element>>(nullAnswersArray);
 
-    if (randomizedAnswers[0] !== null) {
+    const alreadyRandomized = randomizedAnswers[0] !== null;
+    if (alreadyRandomized) {
         return (
             <div>{randomizedAnswers}</div>
         )
@@ -58,9 +61,8 @@ function ShuffledAnswers(props: PuzzleAnswers) {
         <button key={0} onClick={() => props.handleClick(0)}>
             {props.correctAnswer}
         </button>
-    )
+    );
 
-    //if (randomized) {    //Shuffle the answers (Fisher-Yates algorithm)
     let m = answers.length;
     while (m) {
         const i = Math.floor(Math.random() * m--);
@@ -73,5 +75,3 @@ function ShuffledAnswers(props: PuzzleAnswers) {
         <div>{answers}</div>
     )
 };
-
-export default PuzzleQuestionDisplay;
