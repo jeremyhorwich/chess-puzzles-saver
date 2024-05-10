@@ -1,0 +1,10 @@
+.chessboard {
+    display: grid; 
+    grid-template-columns: repeat(8,50px);
+    grid-template-rows: repeat(8, 50px);
+}
+
+.square {
+    height: 100%;
+    width: 100%;
+}
