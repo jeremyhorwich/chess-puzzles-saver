@@ -5,8 +5,9 @@ export default Chessboard
 function Chessboard(){
     function Square(index: number) {
     
-        const backgroundColor = ((index % 2) === 0) ? "#000000" : "#ffffff"
-    
+        const shouldBeBlack = ((Math.floor(index / 8) % 2) + (index % 2)) % 2 === 0
+        const backgroundColor = shouldBeBlack ? "#ffffff" : "#000000";
+   
         return (
             <div key={index} className="square" style={{ backgroundColor }} ></div>
         )

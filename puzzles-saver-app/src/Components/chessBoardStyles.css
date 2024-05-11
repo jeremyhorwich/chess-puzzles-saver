@@ -1,10 +1,15 @@
+
 .chessboard {
     display: grid; 
-    grid-template-columns: repeat(8,50px);
-    grid-template-rows: repeat(8, 50px);
+    grid-template-columns: repeat(8,75px);
+    grid-template-rows: repeat(8, 75px);
 }
 
 .square {
     height: 100%;
     width: 100%;
+    border-right: 1px solid #000000;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
 }
