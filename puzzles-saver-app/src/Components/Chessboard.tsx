@@ -15,7 +15,7 @@ function Chessboard(){
     
     const squares = Array<JSX.Element>(64)
     for (let i = 0; i < 64; i++) {
-        squares[i] = Square(i)
+        squares[i] = Square(i);
     }
     
     return (
@@ -24,8 +24,6 @@ function Chessboard(){
         </div>
     )
 }
-
-
 
 /* Draft 1:
 
