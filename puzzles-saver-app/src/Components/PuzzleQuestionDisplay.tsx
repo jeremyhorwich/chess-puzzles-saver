@@ -22,8 +22,10 @@ function PuzzleQuestionDisplay(props: puzzleQuestion) {
         <div className="puzzleQuestionDisplay">
             {props.question}
 
-            <ShuffledAnswers correctAnswer={props.correctAnswer} 
-                wrongAnswers={props.wrongAnswers} handleClick={handleClick} />
+            <ShuffledAnswers 
+                correctAnswer={props.correctAnswer} 
+                wrongAnswers={props.wrongAnswers} 
+                handleClick={handleClick} />
             {selectedAnswer}            
         </div>
     )
