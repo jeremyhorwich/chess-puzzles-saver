@@ -10,12 +10,10 @@ type puzzleQuestion = {
 }
 
 function PuzzleQuestionDisplay(props: puzzleQuestion) {
-    const [selectedAnswer, setSelectedAnswer] = useState<string>("");
+    const [msg, setMsg] = useState<string>("");
 
-    function handleClick(key: number) {
-        setSelectedAnswer(() => 
-            (key === 0) ? "Correct!" : "Incorrect"
-        );
+    function handleClick(selected: string) {
+        setMsg(selected);
     };
 
     return (
@@ -26,7 +24,7 @@ function PuzzleQuestionDisplay(props: puzzleQuestion) {
                 correctAnswer={props.correctAnswer} 
                 wrongAnswers={props.wrongAnswers} 
                 handleClick={handleClick} />
-            {selectedAnswer}            
+            {msg}            
         </div>
     )
 };
@@ -48,11 +46,9 @@ function ShuffledAnswers(props: PuzzleAnswers) {
         )
     };
 
-    let answerKeys = 0;
     const answers = props.wrongAnswers.map((answer) => {
-        answerKeys++
         return ( 
-            <button key={answerKeys} onClick={() => props.handleClick(answerKeys)}>
+            <button key={answer} onClick={() => props.handleClick("Incorrect!")}>
                 {answer}
             </button>
         )
@@ -60,7 +56,7 @@ function ShuffledAnswers(props: PuzzleAnswers) {
     );
 
     answers.push(
-        <button key={0} onClick={() => props.handleClick(0)}>
+        <button key={props.correctAnswer} onClick={() => props.handleClick("Correc!")}>
             {props.correctAnswer}
         </button>
     );
