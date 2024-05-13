@@ -12,7 +12,10 @@ function Chessboard(){
     const borderColor = (highlighted < aboveHighestIndexValue) ? highlightColor : "#484848"
     const border = "1px solid " + borderColor;
     
-    function handleClick(squareIndex: number) {
+    function handleMouseDown(e : React.MouseEvent, squareIndex: number) {
+        if (e.button !== 0) {  //Not a left mouse click
+            return
+        }
         //Can put more complex logic here for moving pieces
         let newHighlighted = highlighted;
         if (highlighted < aboveHighestIndexValue) {
@@ -26,7 +29,7 @@ function Chessboard(){
     
     type SquareProps = {
         index: number,
-        handleClick: Function,
+        handleMouseDown: Function,
         highlight: string | null
     }
     
@@ -40,7 +43,7 @@ function Chessboard(){
         const id = columns[props.index % 8] + (Math.floor(props.index/8) + 1)
         
         return (
-            <div key={id} className="square" onClick={() => props.handleClick(props.index)} style={{ backgroundColor }}>
+            <div key={id} className="square" onMouseDown={(e) => props.handleMouseDown(e, props.index)} style={{ backgroundColor }}>
                 <img className="piece" src={whiteKing} alt="White King" />
             </div>
         )
@@ -50,9 +53,9 @@ function Chessboard(){
     const squares = Array<JSX.Element>(64)
     for (let i = 0; i < 64; i++) {
         if (i === highlighted) {        //Will this cause issues when we flip the board?
-            squares[i] = Square({index: i, handleClick: handleClick, highlight: highlightColor});
+            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, highlight: highlightColor});
         } else {
-            squares[i] = Square({index: i, handleClick: handleClick, highlight: null})
+            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, highlight: null})
         }
     }
 
