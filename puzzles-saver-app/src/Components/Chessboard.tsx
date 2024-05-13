@@ -1,26 +1,26 @@
 import { useState } from "react";
 import "./chessBoardStyles.css";
-export default Chessboard
+import whiteKing from "../assets/WhiteKing.svg"
+export default Chessboard;
 
 function Chessboard(){
-    const [highlighted, setHighlighted] = useState<number>(64)
+    const aboveHighestIndexValue = 64;
+
+    const [highlighted, setHighlighted] = useState<number>(aboveHighestIndexValue)
 
     const highlightColor = "#cccc95"
-    const borderColor = (highlighted < 64) ? highlightColor : "#000000"
-    const border = "1px solid " + borderColor
+    const borderColor = (highlighted < aboveHighestIndexValue) ? highlightColor : "#484848"
+    const border = "1px solid " + borderColor;
     
     function handleClick(squareIndex: number) {
         //Can put more complex logic here for moving pieces
         let newHighlighted = highlighted;
-        if (highlighted < 64) {
-            newHighlighted = 64;
+        if (highlighted < aboveHighestIndexValue) {
+            newHighlighted = aboveHighestIndexValue;
         } else {
             newHighlighted = squareIndex;
         }
-        setHighlighted(newHighlighted)
-        //Store the highlighted square as state
-        //Then when the board is clicked we match up the id of the square
-        //with the highlight below
+        setHighlighted(newHighlighted);
     }
     
     
@@ -33,14 +33,16 @@ function Chessboard(){
     
     function Square(props: SquareProps) {       
         const shouldBeBlack = ((Math.floor(props.index / 8) % 2) + (props.index % 2)) % 2 === 0;
-        let backgroundColor = shouldBeBlack ? "#ffffff" : "#000000";
+        let backgroundColor = shouldBeBlack ? "#ffffff" : "#484848";
         backgroundColor = (props.highlight !== null) ? props.highlight : backgroundColor;
               
         const columns = ["a","b","c","d","e","f","g","h"]
         const id = columns[props.index % 8] + (Math.floor(props.index/8) + 1)
         
         return (
-            <div key={id} className="square" onClick={() => props.handleClick(props.index)} style={{ backgroundColor }} ></div>
+            <div key={id} className="square" onClick={() => props.handleClick(props.index)} style={{ backgroundColor }}>
+                <img className="piece" src={whiteKing} alt="White King" />
+            </div>
         )
         
     }
