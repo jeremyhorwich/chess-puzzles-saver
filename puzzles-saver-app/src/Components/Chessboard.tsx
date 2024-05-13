@@ -1,35 +1,66 @@
 import { useState } from "react";
 import "./chessBoardStyles.css";
 import whiteKing from "../assets/WhiteKing.svg"
+import whiteQueen from "../assets/WhiteQueen.svg"
 export default Chessboard;
 
-function Chessboard(){
-    const aboveHighestIndexValue = 64;
+<img className="piece" src={whiteKing} alt="White King" />
 
-    const [highlighted, setHighlighted] = useState<number>(aboveHighestIndexValue)
+function Chessboard(){
+    //TODO: set up inital position based on fen passed in through prop
+
+    let initialPos: Array<JSX.Element|null> = Array(64).fill(null)
+    initialPos[23] = <img className="piece" src={whiteKing} alt="White King" />
+    initialPos[45] = <img className="piece" src={whiteQueen} alt="White King" />
+
+
+    const [highlightedSquare, setHighlighted] = useState<number|null>(null)
+
+    const [pieces, setPieces] = useState<Array<JSX.Element|null>>(initialPos)
+
+    /*
+ 
+    0. Create a list of pieces that hold the images
+    1. Update the board to take in a FEN as a prop
+    2. On the handleMouseDown event update the piece array
+
+    */
 
     const highlightColor = "#cccc95"
-    const borderColor = (highlighted < aboveHighestIndexValue) ? highlightColor : "#484848"
+    const borderColor = (highlightedSquare !== null) ? highlightColor : "#484848"
     const border = "1px solid " + borderColor;
     
-    function handleMouseDown(e : React.MouseEvent, squareIndex: number) {
+    function handleMouseDown(e : React.MouseEvent, squareClicked: number) {
         if (e.button !== 0) {  //Not a left mouse click
             return
         }
-        //Can put more complex logic here for moving pieces
-        let newHighlighted = highlighted;
-        if (highlighted < aboveHighestIndexValue) {
-            newHighlighted = aboveHighestIndexValue;
-        } else {
-            newHighlighted = squareIndex;
+
+        if (highlightedSquare === null) {
+            setHighlighted(squareClicked);
+            return
         }
-        setHighlighted(newHighlighted);
+
+        if (squareClicked === highlightedSquare) {
+            setHighlighted(null);
+            return
+        }
+
+        let newPieces = pieces.slice();
+        if (newPieces[highlightedSquare] !== null) {
+            newPieces[squareClicked] = newPieces[highlightedSquare];
+        }
+
+        newPieces[highlightedSquare] = null;
+        
+        setHighlighted(null)
+        setPieces(newPieces)
     }
     
     
     type SquareProps = {
         index: number,
         handleMouseDown: Function,
+        piece: JSX.Element | null,
         highlight: string | null
     }
     
@@ -44,7 +75,7 @@ function Chessboard(){
         
         return (
             <div key={id} className="square" onMouseDown={(e) => props.handleMouseDown(e, props.index)} style={{ backgroundColor }}>
-                <img className="piece" src={whiteKing} alt="White King" />
+                {props.piece}
             </div>
         )
         
@@ -52,10 +83,10 @@ function Chessboard(){
     
     const squares = Array<JSX.Element>(64)
     for (let i = 0; i < 64; i++) {
-        if (i === highlighted) {        //Will this cause issues when we flip the board?
-            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, highlight: highlightColor});
+        if (i === highlightedSquare) {        //Will this cause issues when we flip the board?
+            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, piece: pieces[i], highlight: highlightColor});
         } else {
-            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, highlight: null})
+            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, piece: pieces[i], highlight: null})
         }
     }
 
