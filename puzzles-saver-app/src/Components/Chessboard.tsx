@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./chessBoardStyles.css";
-import whiteKing from "../assets/WhiteKing.svg"
-import whiteQueen from "../assets/WhiteQueen.svg"
+import whiteKing from "../assets/WhiteKing.png"
+import whiteQueen from "../assets/WhiteQueen.png"
 export default Chessboard;
 
 <img className="piece" src={whiteKing} alt="White King" />
@@ -10,27 +10,19 @@ function Chessboard(){
     //TODO: set up inital position based on fen passed in through prop
 
     let initialPos: Array<JSX.Element|null> = Array(64).fill(null)
-    initialPos[23] = <img className="piece" src={whiteKing} alt="White King" />
-    initialPos[45] = <img className="piece" src={whiteQueen} alt="White King" />
+    initialPos[23] = <img draggable className="piece" src={whiteKing} alt="White King" />
+    initialPos[45] = <img draggable className="piece" src={whiteQueen} alt="White King" />
 
 
     const [highlightedSquare, setHighlighted] = useState<number|null>(null)
 
     const [pieces, setPieces] = useState<Array<JSX.Element|null>>(initialPos)
 
-    /*
- 
-    0. Create a list of pieces that hold the images
-    1. Update the board to take in a FEN as a prop
-    2. On the handleMouseDown event update the piece array
-
-    */
-
     const highlightColor = "#cccc95"
     const borderColor = (highlightedSquare !== null) ? highlightColor : "#484848"
     const border = "1px solid " + borderColor;
     
-    function handleMouseDown(e : React.MouseEvent, squareClicked: number) {
+    function handleMouseDown(e: React.MouseEvent, squareClicked: number) {
         if (e.button !== 0) {  //Not a left mouse click
             return
         }
