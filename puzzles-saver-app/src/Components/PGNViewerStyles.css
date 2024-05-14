@@ -1,0 +1,10 @@
+.pgn {
+    display: flexbox;
+    justify-content: space-around;
+    border: 1px solid #000000;
+    width: 500px;
+}
+
+.pgnMove {
+    font: 1em sans-serif;
+}
