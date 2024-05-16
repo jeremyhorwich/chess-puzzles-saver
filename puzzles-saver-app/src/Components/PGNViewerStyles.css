@@ -8,3 +8,15 @@
 .pgnMove {
     font: 1em sans-serif;
 }
+
+.hoveredMove {
+    font: 1em sans-serif;
+    background-color: #818181;
+    color: #ffffff
+}
+
+.selectedMove {
+    font: 1em sans-serif;
+    background-color: #000000;
+    color: #ffffff
+}
