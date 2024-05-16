@@ -5,7 +5,7 @@ export default PGNViewer;
 
 //TODO: constant out the highlight and selection colors
 
-function PGNViewer(PGN: string) {
+function PGNViewer(props: {PGN: string}) {
     const testMoves = [
         "d4", "Nc6", "ef", "e6", "Nf3", "Nf6", "Bd3", "d5", "e5", "Nd7",
         "O-O", "b6", "Bg5", "f6", "exf6", "gxf6", "Bh4", "Qe7", "Re1", "Bb7",
@@ -19,8 +19,12 @@ function PGNViewer(PGN: string) {
     
     //TODO: convert PGN to list of moves
     
-    function handleOnMouseOver(index: number) {
+    function handleMouseOver(index: number) {
         setHovered(index);
+    }
+    
+    function handleMouseLeave() {
+        setHovered(null);
     }
 
     function handleClick(index: number) {
@@ -39,22 +43,24 @@ function PGNViewer(PGN: string) {
         }
 
         return (
-            <div>
-                {shouldDisplayMoveNumber && <div>{Math.floor(index/2)}</div>}
-                <div 
+            <span>
+                {shouldDisplayMoveNumber && <span>{Math.floor(index/2) + 1}. </span>}
+                <span 
                     className={moveClass}
-                    onMouseOver={() => handleOnMouseOver(index)}
+                    onMouseOver={() => handleMouseOver(index)}
+                    onMouseLeave={handleMouseLeave}
                     onClick={() => handleClick(index)}
                 >
                     {move}
-                </div>
-            </div>
+                  </span>
+                {" "}
+            </span>
         )
         })
 
     return (
         <div className="pgn">
-            {parsedMoves};
+            {parsedMoves}
         </div>
     )
 }
