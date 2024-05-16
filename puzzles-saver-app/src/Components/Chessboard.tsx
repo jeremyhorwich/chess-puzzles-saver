@@ -9,10 +9,33 @@ export default Chessboard;
 function Chessboard(){
     //TODO: set up inital position based on fen passed in through prop
 
-    let initialPos: Array<JSX.Element|null> = Array(64).fill(null)
-    initialPos[23] = <img draggable className="piece" src={whiteKing} alt="White King" />
-    initialPos[45] = <img draggable className="piece" src={whiteQueen} alt="White King" />
+    /*
 
+    Functionality in a nutshell:
+        - Two methods for moving piece
+            (A) Click twice. We click the origin square and the target
+                origin is highlighted, target is not. After target selected
+                or origin clicked again the highlight goes away
+            (B) Click to pick up and drag. We highlight the squares we are over.
+                Then when we drop we don't highlight anything anymore
+
+    On mouse up: 
+        - Signal we aren't highlighting anymore
+        - We log the square the moving piece is over and drop it there (If
+            square different from start)
+
+    */
+
+
+
+
+    let initialPos: Array<JSX.Element|null> = Array(64).fill(null)
+    initialPos[23] = <img draggable onDragStart={handleDragStart} className="piece" src={whiteKing} alt="White King" />
+    initialPos[45] = <img draggable onDragStart={handleDragStart} className="piece" src={whiteQueen} alt="White King" />
+
+    function handleDragStart(event: React.DragEvent<HTMLImageElement>) {
+        event.preventDefault()
+    }
 
     const [highlightedSquare, setHighlighted] = useState<number|null>(null)
 
