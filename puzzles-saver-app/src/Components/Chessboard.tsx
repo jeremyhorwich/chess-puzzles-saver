@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { CSSProperties, useState } from "react";
 import "./chessBoardStyles.css";
 import whiteKing from "../assets/WhiteKing.png"
 import whiteQueen from "../assets/WhiteQueen.png"
@@ -6,52 +6,35 @@ export default Chessboard;
 
 function Chessboard(){
     //TODO: set up inital position based on fen passed in through prop
-
-    /*
-
-    Functionality in a nutshell:
-        - Two methods for moving piece
-            (A) Click twice. We click the origin square and the target
-                origin is highlighted, target is not. After target selected
-                or origin clicked again the highlight goes away
-            (B) Click to pick up and drag. We highlight the squares we are over.
-                Then when we drop we don't highlight anything anymore
-
-    On drag start
-    On drag over
-        - Set drop zone as that element (state variable)
-
-    On drop
-
-    */
-   
-   
-   const [selectedSquare, setSelected] = useState<number|null>(null);
-   const [hoveredSquare, setHovered] = useState<number|null>(null);
-   const [isDragging, setIsDragging] = useState<Boolean>(false)
-   const [pieces, setPieces] = useState<Array<JSX.Element|null>>(Array(64).fill(null));
-   const [position, setPosition] = useState({x: 0, y: 0})
+    const [position, setPosition] = useState({x: 0, y: 0})
+    const [isDragging, setIsDragging] = useState<Boolean>(false)
+    
+    const styles: CSSProperties = {
+        position: "absolute",
+        left: position.x,
+        top: position.y,
+        cursor: isDragging ? "grabbing" : "grab"
+    }
+    
+    let initialPos: Array<JSX.Element|null> = Array(64).fill(null);
+    
+    initialPos[23] = <img draggable="false"
+                        onMouseMove={handleMouseMove}
+                        className="piece" 
+                        src={whiteKing} 
+                        style={styles}
+                        alt="White King" />;
+    
+    initialPos[45] = <img draggable className="piece" src={whiteQueen} alt="White King" />;
+    
+    const [selectedSquare, setSelected] = useState<number|null>(null);
+    const [hoveredSquare, setHovered] = useState<number|null>(null);
+    const [pieces, setPieces] = useState<Array<JSX.Element|null>>(initialPos);
    
    const highlightColor = "#cccc95";
    const borderColor = (selectedSquare !== null) ? highlightColor : "#484848";
    const border = "1px solid " + borderColor;
    
-   let initialPos: Array<JSX.Element|null> = Array(64).fill(null);
-   initialPos[23] = <img draggable="false"
-                       className="piece" 
-                       src={whiteKing} 
-                       alt="White King" />;
-   
-   initialPos[45] = <img draggable className="piece" src={whiteQueen} alt="White King" />;
-
-   setPieces(initialPos)   //THIS WILL NOT WORK
-
-   const styles = {
-       position: "absolute",
-       left: position.x,
-       right: position.y,
-       cursor: isDragging ? "grabbing" : "grab"
-   }
    
    
    function handleMouseDown(e: React.MouseEvent, squareClicked: number) {
@@ -100,14 +83,15 @@ function Chessboard(){
             return
         }
 
-        if (hoveredSquare !== selectedSquare) {
-            setHovered(hoveredSquare);
+        if (squareOver !== selectedSquare) {
+            setHovered(squareOver);
         }
     }
 
     function handleMouseUp(squareOver: number) {
         setIsDragging(false)
         setHovered(null)
+        setSelected(squareOver)
         //If we've left the square we started on, then drop piece there
     }
     
@@ -128,7 +112,12 @@ function Chessboard(){
         const id = columns[props.index % 8] + (Math.floor(props.index/8) + 1)
         
         return (
-            <div key={id} className="square" onMouseDown={(e) => props.handleMouseDown(e, props.index)} style={{ backgroundColor }}>
+            <div key={id} 
+                className="square" 
+                onMouseDown={(e) => props.handleMouseDown(e, props.index)} 
+                onMouseOver={() => handleMouseOver(props.index)}            //TODO move these function through props
+                onMouseUp={() => handleMouseUp(props.index)}
+                style={{ backgroundColor }}>
                 {props.piece}
             </div>
         )
@@ -137,7 +126,7 @@ function Chessboard(){
     
     const squares = Array<JSX.Element>(64)
     for (let i = 0; i < 64; i++) {
-        if (i === selectedSquare) {        //Will this cause issues when we flip the board?
+        if (i === selectedSquare || i === hoveredSquare) {        //Will this cause issues when we flip the board?
             squares[i] = Square({index: i, handleMouseDown: handleMouseDown, piece: pieces[i], highlight: highlightColor});
         } else {
             squares[i] = Square({index: i, handleMouseDown: handleMouseDown, piece: pieces[i], highlight: null})
