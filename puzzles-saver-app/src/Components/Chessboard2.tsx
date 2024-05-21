@@ -62,8 +62,11 @@ function Chessboard2(){
         piecesCopy[targetSquare] = null;
         setPieces(piecesCopy);
 
-        position.x = e.clientX;     //TODO dynamic board size and position
-        position.y = e.clientY; 
+        const containerRect = e.currentTarget.getBoundingClientRect();
+        const mouseX = e.clientX - 75/2;
+        const mouseY = e.clientY - 75/2;
+
+        setPosition({x: mouseX, y: mouseY})
         
         //Should we set pieces position to be equal to the mouse here?
     }
@@ -73,8 +76,8 @@ function Chessboard2(){
         
         //TODO: Return center of this thing rather than weird quasi-middle
         const containerRect = e.currentTarget.getBoundingClientRect();
-        const mouseX = e.clientX - containerRect.left - 75/2;
-        const mouseY = e.clientY - containerRect.top - 75/2;
+        const mouseX = e.clientX - 75/2;
+        const mouseY = e.clientY - 75/2;
 
         setPosition({x: mouseX, y: mouseY});
     }
