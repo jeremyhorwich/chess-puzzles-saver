@@ -2,15 +2,18 @@ import React, { CSSProperties, useState, useRef } from "react";
 import "./chessBoardStyles.css";
 import whiteKing from "../assets/WhiteKing.png"
 import whiteQueen from "../assets/WhiteQueen.png"
+import useComponentSize from "../hooks/useComponentSize";
 export default Chessboard2;
 
 //TODO Handle what happens when mouse exits bounds of components
 
 function Chessboard2(){
     //TODO: set up inital position based on fen passed in through prop
-    const [position, setPosition] = useState({x: 0, y: 0})
-    const [isDragging, setIsDragging] = useState<Boolean>(false)
-    const [isAiming, setIsAiming] = useState<Boolean>(false)
+    const [position, setPosition] = useState({x: 0, y: 0});
+    const [isDragging, setIsDragging] = useState<Boolean>(false);
+    const [isAiming, setIsAiming] = useState<Boolean>(false);
+
+    const chessBoardSize = 8*75;
 
     const styles: CSSProperties = {
         position: "absolute",
@@ -18,9 +21,6 @@ function Chessboard2(){
         top: position.y,
         cursor: isDragging ? "grabbing" : "grab"
     }
-
-    const chessboardRef = useRef<HTMLDivElement|null>(null)
-
     const initialPos: Array<JSX.Element|null> = Array(64).fill(null);
 
      const whiteKingTest = <img draggable="false"
@@ -36,7 +36,6 @@ function Chessboard2(){
                         alt="White King" />;
         
     const [selectedOrigin, setSelectedOrigin] = useState<number|null>(null);
-    const [hoveredSquare, setHoveredSquare] = useState<number|null>(null);
     const [pieces, setPieces] = useState<Array<JSX.Element|null>>(initialPos);
     const [dragPiece, setDragPiece] = useState<JSX.Element|null>(null)
 
@@ -46,17 +45,25 @@ function Chessboard2(){
     
     
     
-    function handleMouseDown(e: React.MouseEvent, squareClicked: number) {
+    function handleMouseDown(e: React.MouseEvent) {
         if (e.button !== 0) return;  //If not a left mouse click
-        if (!pieces[squareClicked]) return;
+
+        const targetColumn = Math.floor(e.clientX/75)   //Must change for dynamic board size and position
+        const targetRow = Math.floor(e.clientY/75)      //Must change for dynamic board size and position
+        const targetSquare = targetColumn + (targetRow*8)
+    
+        if (!pieces[targetSquare]) return;
         
         setIsDragging(true); 
-        setSelectedOrigin(squareClicked);
+        setSelectedOrigin(targetSquare);
         setDragPiece(testDragPiece);    //Will have to change this to dynamic drag piece later
         
         const piecesCopy = pieces.slice();
-        piecesCopy[squareClicked] = null;
+        piecesCopy[targetSquare] = null;
         setPieces(piecesCopy);
+
+        position.x = e.clientX;     //TODO dynamic board size and position
+        position.y = e.clientY; 
         
         //Should we set pieces position to be equal to the mouse here?
     }
@@ -66,38 +73,26 @@ function Chessboard2(){
         
         //TODO: Return center of this thing rather than weird quasi-middle
         const containerRect = e.currentTarget.getBoundingClientRect();
-        const mouseX = e.clientX - containerRect.left - 60;
-        const mouseY = e.clientY - containerRect.top - 60;
-        
+        const mouseX = e.clientX - containerRect.left - 75/2;
+        const mouseY = e.clientY - containerRect.top - 75/2;
+
         setPosition({x: mouseX, y: mouseY});
     }
     
-    function handleMouseOver(squareOver: number) {
-        console.log("over")
-        if (!isDragging) {
-            return
-        }
-
-        setHoveredSquare(squareOver);
-        
-        //console.log(squareOver)
-        
-        // if (squareOver !== selectedSquare) {
-            //     setHovered(squareOver);
-            // }
-        }
-        
-    function handleMouseUp() { 
-        console.log(hoveredSquare)      
+    function handleMouseUp(e: React.MouseEvent) { 
         if (!isDragging && !isAiming) return;
+        
         //TODO: If move illegal, cancel dragging
+        const targetColumn = Math.floor(e.clientX/75)   //Must change for dynamic board size and position
+        const targetRow = Math.floor(e.clientY/75)      //Must change for dynamic board size and position
+        const targetSquare = targetColumn + (targetRow*8)
         
         if (isDragging) {
-            if (hoveredSquare === selectedOrigin) {
+            if (targetSquare === selectedOrigin) {
                 changeFromDraggingToAiming();
                 return;
             }
-            changeFromDraggingToNeutral();            
+            changeFromDraggingToNeutral();
         } else {
             changeFromAimingToNeutral();
         }
@@ -105,6 +100,7 @@ function Chessboard2(){
         
         function changeFromDraggingToNeutral() { 
             setIsDragging(false);
+            setDragPiece(null)
 
             if (selectedOrigin === null) {
                  console.log("null origin")     //TODO: change to try/fail?
@@ -112,12 +108,13 @@ function Chessboard2(){
             }
     
             const origin = selectedOrigin as number;
-            movePiece(origin, hoveredSquare as number);     //TODO: Type guard this
+            
+            movePiece(origin, targetSquare);
         }
         
         function changeFromDraggingToAiming() {
             const piecesCopy = pieces.slice();
-            piecesCopy[hoveredSquare as number] = whiteKingTest;
+            piecesCopy[targetSquare] = whiteKingTest;
             
             setDragPiece(null);
             setPieces(piecesCopy);
@@ -136,7 +133,7 @@ function Chessboard2(){
             
             const origin = selectedOrigin as number;
             //TODO: If move illegal, return
-            movePiece(origin, hoveredSquare as number);        //TODO: Type guard this
+            movePiece(origin, targetSquare);
         }
     }
     
@@ -158,9 +155,6 @@ function Chessboard2(){
         return (
             <div key={id} 
                 className="square" 
-                onMouseDown={(e) => handleMouseDown(e, props.index)}
-                onMouseOver={() => handleMouseOver(props.index)}
-                // onMouseOver={() => handleMouseOver(props.index)}            //TODO move these function through props
                 style={{ backgroundColor }}>
                 {props.piece}
             </div>
@@ -181,10 +175,10 @@ function Chessboard2(){
         <div 
             className="chessboard" style={{ border }} 
             onMouseMove={handleMouseMove} 
-            onMouseUp={() => handleMouseUp()} 
-            ref={chessboardRef}
+            onMouseUp={(e) => handleMouseUp(e)}
+            onMouseDown={(e) => handleMouseDown(e)}
         >
-            {testDragPiece}
+            {isDragging && testDragPiece}
             {squares}
         </div>
     )
