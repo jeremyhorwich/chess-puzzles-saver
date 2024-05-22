@@ -22,7 +22,9 @@ function Chessboard(){
     const isDragging = (dragImage !== null);
     const chessBoardSize = 8*75;    //TODO: Find dynamically
     const highlightColor = "#cccc95";
-    const borderColor = (selectedOrigin.current !== null) ? highlightColor : "#484848";
+    const darkSquaresColor = "#484848";
+    const lightSquaresColor = "#ffffff"
+    const borderColor = (selectedOrigin.current !== null) ? highlightColor : darkSquaresColor;
     const border = "1px solid " + borderColor;
     
     let styles: CSSProperties = {
@@ -153,8 +155,8 @@ function Chessboard(){
     }   
         
     function Square(props: SquareProps) {       
-        const shouldBeBlack = ((Math.floor(props.index / 8) % 2) + (props.index % 2)) % 2 === 0;
-        let backgroundColor = shouldBeBlack ? "#ffffff" : "#484848";
+        const shouldBeLight = ((Math.floor(props.index / 8) % 2) + (props.index % 2)) % 2 === 0;
+        let backgroundColor = shouldBeLight ? lightSquaresColor : darkSquaresColor;
         backgroundColor = (props.highlight !== null) ? props.highlight : backgroundColor;
         
         const columns = ["a","b","c","d","e","f","g","h"]
