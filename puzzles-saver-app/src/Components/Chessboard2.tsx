@@ -48,8 +48,10 @@ function Chessboard2(){
     function handleMouseDown(e: React.MouseEvent) {
         if (e.button !== 0) return;  //If not a left mouse click
 
-        const targetColumn = Math.floor(e.clientX/75)   //Must change for dynamic board size and position
-        const targetRow = Math.floor(e.clientY/75)      //Must change for dynamic board size and position
+        const boardRect = e.currentTarget.getBoundingClientRect();
+
+        const targetColumn = Math.floor((e.clientX - boardRect.left)/75)   //Must change for dynamic board size
+        const targetRow = Math.floor((e.clientY - boardRect.top)/75)      //Must change for dynamic board size
         const targetSquare = targetColumn + (targetRow*8)
     
         if (!pieces[targetSquare]) return;
@@ -62,11 +64,7 @@ function Chessboard2(){
         piecesCopy[targetSquare] = null;
         setPieces(piecesCopy);
 
-        const containerRect = e.currentTarget.getBoundingClientRect();
-        const mouseX = e.clientX - 75/2;
-        const mouseY = e.clientY - 75/2;
-
-        setPosition({x: mouseX, y: mouseY})
+        setPosition({x: e.clientX - 75/2, y: e.clientY - 75/2})
         
         //Should we set pieces position to be equal to the mouse here?
     }
@@ -75,7 +73,6 @@ function Chessboard2(){
         if (!isDragging) return;
         
         //TODO: Return center of this thing rather than weird quasi-middle
-        const containerRect = e.currentTarget.getBoundingClientRect();
         const mouseX = e.clientX - 75/2;
         const mouseY = e.clientY - 75/2;
 
@@ -86,8 +83,11 @@ function Chessboard2(){
         if (!isDragging && !isAiming) return;
         
         //TODO: If move illegal, cancel dragging
-        const targetColumn = Math.floor(e.clientX/75)   //Must change for dynamic board size and position
-        const targetRow = Math.floor(e.clientY/75)      //Must change for dynamic board size and position
+
+        const boardRect = e.currentTarget.getBoundingClientRect();
+
+        const targetColumn = Math.floor((e.clientX - boardRect.left)/75)   //Must change for dynamic board size
+        const targetRow = Math.floor((e.clientY - boardRect.top)/75)      //Must change for dynamic board size
         const targetSquare = targetColumn + (targetRow*8)
         
         if (isDragging) {
