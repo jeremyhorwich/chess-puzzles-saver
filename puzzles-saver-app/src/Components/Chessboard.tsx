@@ -11,19 +11,19 @@ function Chessboard(){
     //TODO: Set up initial position based on fen passed in through prop
     //TODO: Behavior if mouse leaves chessboard while dragging
     //TODO: Highlight hover squares
-    //TOOD: Cancel out of aiming
     const [position, setPosition] = useState({x: 0, y: 0});
-    const [isAiming, setIsAiming] = useState<Boolean>(false);
     const [pieces, setPieces] = useState<Array<string|null>>(initialPos);
-    const [dragImage, setDragImage] = useState<string|null>(null);
     
+    const dragImage = useRef<string|null>(null);
     const selectedOrigin = useRef<number|null>(null);
+    const isAiming = useRef<boolean>(false)
     
-    const isDragging = (dragImage !== null);
+    const isDragging = (dragImage.current !== null);
+
     const chessBoardSize = 8*75;    //TODO: Find dynamically
     const highlightColor = "#cccc95";
     const darkSquaresColor = "#484848";
-    const lightSquaresColor = "#ffffff"
+    const lightSquaresColor = "#ffffff";
     const borderColor = (selectedOrigin.current !== null) ? highlightColor : darkSquaresColor;
     const border = "1px solid " + borderColor;
     
@@ -33,11 +33,11 @@ function Chessboard(){
         top: position.y,
         cursor: isDragging ? "grabbing" : "grab"
     }
-    
+   
     const dragPiece = <img
                         draggable="false"
                         className="dragPiece" 
-                        src={dragImage as string}
+                        src={dragImage.current as string}
                         style={styles} />;
     
     
@@ -46,25 +46,22 @@ function Chessboard(){
         
         const boardRect = e.currentTarget.getBoundingClientRect();
         
-        const originColumn = Math.floor((e.clientX - boardRect.left)/75);   //Must change for dynamic board size
-        const originRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
-        const originSquare = originColumn + (originRow*8);
+        const clickedColumn = Math.floor((e.clientX - boardRect.left)/75);   //Must change for dynamic board size
+        const clickedRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
+        const clickedSquare = clickedColumn + (clickedRow*8);
         
-        if (!pieces[originSquare]) return;
-        
-        changeFromNeutralToDragging();
+        if (pieces[clickedSquare]) beginDragging();
         return;
         
         
-        function changeFromNeutralToDragging() {
-            setDragImage(pieces[originSquare])
+        function beginDragging() {
+            selectedOrigin.current = clickedSquare;
+            dragImage.current = pieces[clickedSquare]
 
             const piecesCopy = pieces.slice();
-            piecesCopy[originSquare] = null;
-            setPieces(piecesCopy);
-            
-            selectedOrigin.current = originSquare;
-                        
+            piecesCopy[clickedSquare] = null;
+
+            setPieces(piecesCopy);                        
             setPosition({x: e.clientX - 75/2, y: e.clientY - 75/2});
         }
     }
@@ -79,7 +76,7 @@ function Chessboard(){
 
     
     function handleMouseUp(e: React.MouseEvent) { 
-        if (!isDragging && !isAiming) return;
+        if (!isDragging && !isAiming.current) return;
         
         //TODO: If move illegal, cancel dragging
         
@@ -91,60 +88,51 @@ function Chessboard(){
         const targetSquare = targetColumn + (targetRow*8);
         
         if (isDragging) {
+            stopDragging();
+            
             if (targetSquare === selectedOrigin.current) {
-                changeFromDraggingToAiming();
-            } else {
-                changeFromDraggingToNeutral();
+                toggleAiming();
+                return;
             }
-            return; 
+
+            resetAiming();
+            return;
         }
-        
-        changeFromAimingToNeutral();
-        return;
-        
-        
-        function changeFromDraggingToAiming() {
-            const piecesCopy = pieces.slice();
-            piecesCopy[targetSquare] = dragImage;
+
+        if (isAiming.current) {
             
-            setDragImage(null);
+            //TODO Check for illegal move
+            const piecesCopy = pieces.slice();
+            piecesCopy[targetSquare] = piecesCopy[selectedOrigin.current as number];
+            piecesCopy[selectedOrigin.current as number] = null;
             setPieces(piecesCopy);
-            
-            setIsAiming(true);
+
+            resetAiming();
         }
         
-        
-        function changeFromDraggingToNeutral() { 
-            setDragImage(null)
-            
-            if (selectedOrigin.current === null) {
-                console.log("null origin")     //TODO: change to try/fail?
-                return;
-            }
-            
+
+        function stopDragging() {
             const piecesCopy = pieces.slice();
-            piecesCopy[targetSquare] = dragImage;        //TODO: Change this to be dynamic
+            piecesCopy[targetSquare] = dragImage.current;
             
-            selectedOrigin.current = null;
-            setPieces(piecesCopy)
-        }     
+            dragImage.current = null;
+            setPieces(piecesCopy);
+        }
+
         
-        
-        function changeFromAimingToNeutral() {
-            setIsAiming(false);
-            
-            if (selectedOrigin === null) {
-                console.log("null origin")     //TODO: change to try/fail?
+        function toggleAiming() {
+            isAiming.current = !isAiming.current;
+                if (!isAiming.current) {
+                    selectedOrigin.current = null;
+                }
                 return;
-            }
-            
-            const origin = selectedOrigin.current as number;
-            //TODO: If move illegal, return
-            const piecesCopy = pieces.slice();
-            piecesCopy[targetSquare] = piecesCopy[origin]
-            piecesCopy[origin] = null;
+        }
+
+
+        function resetAiming() {
             selectedOrigin.current = null;
-            setPieces(piecesCopy)
+            isAiming.current = false;
+            return;
         }
     }       
         
