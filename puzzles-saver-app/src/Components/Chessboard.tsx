@@ -6,98 +6,139 @@ export default Chessboard;
 
 function Chessboard(){
     //TODO: set up inital position based on fen passed in through prop
-    const [position, setPosition] = useState({x: 0, y: 0})
-    const [isDragging, setIsDragging] = useState<Boolean>(false)
-    
+    const [position, setPosition] = useState({x: 0, y: 0});
+    const [isDragging, setIsDragging] = useState<Boolean>(false);
+    const [isAiming, setIsAiming] = useState<Boolean>(false);
+
+    const chessBoardSize = 8*75;
+
     const styles: CSSProperties = {
         position: "absolute",
         left: position.x,
         top: position.y,
         cursor: isDragging ? "grabbing" : "grab"
     }
-    
-    let initialPos: Array<JSX.Element|null> = Array(64).fill(null);
-    
-    initialPos[23] = <img draggable="false"
-                        onMouseMove={handleMouseMove}
+    const initialPos: Array<JSX.Element|null> = Array(64).fill(null);
+
+     const whiteKingTest = <img draggable="false"
                         className="piece" 
-                        src={whiteKing} 
-                        style={styles}
+                        src={whiteKing}
                         alt="White King" />;
+    initialPos[23] = whiteKingTest
     
-    initialPos[45] = <img draggable className="piece" src={whiteQueen} alt="White King" />;
-    
-    const [selectedSquare, setSelected] = useState<number|null>(null);
-    const [hoveredSquare, setHovered] = useState<number|null>(null);
+    let testDragPiece = <img draggable="false"
+                        className="dragPiece" 
+                        src={whiteKing}
+                        style={styles} 
+                        alt="White King" />;
+        
+    const [selectedOrigin, setSelectedOrigin] = useState<number|null>(null);
     const [pieces, setPieces] = useState<Array<JSX.Element|null>>(initialPos);
-   
-   const highlightColor = "#cccc95";
-   const borderColor = (selectedSquare !== null) ? highlightColor : "#484848";
-   const border = "1px solid " + borderColor;
-   
-   
-   
-   function handleMouseDown(e: React.MouseEvent, squareClicked: number) {
-        if (e.button !== 0) {  //Not a left mouse click
-            return
-        }
+    const [dragPiece, setDragPiece] = useState<JSX.Element|null>(null)
 
-        if (pieces[squareClicked] === null) {
-            return
-        }
+    const highlightColor = "#cccc95";
+    const borderColor = (selectedOrigin !== null) ? highlightColor : "#484848";
+    const border = "1px solid " + borderColor;
+    
+    
+    
+    function handleMouseDown(e: React.MouseEvent) {
+        if (e.button !== 0) return;  //If not a left mouse click
+
+        const boardRect = e.currentTarget.getBoundingClientRect();
+
+        const targetColumn = Math.floor((e.clientX - boardRect.left)/75)   //Must change for dynamic board size
+        const targetRow = Math.floor((e.clientY - boardRect.top)/75)      //Must change for dynamic board size
+        const targetSquare = targetColumn + (targetRow*8)
+    
+        if (!pieces[targetSquare]) return;
         
-        if (selectedSquare === null) {
-            setSelected(squareClicked);
-            setIsDragging(true)
-            return
-        }
-
-        if (squareClicked === selectedSquare) {
-            setSelected(null);
-            return
-        }
-
-        let newPieces = pieces.slice();
-        if (newPieces[selectedSquare] !== null) {
-            newPieces[squareClicked] = newPieces[selectedSquare];
-        }
-
-        newPieces[selectedSquare] = null;
+        setIsDragging(true); 
+        setSelectedOrigin(targetSquare);
+        setDragPiece(testDragPiece);    //Will have to change this to dynamic drag piece later
         
-        setSelected(null)
-        setPieces(newPieces)
+        const piecesCopy = pieces.slice();
+        piecesCopy[targetSquare] = null;
+        setPieces(piecesCopy);
+
+        setPosition({x: e.clientX - 75/2, y: e.clientY - 75/2})
+        
+        //Should we set pieces position to be equal to the mouse here?
     }
-
+    
     function handleMouseMove(e: React.MouseEvent) {
-        if (!isDragging) {
-            return
-        }
-        setPosition({
-            x: e.clientX,
-            y: e.clientY
-        })
+        if (!isDragging) return;
+        
+        //TODO: Return center of this thing rather than weird quasi-middle
+        const mouseX = e.clientX - 75/2;
+        const mouseY = e.clientY - 75/2;
+
+        setPosition({x: mouseX, y: mouseY});
     }
+    
+    function handleMouseUp(e: React.MouseEvent) { 
+        if (!isDragging && !isAiming) return;
+        
+        //TODO: If move illegal, cancel dragging
 
-    function handleMouseOver(squareOver: number) {
-        if (!isDragging) {
-            return
+        const boardRect = e.currentTarget.getBoundingClientRect();
+
+        const targetColumn = Math.floor((e.clientX - boardRect.left)/75)   //Must change for dynamic board size
+        const targetRow = Math.floor((e.clientY - boardRect.top)/75)      //Must change for dynamic board size
+        const targetSquare = targetColumn + (targetRow*8)
+        
+        if (isDragging) {
+            if (targetSquare === selectedOrigin) {
+                changeFromDraggingToAiming();
+                return;
+            }
+            changeFromDraggingToNeutral();
+        } else {
+            changeFromAimingToNeutral();
+        }
+        
+        
+        function changeFromDraggingToNeutral() { 
+            setIsDragging(false);
+            setDragPiece(null)
+
+            if (selectedOrigin === null) {
+                 console.log("null origin")     //TODO: change to try/fail?
+                return;
+            }
+    
+            const origin = selectedOrigin as number;
+            
+            movePiece(origin, targetSquare);
+        }
+        
+        function changeFromDraggingToAiming() {
+            const piecesCopy = pieces.slice();
+            piecesCopy[targetSquare] = whiteKingTest;
+            
+            setDragPiece(null);
+            setPieces(piecesCopy);
+            
+            setIsDragging(false);
+            setIsAiming(true);
         }
 
-        if (squareOver !== selectedSquare) {
-            setHovered(squareOver);
-        }
-    }
+        function changeFromAimingToNeutral() {
+            setIsAiming(false);
 
-    function handleMouseUp(squareOver: number) {
-        setIsDragging(false)
-        setHovered(null)
-        setSelected(squareOver)
-        //If we've left the square we started on, then drop piece there
+            if (selectedOrigin === null) {
+                console.log("null origin")     //TODO: change to try/fail?
+                return;
+            }
+            
+            const origin = selectedOrigin as number;
+            //TODO: If move illegal, return
+            movePiece(origin, targetSquare);
+        }
     }
     
     type SquareProps = {
         index: number,
-        handleMouseDown: Function,
         piece: JSX.Element | null,
         highlight: string | null
     }
@@ -114,9 +155,6 @@ function Chessboard(){
         return (
             <div key={id} 
                 className="square" 
-                onMouseDown={(e) => props.handleMouseDown(e, props.index)} 
-                onMouseOver={() => handleMouseOver(props.index)}            //TODO move these function through props
-                onMouseUp={() => handleMouseUp(props.index)}
                 style={{ backgroundColor }}>
                 {props.piece}
             </div>
@@ -126,16 +164,38 @@ function Chessboard(){
     
     const squares = Array<JSX.Element>(64)
     for (let i = 0; i < 64; i++) {
-        if (i === selectedSquare || i === hoveredSquare) {        //Will this cause issues when we flip the board?
-            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, piece: pieces[i], highlight: highlightColor});
+        if (i === selectedOrigin /*|| i === hoveredSquare*/) {        //Will this cause issues when we flip the board?
+            squares[i] = Square({index: i, piece: pieces[i], highlight: highlightColor});
         } else {
-            squares[i] = Square({index: i, handleMouseDown: handleMouseDown, piece: pieces[i], highlight: null})
+            squares[i] = Square({index: i, piece: pieces[i], highlight: null})
         }
     }
-
+    
     return (
-        <div className="chessboard" style={{ border }}>
+        <div 
+            className="chessboard" style={{ border }} 
+            onMouseMove={handleMouseMove} 
+            onMouseUp={(e) => handleMouseUp(e)}
+            onMouseDown={(e) => handleMouseDown(e)}
+        >
+            {isDragging && testDragPiece}
             {squares}
         </div>
     )
+    function movePiece(originIndex: number, targetIndex: number) {  
+        //Split into two different functions? One for drag move and one for point click move? Different operations...
+
+        let piecesCopy = pieces.slice();
+        piecesCopy[originIndex] = null;
+        //piecesCopy[targetIndex] = dragPiece;
+        piecesCopy[targetIndex] = whiteKingTest;
+        
+        // if (piecesCopy[originIndex] !== null) {
+        //     piecesCopy[targetIndex] = piecesCopy[originIndex];
+        //     piecesCopy[originIndex] = null;
+        // }
+        
+        setSelectedOrigin(null)
+        setPieces(piecesCopy)
+    }
 }
