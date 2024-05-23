@@ -10,13 +10,14 @@ initialPos[45] = whiteQueen
 function Chessboard(){
     //TODO: Set up initial position based on fen passed in through prop
     //TODO: Behavior if mouse leaves chessboard while dragging
+
     //TODO: Highlight hover squares
     const [position, setPosition] = useState({x: 0, y: 0});
     const [pieces, setPieces] = useState<Array<string|null>>(initialPos);
     
     const dragImage = useRef<string|null>(null);
     const selectedOrigin = useRef<number|null>(null);
-    const isAiming = useRef<boolean>(false)
+    const isAiming = useRef<boolean>(false);
     
     const isDragging = (dragImage.current !== null);
 
@@ -49,8 +50,9 @@ function Chessboard(){
         const clickedColumn = Math.floor((e.clientX - boardRect.left)/75);   //Must change for dynamic board size
         const clickedRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
         const clickedSquare = clickedColumn + (clickedRow*8);
-        
+
         if (pieces[clickedSquare]) beginDragging();
+                
         return;
         
         
@@ -70,8 +72,30 @@ function Chessboard(){
     function handleMouseMove(e: React.MouseEvent) {
         if (!isDragging) return;
         
+        //If we exit the confines of the component, then trigger a leave...
+        const boardRect = e.currentTarget.getBoundingClientRect();
+        const outsideXDimensions = e.clientX < boardRect.left || e.clientX > boardRect.right;
+        const outsideYDimensions = e.clientY < boardRect.top || e.clientY > boardRect.bottom;
+        
+        if (outsideXDimensions || outsideYDimensions) { 
+            resetToNeutral();
+            return;
+        }
+        
         const pieceSize = (chessBoardSize/8);
         setPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
+        return;
+
+        function resetToNeutral() {
+            const piecesCopy = pieces.slice()
+            piecesCopy[selectedOrigin.current as number] = dragImage.current;
+            dragImage.current = null;
+            setPieces(piecesCopy);
+            
+            selectedOrigin.current = null;
+            isAiming.current = false;
+        }
+
     }
 
     
@@ -109,7 +133,7 @@ function Chessboard(){
 
             resetAiming();
         }
-        
+        return;
 
         function stopDragging() {
             const piecesCopy = pieces.slice();
