@@ -185,13 +185,9 @@ function Chessboard(){
         const shouldBeLight = ((Math.floor(props.index / 8) % 2) + (props.index % 2)) % 2 === 0;
         let backgroundColor = shouldBeLight ? lightSquaresColor : darkSquaresColor;
         backgroundColor = (props.highlight !== null) ? props.highlight : backgroundColor;
-        
-        const columns = ["a","b","c","d","e","f","g","h"]
-        const id = columns[props.index % 8] + (Math.floor(props.index/8) + 1)
-        
+            
         return (
             <div
-                key={id} 
                 className="square" 
                 style={{ backgroundColor }}
             >
@@ -201,11 +197,14 @@ function Chessboard(){
     }
     
     const squares = Array<JSX.Element>(64)
+    const columns = ["a","b","c","d","e","f","g","h"]
+    
     for (let i = 0; i < 64; i++) {
+        const id = columns[i % 8] + (Math.floor(i/8) + 1)
         if (i === selectedOrigin.current /*|| i === hoveredSquare*/) {        //Will this cause issues when we flip the board?
-            squares[i] = <Square index={i} piece={pieces[i]} highlight={highlightColor} />
+            squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={highlightColor} />
         } else {
-            squares[i] = <Square index={i} piece={pieces[i]} highlight={null} />
+            squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={null} />
         }
     }
     
