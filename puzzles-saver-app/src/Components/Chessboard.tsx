@@ -43,6 +43,11 @@ function Chessboard(){
     
     
     function handleMouseDown(e: React.MouseEvent) {
+        if (e.button === 2) {   //if right mouse click
+            resetToNeutral();
+            return;
+        }
+
         if (e.button !== 0) return;  //If not a left mouse click
         
         const boardRect = e.currentTarget.getBoundingClientRect();
@@ -58,7 +63,7 @@ function Chessboard(){
         
         function beginDragging() {
             selectedOrigin.current = clickedSquare;
-            dragImage.current = pieces[clickedSquare]
+            dragImage.current = pieces[clickedSquare];
 
             const piecesCopy = pieces.slice();
             piecesCopy[clickedSquare] = null;
@@ -84,18 +89,7 @@ function Chessboard(){
         
         const pieceSize = (chessBoardSize/8);
         setPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
-        return;
-
-        function resetToNeutral() {
-            const piecesCopy = pieces.slice()
-            piecesCopy[selectedOrigin.current as number] = dragImage.current;
-            dragImage.current = null;
-            setPieces(piecesCopy);
-            
-            selectedOrigin.current = null;
-            isAiming.current = false;
-        }
-
+        return;      
     }
 
     
@@ -118,11 +112,11 @@ function Chessboard(){
                 toggleAiming();
                 return;
             }
-
+            
             resetAiming();
             return;
         }
-
+        
         if (isAiming.current) {
             
             //TODO Check for illegal move
@@ -130,11 +124,11 @@ function Chessboard(){
             piecesCopy[targetSquare] = piecesCopy[selectedOrigin.current as number];
             piecesCopy[selectedOrigin.current as number] = null;
             setPieces(piecesCopy);
-
+            
             resetAiming();
         }
         return;
-
+        
         function stopDragging() {
             const piecesCopy = pieces.slice();
             piecesCopy[targetSquare] = dragImage.current;
@@ -142,30 +136,51 @@ function Chessboard(){
             dragImage.current = null;
             setPieces(piecesCopy);
         }
-
+        
         
         function toggleAiming() {
             isAiming.current = !isAiming.current;
-                if (!isAiming.current) {
-                    selectedOrigin.current = null;
-                }
-                return;
+            if (!isAiming.current) {
+                selectedOrigin.current = null;
+            }
+            return;
         }
-
+        
 
         function resetAiming() {
             selectedOrigin.current = null;
             isAiming.current = false;
             return;
         }
-    }       
+    }
+    
+    
+    function handleContextMenu(e: React.MouseEvent) {
+        e.preventDefault();
+    }
+   
+    
+    function resetToNeutral() {
+        const piecesCopy = pieces.slice();
+
+        if (dragImage.current) {
+            piecesCopy[selectedOrigin.current as number] = dragImage.current;
+        }
+
+        dragImage.current = null;
+        setPieces(piecesCopy);
         
+        selectedOrigin.current = null;
+        isAiming.current = false;
+    }
+
+    
     type SquareProps = {
         index: number,
         piece: string | null,
         highlight: string | null
     }   
-        
+    
     function Square(props: SquareProps) {       
         const shouldBeLight = ((Math.floor(props.index / 8) % 2) + (props.index % 2)) % 2 === 0;
         let backgroundColor = shouldBeLight ? lightSquaresColor : darkSquaresColor;
@@ -200,6 +215,7 @@ function Chessboard(){
             onMouseMove={handleMouseMove} 
             onMouseUp={(e) => handleMouseUp(e)}
             onMouseDown={(e) => handleMouseDown(e)}
+            onContextMenu={(e) => handleContextMenu(e)}
         >
             {isDragging && dragPiece}
             {squares}
