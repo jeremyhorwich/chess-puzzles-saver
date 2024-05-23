@@ -161,15 +161,13 @@ function Chessboard(){
    
     
     function resetToNeutral() {
-        const piecesCopy = pieces.slice();
-
         if (dragImage.current) {
+            const piecesCopy = pieces.slice();
             piecesCopy[selectedOrigin.current as number] = dragImage.current;
+            setPieces(piecesCopy);
         }
 
         dragImage.current = null;
-        setPieces(piecesCopy);
-        
         selectedOrigin.current = null;
         isAiming.current = false;
     }
