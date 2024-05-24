@@ -43,7 +43,7 @@ function Chessboard(){
     
     
     function handleMouseDown(e: React.MouseEvent) {
-        if (e.button === 2) {   //if right mouse click
+        if (e.button === 2) {   //Ifa  right mouse click
             resetToNeutral();
             return;
         }
@@ -165,6 +165,8 @@ function Chessboard(){
             const piecesCopy = pieces.slice();
             piecesCopy[selectedOrigin.current as number] = dragImage.current;
             setPieces(piecesCopy);
+        } else {
+            setPosition({x: 0, y: 0});  //Forcing a rerender to unhighlight origin square
         }
 
         dragImage.current = null;
