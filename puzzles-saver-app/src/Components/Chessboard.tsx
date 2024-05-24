@@ -155,11 +155,6 @@ function Chessboard(){
     }
     
     
-    function handleContextMenu(e: React.MouseEvent) {
-        e.preventDefault();
-    }
-   
-    
     function resetToNeutral() {
         if (dragImage.current) {
             const piecesCopy = pieces.slice();
@@ -214,7 +209,7 @@ function Chessboard(){
             onMouseMove={handleMouseMove} 
             onMouseUp={(e) => handleMouseUp(e)}
             onMouseDown={(e) => handleMouseDown(e)}
-            onContextMenu={(e) => handleContextMenu(e)}
+            onContextMenu={(e) => e.preventDefault()}
         >
             {isDragging && dragPiece}
             {squares}
