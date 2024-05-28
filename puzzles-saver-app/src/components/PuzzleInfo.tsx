@@ -41,9 +41,7 @@ function PuzzleInfo(props: PuzzleInfoProps) {
             )
         }
         
-        return (
-            <span>Custom Puzzle</span>
-        )
+        return <span>Custom Puzzle</span>
     }
 
     return <div className="puzzleInfo">{parseInfo()}</div>
