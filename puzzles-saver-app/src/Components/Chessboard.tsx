@@ -1,32 +1,46 @@
-import React, { CSSProperties, useState, useRef } from "react";
+import React, { CSSProperties, useState, useRef, useEffect } from "react";
 import "./chessBoardStyles.css";
 import whiteKing from "../assets/WhiteKing.png"
 import whiteQueen from "../assets/WhiteQueen.png"
 
-const initialPos: Array<string|null> = Array(64).fill(null);
-initialPos[23] = whiteKing
-initialPos[45] = whiteQueen
+const pieceImages: {[key: string]: string} = {
+    "k": whiteKing,
+    "q": whiteQueen
+}
+
+type ChessboardProps = {
+    fen: string,
+}
                         
-function Chessboard(){
-    //TODO: Set up initial position based on fen passed in through prop
+function Chessboard(props: ChessboardProps) {
     //TODO: Behavior if mouse leaves chessboard while dragging
 
     //TODO: Highlight hover squares
     const [position, setPosition] = useState({x: 0, y: 0});
-    const [pieces, setPieces] = useState<Array<string|null>>(initialPos);
+    const [pieces, setPieces] = useState<Array<string|null>>(Array(64).fill(null));
     
     const dragImage = useRef<string|null>(null);
     const selectedOrigin = useRef<number|null>(null);
     const isAiming = useRef<boolean>(false);
     
     const isDragging = (dragImage.current !== null);
-
+    
     const chessBoardSize = 8*75;    //TODO: Find dynamically
     const highlightColor = "#cccc95";
     const darkSquaresColor = "#484848";
     const lightSquaresColor = "#ffffff";
     const borderColor = (selectedOrigin.current !== null) ? highlightColor : darkSquaresColor;
     const border = "1px solid " + borderColor;
+    
+    useEffect(() => {
+        //TODO: Fetch position from API rather than static data mockup
+        
+        const initialPos: Array<string|null> = Array(64).fill(null);
+        initialPos[23] = pieceImages["k"];
+        initialPos[45] = pieceImages["q"];
+
+        setPieces(initialPos)
+    }, [])
     
     let styles: CSSProperties = {
         position: "absolute",
