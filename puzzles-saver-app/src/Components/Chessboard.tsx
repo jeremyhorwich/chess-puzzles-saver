@@ -151,7 +151,7 @@ function Chessboard(props: ChessboardProps) {
             
             dragImage.current = null;
             setPieces(piecesCopy);
-            props.onMoveEnter("e")
+            props.onMoveEnter("e")  //TODO: Highlight origin and target square on move
         }
         
         
