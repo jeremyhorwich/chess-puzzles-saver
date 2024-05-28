@@ -10,6 +10,8 @@ const pieceImages: {[key: string]: string} = {
 
 type ChessboardProps = {
     fen: string,
+    highlightColor: string
+    onMoveEnter: Function
 }
                         
 function Chessboard(props: ChessboardProps) {
@@ -26,7 +28,7 @@ function Chessboard(props: ChessboardProps) {
     const isDragging = (dragImage.current !== null);
     
     const chessBoardSize = 8*75;    //TODO: Find dynamically
-    const highlightColor = "#cccc95";
+    const highlightColor = props.highlightColor;
     const darkSquaresColor = "#484848";
     const lightSquaresColor = "#ffffff";
     const borderColor = (selectedOrigin.current !== null) ? highlightColor : darkSquaresColor;
@@ -149,6 +151,7 @@ function Chessboard(props: ChessboardProps) {
             
             dragImage.current = null;
             setPieces(piecesCopy);
+            props.onMoveEnter("e")
         }
         
         
