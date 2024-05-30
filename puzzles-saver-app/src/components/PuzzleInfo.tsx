@@ -1,4 +1,4 @@
-import "./puzzleInfoStyles.css"
+import "../styles/puzzleInfoStyles.css"
 
 type PuzzleInfoProps = {
     whitePlayer?: string,

@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState, useRef, useEffect } from "react";
-import "./chessBoardStyles.css";
+import "../styles/chessBoardStyles.css"
 import whiteKing from "../assets/WhiteKing.png"
 import whiteQueen from "../assets/WhiteQueen.png"
 

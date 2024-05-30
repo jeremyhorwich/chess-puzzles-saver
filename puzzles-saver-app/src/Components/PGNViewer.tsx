@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./PGNViewerStyles.css";
+import "../styles/PGNViewerStyles.css";
 
 export default PGNViewer;
 

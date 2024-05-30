@@ -1,5 +1,5 @@
 import { useState } from "react";
-import './puzzleQuestionStyle.css';
+import '../styles/puzzleQuestionStyle.css';
 
 export default PuzzleQuestionDisplay;
 
