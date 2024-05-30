@@ -23,6 +23,7 @@ function Chessboard(props: ChessboardProps) {
     
     const dragImage = useRef<string|null>(null);
     const selectedOrigin = useRef<number|null>(null);
+    const selectedTarget = useRef<number|null>(null);
     const isAiming = useRef<boolean>(false);
     
     const isDragging = (dragImage.current !== null);
@@ -72,8 +73,11 @@ function Chessboard(props: ChessboardProps) {
         const clickedRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
         const clickedSquare = clickedColumn + (clickedRow*8);
 
-        if (pieces[clickedSquare]) beginDragging();
-                
+        if (pieces[clickedSquare]) {
+            beginDragging();
+            selectedTarget.current = null;
+        } 
+        
         return;
         
         
@@ -129,8 +133,9 @@ function Chessboard(props: ChessboardProps) {
                 return;
             }
             
-            props.onMoveEnter("e")
-            resetAiming();
+            isAiming.current = false;
+            selectedTarget.current = targetSquare;
+            props.onMoveEnter("e");
             return;
         }
         
@@ -142,9 +147,10 @@ function Chessboard(props: ChessboardProps) {
             piecesCopy[selectedOrigin.current as number] = null;
             setPieces(piecesCopy);
             
-            props.onMoveEnter("e")
+            isAiming.current = false;
+            selectedTarget.current = targetSquare;
+            props.onMoveEnter("e");
 
-            resetAiming();
         }
         return;
         
@@ -162,13 +168,6 @@ function Chessboard(props: ChessboardProps) {
             if (!isAiming.current) {
                 selectedOrigin.current = null;
             }
-            return;
-        }
-        
-
-        function resetAiming() {
-            selectedOrigin.current = null;
-            isAiming.current = false;
             return;
         }
     }
@@ -215,7 +214,7 @@ function Chessboard(props: ChessboardProps) {
     
     for (let i = 0; i < 64; i++) {
         const id = columns[i % 8] + (Math.floor(i/8) + 1)
-        if (i === selectedOrigin.current /*|| i === hoveredSquare*/) {        //Will this cause issues when we flip the board?
+        if (i === selectedOrigin.current || i === selectedTarget.current) {        //Will this cause issues when we flip the board?
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={highlightColor} />
         } else {
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={null} />
