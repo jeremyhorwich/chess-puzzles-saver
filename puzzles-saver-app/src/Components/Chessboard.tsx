@@ -21,12 +21,10 @@ function Chessboard(props: ChessboardProps) {
     const isAiming = useRef<boolean>(false);
     
     const isDragging = (dragImage.current !== null);
-    
     const chessBoardSize = 8*75;    //TODO: Find dynamically
-    const highlightColor = props.highlightColor;
     const darkSquaresColor = "#484848";
     const lightSquaresColor = "#ffffff";
-    const borderColor = (selectedOrigin.current !== null) ? highlightColor : darkSquaresColor;
+    const borderColor = (selectedOrigin.current !== null) ? props.highlightColor : darkSquaresColor;
     const border = "1px solid " + borderColor;
     
     useEffect(() => {
@@ -40,12 +38,9 @@ function Chessboard(props: ChessboardProps) {
                 const piece = pieceImages[initialPosJSON[location]];
                 initialPos[Number(location)] = piece;
             }
-            
             setPieces(initialPos)
         }
-
         getInitialPos();
-        
     }, [])
     
     let styles: CSSProperties = {
@@ -203,10 +198,7 @@ function Chessboard(props: ChessboardProps) {
         backgroundColor = (props.highlight !== null) ? props.highlight : backgroundColor;
             
         return (
-            <div
-                className="square" 
-                style={{ backgroundColor }}
-            >
+            <div className="square" style={{ backgroundColor }}>
                 {props.piece && <img draggable="false" className="piece" src={props.piece as string} />}
             </div>
         )
@@ -218,7 +210,7 @@ function Chessboard(props: ChessboardProps) {
     for (let i = 0; i < 64; i++) {
         const id = columns[i % 8] + (Math.floor(i/8) + 1)
         if (i === selectedOrigin.current || i === selectedTarget.current) {        //Will this cause issues when we flip the board?
-            squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={highlightColor} />
+            squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={props.highlightColor} />
         } else {
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={null} />
         }
