@@ -1,11 +1,8 @@
 from fastapi import APIRouter
+from board import get_piece_coordinates
 
 router = APIRouter(prefix="/chess")
 
-@router.get("/utils/is_move_legal")
-async def is_move_legal(fen: str, origin: int, target: int):
-    return
-
-@router.get("/index")
-async def show_hello():
-    return "Hello World"
+@router.get("/utils/fen-to-pieces-coords")
+async def get_coords_from(fen: str):
+    return get_piece_coordinates(fen)

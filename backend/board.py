@@ -25,7 +25,7 @@ def get_piece_coordinates(raw: str) -> json:
         coordinates[(current_row*8) + current_column] = char
         current_column += 1
     print(coordinates)
-    return json.dumps(coordinates)
+    return coordinates
 
 def get_turn(raw: str) -> str:
     if raw == "w":
