@@ -1,12 +1,6 @@
 import React, { CSSProperties, useState, useRef, useEffect } from "react";
-import "../styles/chessBoardStyles.css"
-import whiteKing from "../assets/WhiteKing.png"
-import whiteQueen from "../assets/WhiteQueen.png"
-
-const pieceImages: {[key: string]: string} = {
-    "k": whiteKing,
-    "q": whiteQueen
-}
+import "../styles/chessBoardStyles.css";
+import pieceImages from "../assets/pieceImages";
 
 type ChessboardProps = {
     fen: string,
@@ -39,7 +33,7 @@ function Chessboard(props: ChessboardProps) {
         //TODO: Fetch position from API rather than static data mockup
         
         const initialPos: Array<string|null> = Array(64).fill(null);
-        initialPos[23] = pieceImages["k"];
+        initialPos[23] = pieceImages["R"];
         initialPos[45] = pieceImages["q"];
 
         setPieces(initialPos)
