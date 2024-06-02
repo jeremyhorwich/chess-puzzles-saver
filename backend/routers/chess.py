@@ -5,4 +5,5 @@ router = APIRouter(prefix="/chess")
 
 @router.get("/utils/fen-to-pieces-coords")
 async def get_coords_from(fen: str):
+    print(fen)
     return get_piece_coordinates(fen)

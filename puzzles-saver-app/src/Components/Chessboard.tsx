@@ -30,13 +30,22 @@ function Chessboard(props: ChessboardProps) {
     const border = "1px solid " + borderColor;
     
     useEffect(() => {
-        //TODO: Fetch position from API rather than static data mockup
-        
-        const initialPos: Array<string|null> = Array(64).fill(null);
-        initialPos[23] = pieceImages["R"];
-        initialPos[45] = pieceImages["q"];
+        async function getInitialPos() {
+            //TODO error handling
+            const response = await fetch(`http://127.0.0.1:8000/chess/utils/fen-to-pieces-coords/?fen=${props.fen}`);
+            const initialPosJSON = await response.json();
+            
+            const initialPos: Array<string|null> = Array(64).fill(null);
+            for (const location in initialPosJSON) {
+                const piece = pieceImages[initialPosJSON[location]];
+                initialPos[Number(location)] = piece;
+            }
+            
+            setPieces(initialPos)
+        }
 
-        setPieces(initialPos)
+        getInitialPos();
+        
     }, [])
     
     let styles: CSSProperties = {
