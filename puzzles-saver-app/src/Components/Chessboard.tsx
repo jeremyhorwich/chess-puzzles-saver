@@ -42,27 +42,14 @@ function Chessboard(props: ChessboardProps) {
         }
         getInitialPos();
     }, [])
-    
-    let styles: CSSProperties = {
-        position: "absolute",
-        left: position.x,
-        top: position.y,
-        cursor: isDragging ? "grabbing" : "grab"
-    }
-   
-    const dragPiece = <img
-                        draggable="false"
-                        className="dragPiece" 
-                        src={dragImage.current as string}
-                        style={styles} />;
-    
+
     
     function handleMouseDown(e: React.MouseEvent) {
-        if (e.button === 2) {   //Ifa  right mouse click
+        if (e.button === 2) {   //If a right mouse click
             resetToNeutral();
             return;
         }
-
+        
         if (e.button !== 0) return;  //If not a left mouse click
         
         const boardRect = e.currentTarget.getBoundingClientRect();
@@ -70,7 +57,7 @@ function Chessboard(props: ChessboardProps) {
         const clickedColumn = Math.floor((e.clientX - boardRect.left)/75);   //Must change for dynamic board size
         const clickedRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
         const clickedSquare = clickedColumn + (clickedRow*8);
-
+        
         if (pieces[clickedSquare]) {
             beginDragging();
             selectedTarget.current = null;
@@ -82,10 +69,10 @@ function Chessboard(props: ChessboardProps) {
         function beginDragging() {
             selectedOrigin.current = clickedSquare;
             dragImage.current = pieces[clickedSquare];
-
+            
             const piecesCopy = pieces.slice();
             piecesCopy[clickedSquare] = null;
-
+            
             setPieces(piecesCopy);                        
             setPosition({x: e.clientX - 75/2, y: e.clientY - 75/2});
         }
@@ -109,7 +96,7 @@ function Chessboard(props: ChessboardProps) {
         setPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
         return;      
     }
-
+    
     
     function handleMouseUp(e: React.MouseEvent) { 
         if (!isDragging && !isAiming.current) return;
@@ -148,7 +135,7 @@ function Chessboard(props: ChessboardProps) {
             isAiming.current = false;
             selectedTarget.current = targetSquare;
             props.onMoveEnter("e");
-
+            
         }
         return;
         
@@ -179,24 +166,36 @@ function Chessboard(props: ChessboardProps) {
         } else {
             setPosition({x: 0, y: 0});  //Forcing a rerender to unhighlight origin square
         }
-
+        
         dragImage.current = null;
         selectedOrigin.current = null;
         isAiming.current = false;
+    }    
+    
+    let styles: CSSProperties = {
+        position: "absolute",
+        left: position.x,
+        top: position.y,
+        cursor: isDragging ? "grabbing" : "grab"
     }
-
+    
+    const dragPiece = <img
+    draggable="false"
+    className="dragPiece" 
+    src={dragImage.current as string}
+    style={styles} />;
     
     type SquareProps = {
         index: number,
         piece: string | null,
         highlight: string | null
-    }   
-    
+    }
+
     function Square(props: SquareProps) {       
         const shouldBeLight = ((Math.floor(props.index / 8) % 2) + (props.index % 2)) % 2 === 0;
         let backgroundColor = shouldBeLight ? lightSquaresColor : darkSquaresColor;
         backgroundColor = (props.highlight !== null) ? props.highlight : backgroundColor;
-            
+        
         return (
             <div className="square" style={{ backgroundColor }}>
                 {props.piece && <img draggable="false" className="piece" src={props.piece as string} />}
@@ -218,11 +217,11 @@ function Chessboard(props: ChessboardProps) {
     
     return (
         <div 
-            className="chessboard" style={{ border }} 
-            onMouseMove={handleMouseMove} 
-            onMouseUp={(e) => handleMouseUp(e)}
-            onMouseDown={(e) => handleMouseDown(e)}
-            onContextMenu={(e) => e.preventDefault()}
+        className="chessboard" style={{ border }} 
+        onMouseMove={handleMouseMove} 
+        onMouseUp={(e) => handleMouseUp(e)}
+        onMouseDown={(e) => handleMouseDown(e)}
+        onContextMenu={(e) => e.preventDefault()}
         >
             {isDragging && dragPiece}
             {squares}
