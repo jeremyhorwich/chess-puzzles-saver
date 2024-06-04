@@ -2,6 +2,8 @@ import React, { CSSProperties, useState, useRef, useEffect } from "react";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
 
+const backend_server = "http://127.0.0.1:8000"
+
 type ChessboardProps = {
     fen: string,
     highlightColor: string
@@ -30,7 +32,7 @@ function Chessboard(props: ChessboardProps) {
     useEffect(() => {
         async function getInitialPos() {
             //TODO error handling
-            const response = await fetch(`http://127.0.0.1:8000/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
+            const response = await fetch(`${backend_server}/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
             const initialPosJSON = await response.json();
             
             const initialPos: Array<string|null> = Array(64).fill(null);
@@ -163,9 +165,10 @@ function Chessboard(props: ChessboardProps) {
         }
             
         async function getMoveInSAN() {
+            const queryParams = `fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
             const response = 
                 await fetch(
-                    `http://127.0.0.1:8000/chess/utils/move-indices-to-san?fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
+                    `${backend_server}/chess/utils/move-indices-to-san?${queryParams}`
                 );
             const responseJSON = await response.json();
             return responseJSON["san"]
