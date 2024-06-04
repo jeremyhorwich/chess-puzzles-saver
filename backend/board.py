@@ -32,9 +32,7 @@ def raw_move_to_san(fen: str, origin: int, target: int):
     board = Board(fen)
     move = Move(origin, target)
     print(board.san(move))
-    return  
-
-origin_and_target_to_san("R7/7K/8/8/8/8/7k/R7 w - - 0 1", 0, 8)
+    return  {"san": board.san(move)}
 
 def get_turn(raw: str) -> str:
     if raw == "w":

@@ -44,6 +44,7 @@ function Chessboard(props: ChessboardProps) {
     }, [])
 
     
+    
     function handleMouseDown(e: React.MouseEvent) {
         if (e.button === 2) {   //If a right mouse click
             resetToNeutral();
@@ -120,7 +121,12 @@ function Chessboard(props: ChessboardProps) {
             
             isAiming.current = false;
             selectedTarget.current = targetSquare;
-            props.onMoveEnter("e");
+            
+            const move = getMoveInSAN();
+            move.then((value) => 
+                console.log(value)
+                //props.onMoveEnter(value))
+            )
             return;
         }
         
@@ -134,7 +140,10 @@ function Chessboard(props: ChessboardProps) {
             
             isAiming.current = false;
             selectedTarget.current = targetSquare;
-            props.onMoveEnter("e");
+            
+            const move = getMoveInSAN();
+            //TODO error handling
+            move.then((value) => props.onMoveEnter(value))
             
         }
         return;
@@ -154,6 +163,16 @@ function Chessboard(props: ChessboardProps) {
                 selectedOrigin.current = null;
             }
             return;
+        }
+            
+        async function getMoveInSAN() {
+            const response = 
+                await fetch(
+                    //`http://127.0.0.1:8000/chess/utils/move-indices-to-san/?fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
+                    `http://127.0.0.1:8000/chess/utils/move-indices-to-san/?fen=${selectedOrigin.current}`
+                );
+            const responseJSON = await response.json();
+            return responseJSON["san"]
         }
     }
     
