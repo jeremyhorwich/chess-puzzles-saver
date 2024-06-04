@@ -123,10 +123,7 @@ function Chessboard(props: ChessboardProps) {
             selectedTarget.current = targetSquare;
             
             const move = getMoveInSAN();
-            move.then((value) => 
-                console.log(value)
-                //props.onMoveEnter(value))
-            )
+            move.then((value) => props.onMoveEnter(value))
             return;
         }
         
@@ -171,7 +168,7 @@ function Chessboard(props: ChessboardProps) {
                     `http://127.0.0.1:8000/chess/utils/move-indices-to-san?fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
                 );
             const responseJSON = await response.json();
-            return responseJSON["response"]
+            return responseJSON["san"]
         }
     }
     
