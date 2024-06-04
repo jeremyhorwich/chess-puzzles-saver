@@ -16,6 +16,6 @@ class MoveRequest(BaseModel):
 
 @router.get("/utils/move-indices-to-san")
 async def convert_indices_to_san(fen: str, origin: int, target: int):
-    print(origin, target)
-    return {"response": "null"}
-    return raw_move_to_san(fen, origin, target)
+    back_origin = (7 - origin // 8)*8 + (origin % 8)
+    back_target = (7 - target // 8)*8 + (target % 8)
+    return raw_move_to_san(fen, back_origin, back_target)

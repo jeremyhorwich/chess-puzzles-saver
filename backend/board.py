@@ -25,13 +25,11 @@ def get_piece_coordinates(raw: str) -> json:
             break
         coordinates[(current_row*8) + current_column] = char
         current_column += 1
-    print(coordinates)
     return coordinates
 
 def raw_move_to_san(fen: str, origin: int, target: int):
     board = Board(fen)
     move = Move(origin, target)
-    print(board.san(move))
     return  {"san": board.san(move)}
 
 def get_turn(raw: str) -> str:

@@ -168,11 +168,10 @@ function Chessboard(props: ChessboardProps) {
         async function getMoveInSAN() {
             const response = 
                 await fetch(
-                    `http://127.0.0.1:8000/chess/utils/move-indices-to-san/?fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
-                    //`http://127.0.0.1:8000/chess/utils/move-indices-to-san?fen=${selectedOrigin.current}`
+                    `http://127.0.0.1:8000/chess/utils/move-indices-to-san?fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
                 );
             const responseJSON = await response.json();
-            return responseJSON["san"]
+            return responseJSON["response"]
         }
     }
     
