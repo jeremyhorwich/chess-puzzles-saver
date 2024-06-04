@@ -30,7 +30,7 @@ function Chessboard(props: ChessboardProps) {
     useEffect(() => {
         async function getInitialPos() {
             //TODO error handling
-            const response = await fetch(`http://127.0.0.1:8000/chess/utils/fen-to-pieces-coords/?fen=${props.fen}`);
+            const response = await fetch(`http://127.0.0.1:8000/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
             const initialPosJSON = await response.json();
             
             const initialPos: Array<string|null> = Array(64).fill(null);
@@ -168,8 +168,8 @@ function Chessboard(props: ChessboardProps) {
         async function getMoveInSAN() {
             const response = 
                 await fetch(
-                    //`http://127.0.0.1:8000/chess/utils/move-indices-to-san/?fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
-                    `http://127.0.0.1:8000/chess/utils/move-indices-to-san/?fen=${selectedOrigin.current}`
+                    `http://127.0.0.1:8000/chess/utils/move-indices-to-san/?fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
+                    //`http://127.0.0.1:8000/chess/utils/move-indices-to-san?fen=${selectedOrigin.current}`
                 );
             const responseJSON = await response.json();
             return responseJSON["san"]
