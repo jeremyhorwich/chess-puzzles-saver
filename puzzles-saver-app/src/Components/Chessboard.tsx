@@ -14,19 +14,19 @@ function Chessboard(props: ChessboardProps) {
     //TODO: Behavior if mouse leaves chessboard while dragging
 
     //TODO: Highlight hover squares
-    const [position, setPosition] = useState({x: 0, y: 0});
+    const [dragPosition, setDragPosition] = useState({x: 0, y: 0});
     const [pieces, setPieces] = useState<Array<string|null>>(Array(64).fill(null));
     
     const dragImage = useRef<string|null>(null);
-    const selectedOrigin = useRef<number|null>(null);
-    const selectedTarget = useRef<number|null>(null);
+    const originSquare = useRef<number|null>(null);
+    const targetSquare = useRef<number|null>(null);
     const isAiming = useRef<boolean>(false);
     
     const isDragging = (dragImage.current !== null);
     const chessBoardSize = 8*75;    //TODO: Find dynamically
     const darkSquaresColor = "#484848";
     const lightSquaresColor = "#ffffff";
-    const borderColor = (selectedOrigin.current !== null) ? props.highlightColor : darkSquaresColor;
+    const borderColor = (originSquare.current !== null) ? props.highlightColor : darkSquaresColor;
     const border = "1px solid " + borderColor;
     
     useEffect(() => {
@@ -60,24 +60,29 @@ function Chessboard(props: ChessboardProps) {
         const clickedColumn = Math.floor((e.clientX - boardRect.left)/75);   //Must change for dynamic board size
         const clickedRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
         const clickedSquare = clickedColumn + (clickedRow*8);
+
+        if (isAiming.current && clickedSquare !== originSquare.current) {
+            targetSquare.current = clickedSquare;
+            return;
+        }
         
         if (pieces[clickedSquare]) {
             beginDragging();
-            selectedTarget.current = null;
+            targetSquare.current = null;
         } 
         
         return;
         
         
         function beginDragging() {
-            selectedOrigin.current = clickedSquare;
+            originSquare.current = clickedSquare;
             dragImage.current = pieces[clickedSquare];
             
             const piecesCopy = pieces.slice();
             piecesCopy[clickedSquare] = null;
             
             setPieces(piecesCopy);                        
-            setPosition({x: e.clientX - 75/2, y: e.clientY - 75/2});
+            setDragPosition({x: e.clientX - 75/2, y: e.clientY - 75/2});
         }
     }
     
@@ -96,7 +101,7 @@ function Chessboard(props: ChessboardProps) {
         }
         
         const pieceSize = (chessBoardSize/8);
-        setPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
+        setDragPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
         return;      
     }
     
@@ -109,20 +114,20 @@ function Chessboard(props: ChessboardProps) {
         const boardRect = e.currentTarget.getBoundingClientRect();
         const squareSize = chessBoardSize/8;
         
-        const targetColumn = Math.floor((e.clientX - boardRect.left)/squareSize);
-        const targetRow = Math.floor((e.clientY - boardRect.top)/squareSize);
-        const targetSquare = targetColumn + (targetRow*8);
+        const hoveredColumn = Math.floor((e.clientX - boardRect.left)/squareSize);
+        const hoveredRow = Math.floor((e.clientY - boardRect.top)/squareSize);
+        const hoveredSquare = hoveredColumn + (hoveredRow*8);
         
         if (isDragging) {
             stopDragging();
             
-            if (targetSquare === selectedOrigin.current) {
+            if (hoveredSquare === originSquare.current) {
                 toggleAiming();
                 return;
             }
             
             isAiming.current = false;
-            selectedTarget.current = targetSquare;
+            targetSquare.current = hoveredSquare;
             
             const move = getMoveInSAN();
             move.then((value) => props.onMoveEnter(value))
@@ -133,12 +138,13 @@ function Chessboard(props: ChessboardProps) {
             
             //TODO Check for illegal move
             const piecesCopy = pieces.slice();
-            piecesCopy[targetSquare] = piecesCopy[selectedOrigin.current as number];
-            piecesCopy[selectedOrigin.current as number] = null;
+            piecesCopy[hoveredSquare] = piecesCopy[originSquare.current as number];
+
+            piecesCopy[originSquare.current as number] = null;
             setPieces(piecesCopy);
             
             isAiming.current = false;
-            selectedTarget.current = targetSquare;
+            targetSquare.current = hoveredSquare;
             
             const move = getMoveInSAN();
             //TODO error handling
@@ -149,7 +155,7 @@ function Chessboard(props: ChessboardProps) {
         
         function stopDragging() {
             const piecesCopy = pieces.slice();
-            piecesCopy[targetSquare] = dragImage.current;
+            piecesCopy[hoveredSquare] = dragImage.current;
             
             dragImage.current = null;
             setPieces(piecesCopy);
@@ -159,13 +165,13 @@ function Chessboard(props: ChessboardProps) {
         function toggleAiming() {
             isAiming.current = !isAiming.current;
             if (!isAiming.current) {
-                selectedOrigin.current = null;
+                originSquare.current = null;
             }
             return;
         }
             
         async function getMoveInSAN() {
-            const queryParams = `fen=${props.fen}&origin=${selectedOrigin.current}&target=${selectedTarget.current}`
+            const queryParams = `fen=${props.fen}&origin=${originSquare.current}&target=${targetSquare.current}`
             const response = 
                 await fetch(
                     `${backend_server}/chess/utils/move-indices-to-san?${queryParams}`
@@ -179,21 +185,21 @@ function Chessboard(props: ChessboardProps) {
     function resetToNeutral() {
         if (dragImage.current) {
             const piecesCopy = pieces.slice();
-            piecesCopy[selectedOrigin.current as number] = dragImage.current;
+            piecesCopy[originSquare.current as number] = dragImage.current;
             setPieces(piecesCopy);
         } else {
-            setPosition({x: 0, y: 0});  //Forcing a rerender to unhighlight origin square
+            setDragPosition({x: 0, y: 0});  //Forcing a rerender to unhighlight origin square
         }
         
         dragImage.current = null;
-        selectedOrigin.current = null;
+        originSquare.current = null;
         isAiming.current = false;
     }    
     
     let styles: CSSProperties = {
         position: "absolute",
-        left: position.x,
-        top: position.y,
+        left: dragPosition.x,
+        top: dragPosition.y,
         cursor: isDragging ? "grabbing" : "grab"
     }
     
@@ -226,7 +232,7 @@ function Chessboard(props: ChessboardProps) {
     
     for (let i = 0; i < 64; i++) {
         const id = columns[i % 8] + (Math.floor(i/8) + 1)
-        if (i === selectedOrigin.current || i === selectedTarget.current) {        //Will this cause issues when we flip the board?
+        if (i === originSquare.current || i === targetSquare.current) {        //Will this cause issues when we flip the board?
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={props.highlightColor} />
         } else {
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={null} />
