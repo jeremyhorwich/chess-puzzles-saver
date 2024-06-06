@@ -6,9 +6,6 @@ def algebraic_to_coord(algebraic_position: str) -> tuple[int, int]:
     row = 8 - int(algebraic_position[1])
     return row, column
 
-#TODO: Format error handling
-#TODO: Change to convert to algebraic notation, then in Board convert
-#   to coordinates. We don't need to know coords outside of board
 def get_piece_coordinates(raw: str) -> json:
     coordinates = dict()
     current_row = 0
@@ -26,6 +23,11 @@ def get_piece_coordinates(raw: str) -> json:
         coordinates[(current_row*8) + current_column] = char
         current_column += 1
     return coordinates
+
+def is_move_legal(fen: str, origin: int, target: int):
+    board = Board(fen)
+    move = Move(origin, target)
+    return (move in board.legal_moves)
 
 def raw_move_to_san(fen: str, origin: int, target: int):
     board = Board(fen)
