@@ -31,16 +31,24 @@ function Chessboard(props: ChessboardProps) {
     
     useEffect(() => {
         async function getInitialPos() {
-            //TODO error handling
-            const response = await fetch(`${backend_server}/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
-            const initialPosJSON = await response.json();
-            
-            const initialPos: Array<string|null> = Array(64).fill(null);
-            for (const location in initialPosJSON) {
-                const piece = pieceImages[initialPosJSON[location]];
-                initialPos[Number(location)] = piece;
+            try {
+                const response = await fetch(`${backend_server}/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+
+                const initialPosJSON = await response.json();
+                
+                const initialPos: Array<string|null> = Array(64).fill(null);
+                for (const location in initialPosJSON) {
+                    const piece = pieceImages[initialPosJSON[location]];
+                    initialPos[Number(location)] = piece;
+                }
+
+                setPieces(initialPos)
+            } catch (error) {
+                console.log(error);
             }
-            setPieces(initialPos)
         }
         getInitialPos();
     }, [])
@@ -172,12 +180,21 @@ function Chessboard(props: ChessboardProps) {
             
         async function getMoveInSAN() {
             const queryParams = `fen=${props.fen}&origin=${originSquare.current}&target=${targetSquare.current}`
-            const response = 
-                await fetch(
-                    `${backend_server}/chess/utils/move-indices-to-san?${queryParams}`
-                );
-            const responseJSON = await response.json();
-            return responseJSON["san"]
+            try {
+                const response = 
+                    await fetch(
+                        `${backend_server}/chess/utils/move-indices-to-san?${queryParams}`
+                    );
+                
+                if (!response.ok) {
+                    throw Error(response.statusText)
+                }
+
+                const responseJSON = await response.json();
+                return responseJSON["san"]
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
     
