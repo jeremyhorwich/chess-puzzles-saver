@@ -32,7 +32,7 @@ def is_move_legal(fen: str, origin: int, target: int):
 def raw_move_to_san(fen: str, origin: int, target: int):
     board = Board(fen)
     move = Move(origin, target)
-    return  {"san": board.san(move)}
+    return board.san(move)
 
 def get_turn(raw: str) -> str:
     if raw == "w":
