@@ -1,5 +1,6 @@
 import React, { CSSProperties, useState, useRef, useEffect } from "react";
 import useGetMoveFromCoords from "../hooks/fetches/useGetMoveFromCoords";
+import useGetIsMoveLegal from "../hooks/fetches/useGetIsMoveLegal";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
 
@@ -126,6 +127,9 @@ function Chessboard(props: ChessboardProps) {
         const hoveredRow = Math.floor((e.clientY - boardRect.top)/squareSize);
         const hoveredSquare = hoveredColumn + (hoveredRow*8);
         
+        const legality = useGetIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
+        legality.then((result) => console.log(result))
+
         if (isDragging) {
             stopDragging();
             
@@ -201,10 +205,10 @@ function Chessboard(props: ChessboardProps) {
     }
     
     const dragPiece = <img
-    draggable="false"
-    className="dragPiece" 
-    src={dragImage.current as string}
-    style={styles} />;
+                        draggable="false"
+                        className="dragPiece" 
+                        src={dragImage.current as string}
+                        style={styles} />;
     
     type SquareProps = {
         index: number,

@@ -11,10 +11,10 @@ async def get_coords_from(fen: str):
 async def convert_indices_to_san(fen: str, origin: int, target: int):
     back_origin = convert_array_index_to_pychess_square(origin)
     back_target = convert_array_index_to_pychess_square(target)
-    return raw_move_to_san(fen, back_origin, back_target)
+    return {"san": raw_move_to_san(fen, back_origin, back_target)}
 
 @router.get("/utils/is-move-legal")
-async def is_move_legal(fen: str, origin: int, target: int):
+async def get_move_legality(fen: str, origin: int, target: int):
     back_origin = convert_array_index_to_pychess_square(origin)
     back_target = convert_array_index_to_pychess_square(target)
     return {"legal": is_move_legal(fen, back_origin, back_target)}
