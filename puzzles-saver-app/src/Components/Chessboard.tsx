@@ -1,4 +1,5 @@
 import React, { CSSProperties, useState, useRef, useEffect } from "react";
+import useGetMoveFromCoords from "../hooks/fetches/useGetMoveFromCoords";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
 
@@ -98,7 +99,6 @@ function Chessboard(props: ChessboardProps) {
     function handleMouseMove(e: React.MouseEvent) {
         if (!isDragging) return;
         
-        //If we exit the confines of the component, then trigger a leave...
         const boardRect = e.currentTarget.getBoundingClientRect();
         const outsideXDimensions = e.clientX < boardRect.left || e.clientX > boardRect.right;
         const outsideYDimensions = e.clientY < boardRect.top || e.clientY > boardRect.bottom;
@@ -137,7 +137,7 @@ function Chessboard(props: ChessboardProps) {
             isAiming.current = false;
             targetSquare.current = hoveredSquare;
             
-            const move = getMoveInSAN();
+            const move = useGetMoveFromCoords(props.fen, originSquare.current as number, targetSquare.current);
             move.then((value) => props.onMoveEnter(value))
             return;
         }
@@ -154,8 +154,7 @@ function Chessboard(props: ChessboardProps) {
             isAiming.current = false;
             targetSquare.current = hoveredSquare;
             
-            const move = getMoveInSAN();
-            //TODO error handling
+            const move = useGetMoveFromCoords(props.fen, originSquare.current as number, targetSquare.current);
             move.then((value) => props.onMoveEnter(value))
             
         }
@@ -176,25 +175,6 @@ function Chessboard(props: ChessboardProps) {
                 originSquare.current = null;
             }
             return;
-        }
-            
-        async function getMoveInSAN() {
-            const queryParams = `fen=${props.fen}&origin=${originSquare.current}&target=${targetSquare.current}`
-            try {
-                const response = 
-                    await fetch(
-                        `${backend_server}/chess/utils/move-indices-to-san?${queryParams}`
-                    );
-                
-                if (!response.ok) {
-                    throw Error(response.statusText)
-                }
-
-                const responseJSON = await response.json();
-                return responseJSON["san"]
-            } catch (error) {
-                console.log(error)
-            }
         }
     }
     
