@@ -65,8 +65,8 @@ function Chessboard(props: ChessboardProps) {
         
         const boardRect = e.currentTarget.getBoundingClientRect();
         
-        const clickedColumn = Math.floor((e.clientX - boardRect.left)/75);   //Must change for dynamic board size
-        const clickedRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
+        const clickedColumn = Math.floor((e.clientX - boardRect.left)/(chessBoardSize/8));
+        const clickedRow = Math.floor((e.clientY - boardRect.top)/(chessBoardSize/8));
         const clickedSquare = clickedColumn + (clickedRow*8);
 
         if (isAiming.current && clickedSquare !== originSquare.current) return;
@@ -182,7 +182,7 @@ function Chessboard(props: ChessboardProps) {
             }
         }
     }
-    
+
     
     function resetToNeutral() {
         if (dragImage.current) {
@@ -198,6 +198,7 @@ function Chessboard(props: ChessboardProps) {
         isAiming.current = false;
     }
     
+
     let styles: CSSProperties = {
         position: "absolute",
         left: dragPosition.x,
@@ -234,7 +235,7 @@ function Chessboard(props: ChessboardProps) {
     
     for (let i = 0; i < 64; i++) {
         const id = columns[i % 8] + (Math.floor(i/8) + 1)
-        if (i === originSquare.current || i === targetSquare.current) {        //Will this cause issues when we flip the board?
+        if (i === originSquare.current || i === targetSquare.current) {       //Will this cause issues when we flip the board?
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={props.highlightColor} />
         } else {
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={null} />
