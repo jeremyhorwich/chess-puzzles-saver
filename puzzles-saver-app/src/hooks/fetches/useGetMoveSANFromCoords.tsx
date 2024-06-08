@@ -1,6 +1,6 @@
 const backend_server = "http://127.0.0.1:8000"
 
-async function useGetMoveFromCoords(fen: string, origin: number, target: number) {
+async function useGetMoveSANFromCoords(fen: string, origin: number, target: number) {
     const queryParams = `fen=${fen}&origin=${origin}&target=${target}`
     try {
         const response = 
@@ -13,10 +13,10 @@ async function useGetMoveFromCoords(fen: string, origin: number, target: number)
         }
     
         const responseJSON = await response.json();
-        return responseJSON
+        return responseJSON["san"]
     } catch (error) {
         console.log(error)
     }
 }
 
-export default useGetMoveFromCoords
+export default useGetMoveSANFromCoords

@@ -13,7 +13,7 @@ async function useGetIsMoveLegal(fen: string, origin: number, target: number) {
         }
         
         const responseJSON = await response.json();
-        return responseJSON
+        return responseJSON["legal"]
     } catch (error) {
         console.log(error);
     }

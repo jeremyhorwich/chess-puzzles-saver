@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState, useRef, useEffect } from "react";
-import useGetMoveFromCoords from "../hooks/fetches/useGetMoveFromCoords";
+import useGetMoveSANFromCoords from "../hooks/fetches/useGetMoveSANFromCoords";
 import useGetIsMoveLegal from "../hooks/fetches/useGetIsMoveLegal";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
@@ -13,9 +13,7 @@ type ChessboardProps = {
 }
                         
 function Chessboard(props: ChessboardProps) {
-    //TODO: Behavior if mouse leaves chessboard while dragging
-
-    //TODO: Highlight hover squares
+    //TODO: Highlight hover squares?
     const [dragPosition, setDragPosition] = useState({x: 0, y: 0});
     const [pieces, setPieces] = useState<Array<string|null>>(Array(64).fill(null));
     
@@ -71,10 +69,7 @@ function Chessboard(props: ChessboardProps) {
         const clickedRow = Math.floor((e.clientY - boardRect.top)/75);      //Must change for dynamic board size
         const clickedSquare = clickedColumn + (clickedRow*8);
 
-        if (isAiming.current && clickedSquare !== originSquare.current) {
-            targetSquare.current = clickedSquare;
-            return;
-        }
+        if (isAiming.current && clickedSquare !== originSquare.current) return;
         
         if (pieces[clickedSquare]) {
             beginDragging();
@@ -91,7 +86,7 @@ function Chessboard(props: ChessboardProps) {
             const piecesCopy = pieces.slice();
             piecesCopy[clickedSquare] = null;
             
-            setPieces(piecesCopy);                        
+            setPieces(piecesCopy);
             setDragPosition({x: e.clientX - 75/2, y: e.clientY - 75/2});
         }
     }
@@ -117,53 +112,60 @@ function Chessboard(props: ChessboardProps) {
     
     function handleMouseUp(e: React.MouseEvent) { 
         if (!isDragging && !isAiming.current) return;
-        
-        //TODO: If move illegal, cancel dragging
-        
+                
         const boardRect = e.currentTarget.getBoundingClientRect();
         const squareSize = chessBoardSize/8;
         
         const hoveredColumn = Math.floor((e.clientX - boardRect.left)/squareSize);
         const hoveredRow = Math.floor((e.clientY - boardRect.top)/squareSize);
         const hoveredSquare = hoveredColumn + (hoveredRow*8);
-        
-        const legality = useGetIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
-        legality.then((result) => console.log(result))
 
-        if (isDragging) {
-            stopDragging();
-            
-            if (hoveredSquare === originSquare.current) {
-                toggleAiming();
-                return;
-            }
-            
-            isAiming.current = false;
-            targetSquare.current = hoveredSquare;
-            
-            const move = useGetMoveFromCoords(props.fen, originSquare.current as number, targetSquare.current);
-            move.then((value) => props.onMoveEnter(value))
-            return;
-        }
-        
-        if (isAiming.current) {
-            
-            //TODO Check for illegal move
-            const piecesCopy = pieces.slice();
-            piecesCopy[hoveredSquare] = piecesCopy[originSquare.current as number];
+        useGetIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
+            .then((isMoveLegal) => {
+                if (isDragging) {
+                    if (hoveredSquare === originSquare.current) {
+                        stopDragging();
+                        toggleAiming();
+                        return;
+                    }
 
-            piecesCopy[originSquare.current as number] = null;
-            setPieces(piecesCopy);
-            
-            isAiming.current = false;
-            targetSquare.current = hoveredSquare;
-            
-            const move = useGetMoveFromCoords(props.fen, originSquare.current as number, targetSquare.current);
-            move.then((value) => props.onMoveEnter(value))
-            
-        }
-        return;
+                    if (!isMoveLegal) {
+                        resetToNeutral();
+                        return;
+                    }
+                    
+                    stopDragging();                    
+                    isAiming.current = false;
+                    targetSquare.current = hoveredSquare;
+                    
+                    const moveSAN = useGetMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
+                    moveSAN.then((value) => props.onMoveEnter(value))
+                    return;
+                }
+                
+                if (isAiming.current) {
+                    if (!isMoveLegal) {
+                        resetToNeutral();
+                        return;
+                    }
+
+                    const piecesCopy = pieces.slice();
+                    piecesCopy[hoveredSquare] = piecesCopy[originSquare.current as number];
         
+                    piecesCopy[originSquare.current as number] = null;
+                    setPieces(piecesCopy);
+                    
+                    isAiming.current = false;
+                    targetSquare.current = hoveredSquare;
+                    
+                    const move = useGetMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
+                    move.then((value) => {
+                        console.log(value)
+                        props.onMoveEnter(value)
+                    })
+                }            
+            })
+
         function stopDragging() {
             const piecesCopy = pieces.slice();
             piecesCopy[hoveredSquare] = dragImage.current;
@@ -178,7 +180,6 @@ function Chessboard(props: ChessboardProps) {
             if (!isAiming.current) {
                 originSquare.current = null;
             }
-            return;
         }
     }
     
@@ -195,7 +196,7 @@ function Chessboard(props: ChessboardProps) {
         dragImage.current = null;
         originSquare.current = null;
         isAiming.current = false;
-    }    
+    }
     
     let styles: CSSProperties = {
         position: "absolute",
