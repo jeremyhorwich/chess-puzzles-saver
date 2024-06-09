@@ -4,7 +4,7 @@ import useGetIsMoveLegal from "../hooks/fetches/useGetIsMoveLegal";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
 
-const backend_server = "http://127.0.0.1:8000"
+const backendBaseURL = import.meta.env.VITE_BACKEND_BASE_URL
 
 type ChessboardProps = {
     fen: string,
@@ -32,7 +32,7 @@ function Chessboard(props: ChessboardProps) {
     useEffect(() => {
         async function getInitialPos() {
             try {
-                const response = await fetch(`${backend_server}/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
+                const response = await fetch(`${backendBaseURL}/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }

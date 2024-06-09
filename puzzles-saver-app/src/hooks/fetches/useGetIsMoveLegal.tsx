@@ -1,11 +1,11 @@
-const backend_server = "http://127.0.0.1:8000"
+const backendBaseURL = import.meta.env.VITE_BACKEND_BASE_URL
 
 async function useGetIsMoveLegal(fen: string, origin: number, target: number) {
     const queryParams = `fen=${fen}&origin=${origin}&target=${target}`
     try {
         const response = 
             await fetch(
-                `${backend_server}/chess/utils/is-move-legal?${queryParams}`
+                `${backendBaseURL}/chess/utils/is-move-legal?${queryParams}`
             );
         
         if (!response.ok) {
