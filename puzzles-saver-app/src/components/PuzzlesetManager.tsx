@@ -40,7 +40,7 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
         <div>
             <PuzzlePlayer {...puzzleObject.current}/>
             {currentPuzzleIndex > 0 && <button onClick={() => handleClick(-1)}>Button 1</button>}
-            {currentPuzzleIndex && <button onClick={() => handleClick(1)}>Button 2</button>}
+            {currentPuzzleIndex < puzzleset.current.puzzles.length && <button onClick={() => handleClick(1)}>Button 2</button>}
         </div>
     )
 }
