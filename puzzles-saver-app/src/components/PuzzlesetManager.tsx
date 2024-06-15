@@ -19,15 +19,17 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
         useGetPuzzleset(props.puzzlesetID)
             .then((puzzlesetJSON) => {
                 puzzleset.current = puzzlesetJSON;
-                useGetPuzzle(puzzlesetJSON.puzzles[currentPuzzleIndex])
-                    .then((puzzleJSON) => {puzzleObject.current = puzzleJSON});
+                useGetPuzzle(puzzlesetJSON.puzzles[0])
+                    .then((puzzleJSON) => {
+                        puzzleObject.current = puzzleJSON
+                        setCurrentPuzzleIndex(0);       //Force a rerender now that we have data
+                    });
             })
-        
-        setCurrentPuzzleIndex(0);       //Force a rerender now that we have data
     }, []);
 
     useEffect(() => {
         if (puzzleset.current.name === "") return;
+        console.log("changing")
         useGetPuzzle(puzzleset.current.puzzles[currentPuzzleIndex])
             .then((puzzleJSON) => {puzzleObject.current = puzzleJSON});
     }, [currentPuzzleIndex]);
@@ -40,7 +42,7 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
         <div>
             <PuzzlePlayer {...puzzleObject.current}/>
             {currentPuzzleIndex > 0 && <button onClick={() => handleClick(-1)}>Button 1</button>}
-            {currentPuzzleIndex && <button onClick={() => handleClick(1)}>Button 2</button>}
+            {<button onClick={() => handleClick(1)}>Button 2</button>}
         </div>
     )
 }

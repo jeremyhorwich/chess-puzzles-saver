@@ -27,7 +27,7 @@ function PuzzlePlayer(props: Puzzle) {
                 whitePlayer={props.whitePlayer}
                 blackPlayer={props.blackPlayer}
             />  
-            <Chessboard fen={props.fen} highlightColor={currentHighlight} onMoveEnter={onMoveEntered}/>
+            <Chessboard key={props.fen} fen={props.fen} highlightColor={currentHighlight} onMoveEnter={onMoveEntered}/>
         </div>
     )
 }
