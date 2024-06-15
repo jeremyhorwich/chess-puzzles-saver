@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState, useRef, useEffect } from "react";
-import useGetMoveSANFromCoords from "../hooks/fetches/useGetMoveSANFromCoords";
-import useGetIsMoveLegal from "../hooks/fetches/useGetIsMoveLegal";
+import getMoveSANFromCoords from "../fetches/getMoveSANFromCoords";
+import getIsMoveLegal from "../fetches/getIsMoveLegal";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
 
@@ -120,7 +120,7 @@ function Chessboard(props: ChessboardProps) {
         const hoveredRow = Math.floor((e.clientY - boardRect.top)/squareSize);
         const hoveredSquare = hoveredColumn + (hoveredRow*8);
 
-        useGetIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
+        getIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
             .then((isMoveLegal) => {
                 if (isDragging) {
                     if (hoveredSquare === originSquare.current) {
@@ -138,7 +138,7 @@ function Chessboard(props: ChessboardProps) {
                     isAiming.current = false;
                     targetSquare.current = hoveredSquare;
                     
-                    const moveSAN = useGetMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
+                    const moveSAN = getMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
                     moveSAN.then((value) => props.onMoveEnter(value))
                     return;
                 }
@@ -158,7 +158,7 @@ function Chessboard(props: ChessboardProps) {
                     isAiming.current = false;
                     targetSquare.current = hoveredSquare;
                     
-                    const move = useGetMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
+                    const move = getMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
                     move.then((value) => {
                         console.log(value)
                         props.onMoveEnter(value)

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Puzzle, Puzzleset } from "../dataTypes/puzzleTypes"; 
 import { PuzzlePlayer } from "./PuzzlePlayer";
-import useGetPuzzleset from "../hooks/fetches/useGetPuzzleset";
-import useGetPuzzle from "../hooks/fetches/useGetPuzzle";
+import getPuzzleset from "../fetches/getPuzzleset";
+import getPuzzle from "../fetches/getPuzzle";
 
 const startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -16,10 +16,10 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
     const puzzleset = useRef<Puzzleset>({name: "", puzzles: [""]});
 
     useEffect(() => {
-        useGetPuzzleset(props.puzzlesetID)
+        getPuzzleset(props.puzzlesetID)
             .then((puzzlesetJSON) => {
                 puzzleset.current = puzzlesetJSON;
-                useGetPuzzle(puzzlesetJSON.puzzles[0])
+                getPuzzle(puzzlesetJSON.puzzles[0])
                     .then((puzzleJSON) => {
                         puzzleObject.current = puzzleJSON
                         setCurrentPuzzleIndex(0);       //Force a rerender now that we have data
@@ -30,7 +30,7 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
     useEffect(() => {
         if (puzzleset.current.name === "") return;
         console.log("changing")
-        useGetPuzzle(puzzleset.current.puzzles[currentPuzzleIndex])
+        getPuzzle(puzzleset.current.puzzles[currentPuzzleIndex])
             .then((puzzleJSON) => {puzzleObject.current = puzzleJSON});
     }, [currentPuzzleIndex]);
 

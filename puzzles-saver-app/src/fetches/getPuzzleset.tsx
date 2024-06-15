@@ -1,6 +1,6 @@
 const backendBaseURL = import.meta.env.VITE_BACKEND_BASE_URL
 
-async function useGetPuzzleset(_id: string) {
+async function getPuzzleset(_id: string) {
     try {
         const response = 
             await fetch(
@@ -18,4 +18,4 @@ async function useGetPuzzleset(_id: string) {
     }
 }
 
-export default useGetPuzzleset
+export default getPuzzleset

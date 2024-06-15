@@ -1,6 +1,6 @@
 const backendBaseURL = import.meta.env.VITE_BACKEND_BASE_URL
 
-async function useGetMoveSANFromCoords(fen: string, origin: number, target: number) {
+async function getMoveSANFromCoords(fen: string, origin: number, target: number) {
     const queryParams = `fen=${fen}&origin=${origin}&target=${target}`
     try {
         const response = 
@@ -19,4 +19,4 @@ async function useGetMoveSANFromCoords(fen: string, origin: number, target: numb
     }
 }
 
-export default useGetMoveSANFromCoords
+export default getMoveSANFromCoords
