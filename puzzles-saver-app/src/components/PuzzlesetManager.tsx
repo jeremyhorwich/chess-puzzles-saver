@@ -11,8 +11,11 @@ type PuzzleSetManagerProps = {
 }
 
 function PuzzlesetManager(props: PuzzleSetManagerProps) {
-    const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState<number>(-1);
-    const puzzleObject = useRef<Puzzle>({fen: startingPosition, answer: "", title: "Loading Puzzle"});
+    const [currentPuzzleObject, setCurrentPuzzleObject] = useState<Puzzle>({
+        fen: startingPosition, answer: "", title: "Loading Puzzle"
+    });
+
+    const puzzleIndex = useRef<number>(0);
     const puzzleset = useRef<Puzzleset>({name: "", puzzles: [""]});
 
     useEffect(() => {
@@ -20,29 +23,22 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
             .then((puzzlesetJSON) => {
                 puzzleset.current = puzzlesetJSON;
                 getPuzzle(puzzlesetJSON.puzzles[0])
-                    .then((puzzleJSON) => {
-                        puzzleObject.current = puzzleJSON
-                        setCurrentPuzzleIndex(0);       //Force a rerender now that we have data
-                    });
+                    .then((puzzleJSON) => {setCurrentPuzzleObject(puzzleJSON)});
             })
     }, []);
 
-    useEffect(() => {
-        if (puzzleset.current.name === "") return;
-        console.log("changing")
-        getPuzzle(puzzleset.current.puzzles[currentPuzzleIndex])
-            .then((puzzleJSON) => {puzzleObject.current = puzzleJSON});
-    }, [currentPuzzleIndex]);
 
     function handleClick(direction: -1 | 1) {
-        setCurrentPuzzleIndex(currentPuzzleIndex + direction);
+        puzzleIndex.current += direction;
+        getPuzzle(puzzleset.current.puzzles[puzzleIndex.current])
+            .then((puzzleJSON) => {setCurrentPuzzleObject(puzzleJSON)});
     }
 
     return (
         <div>
-            <PuzzlePlayer {...puzzleObject.current}/>
-            {currentPuzzleIndex > 0 && <button onClick={() => handleClick(-1)}>Button 1</button>}
-            {currentPuzzleIndex < puzzleset.current.puzzles.length && <button onClick={() => handleClick(1)}>Button 2</button>}
+            <PuzzlePlayer key={currentPuzzleObject.fen} {...currentPuzzleObject}/>
+            {puzzleIndex.current > 0 && <button onClick={() => handleClick(-1)}>Button 1</button>}
+            {puzzleIndex.current < puzzleset.current.puzzles.length - 1 && <button onClick={() => handleClick(1)}>Button 2</button>}
         </div>
     )
 }
