@@ -32,4 +32,4 @@ function PuzzlePlayer(props: Puzzle) {
     )
 }
 
-export { PuzzlePlayer}
+export { PuzzlePlayer }
