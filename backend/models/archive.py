@@ -1,10 +1,10 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class PlayerInfo(BaseModel):
     username: str
     rating: int
     result: str
-    id: str
 
 class Accuracy(BaseModel):
     white: float
@@ -14,9 +14,9 @@ class MonthlyArchiveGame(BaseModel):
     url: str
     pgn: str
     time_control: str
-    end_time: str
+    end_time: int
     rated: bool
-    accuracies: Accuracy
+    accuracies: Optional[Accuracy] = None
     tcn: str
     uuid: str
     initial_setup: str
