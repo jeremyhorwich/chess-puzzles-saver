@@ -1,38 +1,27 @@
 from chesscom import get_player_monthly_archive
 from datetime import date 
+from requests import get
+from pydantic import HttpUrl
 
-def previous_monthly_archive_date(year: str, month: str):
-    if month == "01":
-        return str(int(year) - 1), "12"
-    previous_month = int(month) - 1
-    if previous_month < 10:
-        return year, "0" + str(previous_month)
-    return year, str(previous_month)
-
-def current_monthly_archive_date():
-    year = date.today().year
-    month = date.today().month
-    if month < 10:
-        return year, "0" + str(month)
-    return year, str(month)
+def get_player_archives(profile: str) -> list[HttpUrl]:
+    url = f"https://api.chess.com/pub/player/{profile}/games/archives"
+    user_agent_header = {"user-agent": "chess-puzzles-saver/0.0.1"}
+    r = get(url, headers=user_agent_header)
+    j = r.json()
+    return j["archives"]
 
 def get_most_recent_games_from(profile: str, 
                                number_to_find: int,
                                **filters):
-    #TODO update to use https://api.chess.com/pub/player/{username}/games/archives
-    #See https://www.chess.com/news/view/published-data-api#pubapi-endpoint-games-archive
-    year_to_search, month_to_search = current_monthly_archive_date()
+    archives = get_player_archives(profile)
+    #TODO error handling - what if player has no games?
+    
     games = []
-    while len(games) < number_to_find:
-        previous_archive = get_player_monthly_archive(profile, 
-                                                      year_to_search, 
-                                                      month_to_search)
-        if len(previous_archive) == 0:
+    for archive in archives:
+        next_most_recent_games = get_player_monthly_archive(archive)
+        games.append(next_most_recent_games.reverse())
+        if len(games) >= number_to_find:
             break
-        
-        games.append(previous_archive.reverse())
-        year_to_search, month_to_search = previous_monthly_archive_date(
-            year_to_search, month_to_search)
     return games[0:number_to_find]
 
 print(get_most_recent_games_from("jeremyhorwich",10))

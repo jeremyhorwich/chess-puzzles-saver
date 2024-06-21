@@ -1,5 +1,6 @@
 from requests import get
 from models.archive import MonthlyArchiveGame
+from pydantic import HttpUrl
 
 
 def clean_extraneous_info_from(verbose_pgn: str) -> str:
@@ -16,11 +17,16 @@ def clean_extraneous_info_from(verbose_pgn: str) -> str:
     return cleaned
         
 
-def get_player_monthly_archive(player_name: str,
-                            year: str,
-                            month: str) -> list[MonthlyArchiveGame]:
-    url = "https://api.chess.com/"\
-         f"pub/player/{player_name}/games/{year}/{month}"
+def get_player_monthly_archive(archive_url: HttpUrl = None,
+                               player_name: str = None,
+                               year: str = None,
+                               month: str = None
+                               ) -> list[MonthlyArchiveGame]:
+    if archive_url:
+        url = archive_url
+    else:
+        url = "https://api.chess.com/"\
+            f"pub/player/{player_name}/games/{year}/{month}"
     user_agent_header = {"user-agent": "chess-puzzles-saver/0.0.1"}
     r = get(url, headers=user_agent_header)
     j = r.json()
