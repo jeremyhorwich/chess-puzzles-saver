@@ -30,7 +30,6 @@ def get_player_monthly_archive(archive_url: HttpUrl = None,
     user_agent_header = {"user-agent": "chess-puzzles-saver/0.0.1"}
     r = get(url, headers=user_agent_header)
     j = r.json()
+
     games = [MonthlyArchiveGame(**game) for game in j["games"]]
     return games
-
-get_player_monthly_archive("jeremyhorwich", "2024", "06")

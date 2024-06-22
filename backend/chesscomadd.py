@@ -17,11 +17,12 @@ def get_most_recent_games_from(profile: str,
     #TODO error handling - what if player has no games?
     
     games = []
-    for archive in archives:
+    for archive in reversed(archives):
         next_most_recent_games = get_player_monthly_archive(archive)
-        games.append(next_most_recent_games.reverse())
+        next_most_recent_games.reverse()
+        games.extend(next_most_recent_games)
         if len(games) >= number_to_find:
             break
     return games[0:number_to_find]
 
-print(get_most_recent_games_from("jeremyhorwich",10))
+print(get_most_recent_games_from("jeremyhorwich",2))
