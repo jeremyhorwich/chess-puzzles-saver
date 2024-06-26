@@ -2,7 +2,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 from os import getenv
 from bson import ObjectId
-from models.puzzle import Puzzle, PuzzleSet
+from models.puzzle import Puzzle, Puzzleset
 
 load_dotenv()
 mongo_user = getenv("MONGO_DB_USER")
@@ -18,7 +18,7 @@ async def get_puzzle(puzzle_id: str) -> Puzzle:
     puzzle = await db.Puzzles.find_one({"_id": o_id}, {"_id": 0})
     return puzzle
 
-async def get_puzzle_set(puzzleset_id: ObjectId) -> PuzzleSet:
+async def get_puzzle_set(puzzleset_id: ObjectId) -> Puzzleset:
     o_id = ObjectId(puzzleset_id)
     db = get_puzzleplayer_db()
     puzzleset = await db.Puzzlesets.find_one({"_id": o_id}, {"_id": 0})

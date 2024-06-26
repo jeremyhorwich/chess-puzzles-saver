@@ -9,6 +9,7 @@ class Puzzle(BaseModel):
     whitePlayer: Optional[str] = None
     blackPlayer: Optional[str] = None
 
-class PuzzleSet(BaseModel):
+
+class Puzzleset(BaseModel):
     name: str
     puzzles: list[str]

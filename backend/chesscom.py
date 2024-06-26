@@ -1,6 +1,7 @@
 from requests import get
 from models.archive import MonthlyArchiveGame
 from pydantic import HttpUrl
+from uci import generate_puzzleset
 
 
 def clean_extraneous_info_from(verbose_pgn: str) -> str:
@@ -45,7 +46,7 @@ def get_player_archives(profile: str) -> list[HttpUrl]:
 
 def get_most_recent_games_from(profile: str, 
                                number_to_find: int,
-                               **filters):
+                               **filters) -> list[MonthlyArchiveGame]:
     archives = get_player_archives(profile)
     #TODO error handling - what if player has no games?
     
@@ -56,6 +57,9 @@ def get_most_recent_games_from(profile: str,
         games.extend(next_most_recent_games)
         if len(games) >= number_to_find:
             break
+    
     return games[0:number_to_find]
 
-print(get_most_recent_games_from("jeremyhorwich",2))
+recent_games = get_most_recent_games_from("jeremyhorwich",3)
+
+print(generate_puzzleset(recent_games,5,"jeremyhorwich"))
