@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from board import get_piece_coordinates, raw_move_to_san, is_move_legal
 from dbconnect import get_puzzle_set, get_puzzle
+from chesscom import generate_player_puzzles as chesscom_generate
 
 router = APIRouter(prefix="/chess")
 
@@ -36,10 +37,13 @@ async def get_puzzleset_from_db(puzzleset_id: str):
 
 
 @router.get("/puzzles/create_puzzles_from_profile")
-async def create_puzzles_from_profile(profile_name: str, site: str):
+async def create_puzzles_from_profile(profile_name: str, 
+                                      site: str,
+                                      number_of_puzzles: int):
     if site == "chesscom":
-        pass
-    pass
+        generated = chesscom_generate(profile_name, number_of_puzzles)
+        return {"puzzles": generated}
+    return {"message": "siteNotRecognized"}
 
 def convert_array_index_to_pychess_square(array_index: int):
     return (7 - array_index // 8)*8 + (array_index % 8)
