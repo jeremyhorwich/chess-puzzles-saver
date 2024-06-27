@@ -1,17 +1,98 @@
-Minimum viable product:
+ --- Project Plan --- 
 
-From the board:
-- Enter a move, see correct move and explanation                        DONE
-- Be able to tag board after the fact (buttons: next, add tag, retry?)  DONE
+TARGET DATE - AUGUST 10
 
-From the main menu:
-- Load a new board or set of boards                                     DONE
-- Create a new board from blank or starting position
-- Generate a set based on tags
--   With options for size, difficulty rating
-- Play existing set                                                     DONE
+Week of June 27 - 29
+6.28 Frontend functionality for rerouting to page (2) on click
+6.29 API route for finding/generating user based on profile
+                                Page 1 functionality complete
 
-Extras:
+Week of June 30 - July 6
+Week of July 7 - July 13
+Week of July 14 - July 20
 
-From the board:
-- Play out position with stockfish
+                                FUNCTIONALITY END, UI DESIGN BEGIN
+
+Week of July 21 - July 27
+
+- Prettify pages (1), (2)
+
+Week of July 28 - August 3
+
+- Prettify pages (3, 4)
+
+                                FEATURE END, DEPLOYMENT BEGIN
+
+Week of August 4 - August 10
+
+- Deploy backend
+- Deploy frontend
+
+ --- Minimum viable product ---
+
+Core description - a site where users can paste in a chess site profile,
+generate puzzles off the site, and play through these puzzles.
+
+Core functionality:
+
+(1) Landing page
+    - Paste in a profile
+(2) Puzzle set selector
+    - Select puzzleset to play from a list of puzzle sets generated from
+        user
+    - OR generate new puzzles from dates
+(3) Puzzle player
+    - Play puzzles
+        - Correct or incorrect displayed
+    - Results tracked
+(4) Results page
+    - Display correct / incorrect. Link back to Puzzle set selector
+
+--- Features in depth ---
+
+Every feature needs
+
+- Backend
+- Frontend
+- UI / Prettification
+
+(1) Landing page
+
+Frontend
+    Input bar to paste in profile                                       DONE
+    Button to go                                                        DONE
+    Reroute                  
+Backend
+    Generate new "user" in DB if does not exist
+        otherwise, retrieve user information
+UI / Prettification
+
+(2) Puzzle set selector
+Frontend
+    Display generated sets in list
+    Click on puzzleset to reroute
+    Button for generating new puzzleset
+Backend
+    Generate new puzzleset and save to user in db                       PARTIAL (not saved to db yet)
+UI / Prettification
+
+(3) Puzzle player
+Frontend
+    Play puzzles                                                        PARTIAL (board features - flip and promotion)
+    Track results
+Backend
+    Retrieve puzzleset and puzzle information                           DONE
+UI / Prettification
+
+(4) Results page
+Frontend
+    Display correct / incorrect
+    Link back to puzzle set selector (cookies?)
+UI / Prettification
+
+--- Future Features ---
+
+Login - link multiple accounts together
+More filtering / options when generating puzzles
+Examine game from which puzzle was generated?
+Multiple engine options (beyond stockfish)
