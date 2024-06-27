@@ -1,32 +1,55 @@
  --- Project Plan --- 
 
-TARGET DATE - AUGUST 10
+TARGET DATE - JULY 27
 
-Week of June 27 - 29
+Week of June 27 - 29 - Finish page 1 functionality
 6.28 Frontend functionality for rerouting to page (2) on click
 6.29 API route for finding/generating user based on profile
-                                Page 1 functionality complete
 
-Week of June 30 - July 6
-Week of July 7 - July 13
-Week of July 14 - July 20
+Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
+
+6.30 Rest day / Catchup
+7.1 Display generated sets in list
+    Click on puzzleset to reroute to puzzleplayer
+7.2 Button for generating new puzzleset (w/ supporting components)
+7.3 Generate new puzzleset and save to user in db
+7.4 Flip board
+7.5 Pawn promotion (promote hover component)
+7.6 Pawn promotion (change on board)
+
+Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
+
+7.7 Rest day / Catchup
+7.8 Track puzzle playing results
+    Display correct / incorrect
+7.9 Link back to puzzle set selector (cookies?)
 
                                 FUNCTIONALITY END, UI DESIGN BEGIN
 
-Week of July 21 - July 27
+7.10 Page 1 page composition (JSX)
+     Page 1 UI
+7.11 Page 2 page composition (JSX)
+7.12 Page 2 UI
+7.13 Reevaluate project status / timelines
 
-- Prettify pages (1), (2)
+Week of July 14 - July 20
 
-Week of July 28 - August 3
-
-- Prettify pages (3, 4)
+7.14 Rest day / Catchup
+7.15 Page 3 page composition (JSX)
+7.16 Page 3 UI
+7.17 Page 4 page composition (JSX)
+7.18 Page 4 UI
+7.19 Research backend deployment options
+7.20 Research frontend deployment options
 
                                 FEATURE END, DEPLOYMENT BEGIN
 
-Week of August 4 - August 10
+Week of July 21 - July 27
 
 - Deploy backend
 - Deploy frontend
+
+                                V1 DEPLOYMENT END
 
  --- Minimum viable product ---
 
@@ -61,38 +84,46 @@ Every feature needs
 Frontend
     Input bar to paste in profile                                       DONE
     Button to go                                                        DONE
-    Reroute                  
-Backend
-    Generate new "user" in DB if does not exist
+    Reroute                                                             6.28
+Backend                                                                 
+    Generate new "user" in DB if does not exist                         6.29
         otherwise, retrieve user information
-UI / Prettification
+UI / Prettification                                                     7.10
 
 (2) Puzzle set selector
 Frontend
-    Display generated sets in list
-    Click on puzzleset to reroute
-    Button for generating new puzzleset
+    Display generated sets in list                                      7.1
+    Click on puzzleset to reroute to puzzleplayer                       7.1
+    Button for generating new puzzleset                                 7.2
 Backend
-    Generate new puzzleset and save to user in db                       PARTIAL (not saved to db yet)
-UI / Prettification
+    Generate new puzzleset and save to user in db                       PARTIAL (not saved to db yet)                   7.3
+UI / Prettification                                                     7.11-12                                         
 
 (3) Puzzle player
 Frontend
-    Play puzzles                                                        PARTIAL (board features - flip and promotion)
-    Track results
+    Play puzzles                                                        PARTIAL (board features - flip and promotion)   7.4 (flip) - 7.5-6 (promotion)
+    Track results                                                       7.8
 Backend
     Retrieve puzzleset and puzzle information                           DONE
-UI / Prettification
+UI / Prettification                                                     7.15-16
 
 (4) Results page
 Frontend
-    Display correct / incorrect
-    Link back to puzzle set selector (cookies?)
-UI / Prettification
+    Display correct / incorrect                                         7.8
+    Link back to puzzle set selector (cookies?)                         7.9
+UI / Prettification                                                     7.17-7.18
 
 --- Future Features ---
 
 Login - link multiple accounts together
 More filtering / options when generating puzzles
 Examine game from which puzzle was generated?
-Multiple engine options (beyond stockfish)
+User settings page
+    Multiple engine options (beyond stockfish)
+    Multiple attempts per puzzle?
+Replace python-chess with own logic (MAJOR SUBPROJECT)
+Robust handling of threefold definition logic
+Add date info to generated puzzles
+Manual creation of own puzzles
+Manual creation of own puzzlesets
+Better/more sophisticated puzzle generation (more than raw eval)
