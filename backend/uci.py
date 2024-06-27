@@ -35,8 +35,6 @@ def score_position(fen: str) -> int:
 
 
 def score_difference_of_best_and(actual: str, fen: str):
-    WINNING_THRESHOLD = 400
-
     white_to_move = not fen_to_fields(fen)[1]
     
     best_move = find_top_n_moves(1, fen)[0]
@@ -57,10 +55,6 @@ def score_difference_of_best_and(actual: str, fen: str):
     if not white_to_move:
         best_score, actual_score = best_score * -1, actual_score * -1
     
-    pov_is_winning = actual_score > WINNING_THRESHOLD
-    if pov_is_winning:
-        return (40000 / actual_score), best_move
-
     return (best_score - actual_score) * (100 / best_score), best_move
 
 
