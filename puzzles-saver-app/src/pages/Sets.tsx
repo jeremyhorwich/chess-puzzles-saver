@@ -1,3 +1,12 @@
+import { useLocation } from "react-router-dom"
+
 export function Sets() {
-    return <h1>placeholder4</h1>
+    const location = useLocation();
+    const { display } = location.state || {};
+        
+    if (!display) {
+        return <h1>error</h1>
+    }
+
+    return <h1>{display}</h1>
 }

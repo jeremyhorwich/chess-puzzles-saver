@@ -1,3 +1,5 @@
+import ProfileInputter from "../components/ProfileInputter"
+
 export function Landing() {
-    return <h1>placeholder1</h1>
+    return <ProfileInputter />
 }
