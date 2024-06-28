@@ -127,3 +127,4 @@ Add date info to generated puzzles
 Manual creation of own puzzles
 Manual creation of own puzzlesets
 Better/more sophisticated puzzle generation (more than raw eval)
+Support for mobile (via flexbox)
