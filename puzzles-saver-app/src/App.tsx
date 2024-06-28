@@ -1,64 +1,21 @@
-import './styles.css'
-import './components/PuzzleQuestionDisplay'
-import PuzzleQuestionDisplay from './components/PuzzleQuestionDisplay'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { Landing } from "./pages/Landing"
+import { Sets } from "./pages/Sets"
+import { PlayPuzzles } from "./pages/PlayPuzzles"
+import { Results } from "./pages/Results"
+
 
 function App() {
-  return (
-    <div className="puzzleViewer">
-      <TopBar/>
-      <Puzzle/>
-    </div>
-  )
-}
-
-function TopBar() {
-  return (
-    <div className="topbar"></div>
-  )
-}
-
-function Puzzle() {
-  return (
-    <div className="puzzle">
-      <Board/>
-      <PuzzleMeta/>
-    </div>
-  )
-}
-
-function Board() {
-  return (
-    <div className="board"></div>
-  )
-}
-
-
-function PuzzleMeta() {
-  const game1 = "1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. Nf3 d6 5. Bb5+ Bd7 6. Bc4 Bc6 7. O-O e6 8. d4"
-  let wrongs = ["wrong1","wrong2","wrong3"]
-  return (
-    <div className="puzzleMeta">
-      <Notation pgn={game1}/>
-      <PuzzleQuestionDisplay question="placeholder" correctAnswer="button" wrongAnswers={wrongs}/>
-      <OtherOptions/>
-    </div>
-  )
-}
-
-type notation = {
-  pgn: String
-}
-
-function Notation(props: notation) {
-  return (
-    <div className="notation">{props.pgn}</div>
-  )
-}
-
-function OtherOptions() {
-  return (
-    <div className="otherOptions"></div>
-  )
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Landing />}/>
+                <Route path="/sets" element={<Sets />}/>
+                <Route path="/playPuzzles" element={<PlayPuzzles />}/>
+                <Route path="/results" element={<Results />}/>
+            </Routes>
+        </Router>
+    )
 }
 
 export default App
