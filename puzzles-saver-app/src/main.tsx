@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import PuzzlesetManager from './Components/PuzzlesetManager'
-
+import PuzzlesetManager from './components/PuzzlesetManager'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

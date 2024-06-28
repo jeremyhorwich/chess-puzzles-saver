@@ -1,6 +1,6 @@
 import './styles.css'
-import './Components/PuzzleQuestionDisplay'
-import PuzzleQuestionDisplay from './Components/PuzzleQuestionDisplay'
+import './components/PuzzleQuestionDisplay'
+import PuzzleQuestionDisplay from './components/PuzzleQuestionDisplay'
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Puzzle } from "../dataTypes/puzzleTypes";
-import Chessboard from "./Chessboard"
+import Chessboard from "./Chessboard";
 import PuzzleInfo from "./PuzzleInfo"
 
 
