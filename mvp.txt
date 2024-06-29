@@ -4,7 +4,7 @@ TARGET DATE - JULY 27
 
 Week of June 27 - 29 - Finish page 1 functionality
 6.28 Frontend functionality for rerouting to page (2) on click          DONE
-6.29 API route for finding/generating user based on profile
+6.29 API route for finding/generating user based on profile             DONE
 
 Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
 
@@ -86,8 +86,8 @@ Frontend
     Button to go                                                        DONE
     Reroute                                                             DONE
 Backend                                                                 
-    Generate new "user" in DB if does not exist                         6.29
-        otherwise, retrieve user information
+    Generate new "user" in DB if does not exist                         DONE
+        otherwise, retrieve user information                            DONE
 UI / Prettification                                                     7.10
 
 (2) Puzzle set selector
