@@ -65,8 +65,4 @@ def get_recent_games_from(profile: str,
 def generate_player_puzzles(profile: str, number_to_generate: int
                             ) -> list[Puzzle]:
     recent_games = get_recent_games_from(profile, number_to_generate)
-    return generate_puzzleset(recent_games, )
-
-recent_games = get_recent_games_from("jeremyhorwich",3)
-
-print(generate_puzzleset(recent_games,5,"jeremyhorwich"))
+    return generate_puzzleset(recent_games, number_to_generate, profile)
