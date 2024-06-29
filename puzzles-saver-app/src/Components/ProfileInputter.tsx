@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom"
+import postOrGetUser from "../fetches/postOrGetUser";
 
 
 function ProfileInputter() {
@@ -12,7 +13,8 @@ function ProfileInputter() {
     }
 
     function handleSubmission() {
-        navigate("/sets", { state: { display: inputValue.current } });
+        postOrGetUser(inputValue.current)
+            .then((username) => navigate("/sets", { state: { user: username } }))
     }
 
     return (
@@ -30,4 +32,4 @@ function ProfileInputter() {
     )
 }
 
-export default ProfileInputter
+export default ProfileInputter;

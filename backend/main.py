@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import chessroutes
+from routers import userroutes
 
 app = FastAPI()
 
@@ -18,6 +19,7 @@ app.add_middleware(
 )
 
 app.include_router(chessroutes.router)
+app.include_router(userroutes.router)
 
 @app.get("/index")
 async def display_hello():
