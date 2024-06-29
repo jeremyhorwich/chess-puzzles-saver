@@ -5,7 +5,9 @@ async function postOrGetUser(profileAddress: string) {
     try {
         const response = 
             await fetch(
-                `${backendBaseURL}/users/online-profile-to-user?${queryParams}`
+                `${backendBaseURL}/users/online-profile-to-user?${queryParams}`, {
+                    method: "POST"
+                }
             );
         
         if (!response.ok) {
@@ -13,7 +15,7 @@ async function postOrGetUser(profileAddress: string) {
         }
         
         const responseJSON = await response.json();
-        return responseJSON["legal"]
+        return responseJSON["username"]
     } catch (error) {
         console.log(error);
     }

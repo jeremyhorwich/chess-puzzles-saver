@@ -30,8 +30,9 @@ async def get_puzzle_set(puzzleset_id: str) -> Puzzleset:
 
 async def post_or_get_user(username: str) -> User:
     db = get_puzzleplayer_db()
-    user = await db.Puzzles.find_one_and_update(
-        {"username": username}, 
+    user = await db.Users.find_one_and_update(
+        {"username": username},
+        {"$set": {"username": username}},
         upsert=True,
         projection={"_id": False},
         return_document=ReturnDocument.AFTER  # return the updated document

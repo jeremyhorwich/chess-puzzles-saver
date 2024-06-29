@@ -22,7 +22,7 @@ function ProfileInputter() {
             <p>Get started</p>
             <input 
                 type="text" 
-                placeholder="http://chess.com/members/yourprofile"
+                placeholder="http://chess.com/member/yourprofile"
                 onChange={handleInputChange}
                 required
             />
