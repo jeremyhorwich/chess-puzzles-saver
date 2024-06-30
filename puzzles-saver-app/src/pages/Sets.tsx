@@ -1,11 +1,13 @@
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 export function Sets() {
+    const navigate = useNavigate();
     const location = useLocation();
     const { user } = location.state || {};
-        
+    
     if (!user) {
-        return <h1>error</h1>
+        navigate("/error");
+        return null
     }
 
     return <h1>{user}</h1>

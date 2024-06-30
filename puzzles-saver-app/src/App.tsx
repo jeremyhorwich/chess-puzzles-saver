@@ -3,6 +3,7 @@ import { Landing } from "./pages/Landing"
 import { Sets } from "./pages/Sets"
 import { PlayPuzzles } from "./pages/PlayPuzzles"
 import { Results } from "./pages/Results"
+import { Error } from "./pages/Error"
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/sets" element={<Sets />}/>
                 <Route path="/playPuzzles" element={<PlayPuzzles />}/>
                 <Route path="/results" element={<Results />}/>
+                <Route path="/error" element={<Error />}/>
             </Routes>
         </Router>
     )
