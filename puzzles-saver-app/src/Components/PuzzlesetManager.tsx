@@ -16,7 +16,7 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
     });
 
     const puzzleIndex = useRef<number>(0);
-    const puzzleset = useRef<Puzzleset>({name: "", puzzles: [""]});
+    const puzzleset = useRef<Puzzleset>({name: "", date: "", puzzles: [""]});
 
     useEffect(() => {
         getPuzzleset(props.puzzlesetID)

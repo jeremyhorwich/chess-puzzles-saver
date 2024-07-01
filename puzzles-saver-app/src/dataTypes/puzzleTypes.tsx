@@ -8,9 +8,8 @@ type Puzzle = {
 }
 
 type Puzzleset = {
-    id: string,
-    date: string,
     name: string,
+    date: string,
     puzzles: Array<string>
 }
 

@@ -1,24 +1,34 @@
-import { useState } from "react";
-import PuzzlesetDataDisplay from "./PuzzlesetDataDisplay";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import PuzzlesetDataDisplay from "./PuzzlesetDataDisplay";
+import getUserPuzzlesets from "../fetches/getUserPuzzlesets";
+import { Puzzleset } from "../dataTypes/puzzleTypes";
 
 function UserSetsDisplay(props: {user: string}) {
-    const [puzzlesets, setPuzzlesets] = useState<Array<string>>([""]);
-    const navigate = useNavigate()
-    let setDisplays;
-
+    const navigate = useNavigate()  //TODO change to link
+    const [displayArray, setDisplayArray] = useState<Puzzleset[]>([])
+    
     function rerouteToPuzzlePlayer(puzzles: Array<string>) {
+        console.log(puzzles)
         navigate("/playpuzzles", { state: { puzzles: puzzles } })
     }
 
-    //useEffect that sets puzzlesets
+    useEffect(() => {
+        getUserPuzzlesets(props.user)
+            .then((sets) => {
+                setDisplayArray(sets)
+            })
+    }, [])
     
     return (
         <>
-            {puzzlesets[0] === "" ? (
+            {displayArray.length === 0 ? (
                 <div> Loading </div>
             ) : (
-                {setDisplays}
+                displayArray.map((set: Puzzleset) => (
+                    <PuzzlesetDataDisplay key={set.name} set={set} handleClick={rerouteToPuzzlePlayer} />
+                )
+            )
             )
         }
         </>
