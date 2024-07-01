@@ -39,6 +39,15 @@ async def post_or_get_user(username: str) -> User:
     )
     return user
 
+async def get_user_puzzlesets(username: str) -> User:
+    db = get_puzzleplayer_db()
+    user = await db.Users.find_one({"username": username}, {"_id": 0})
+    sets = []
+    for id in user["sets"]:
+        set = await get_puzzle_set(id)
+        sets.append(set)
+    return {"sets": sets}
+
 
 def get_puzzleplayer_db():
     client = AsyncIOMotorClient(mongo_uri)
