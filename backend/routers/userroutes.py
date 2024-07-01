@@ -12,4 +12,4 @@ async def retrieve_user_from_profile_address(url: str):
 @router.get("/{user}/sets")
 async def get_user_sets(user: str):
     sets = await get_user_puzzlesets(user)
-    return sets
+    return {"sets": sets}

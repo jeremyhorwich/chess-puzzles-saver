@@ -46,7 +46,7 @@ async def get_user_puzzlesets(username: str) -> User:
     for id in user["sets"]:
         set = await get_puzzle_set(id)
         sets.append(set)
-    return {"sets": sets}
+    return sets
 
 
 def get_puzzleplayer_db():
