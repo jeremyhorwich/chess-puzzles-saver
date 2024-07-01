@@ -9,8 +9,8 @@ Week of June 27 - 29 - Finish page 1 functionality
 Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
 
 6.30 Rest day / Catchup
-7.1 Display generated sets in list
-    Click on puzzleset to reroute to puzzleplayer
+7.1 Display generated sets in list                                      PARTIAL
+    Click on puzzleset to reroute to puzzleplayer                       DONE
 7.2 Button for generating new puzzleset (w/ supporting components)
 7.3 Generate new puzzleset and save to user in db
 7.4 Flip board
@@ -92,8 +92,8 @@ UI / Prettification                                                     7.10
 
 (2) Puzzle set selector
 Frontend
-    Display generated sets in list                                      7.1
-    Click on puzzleset to reroute to puzzleplayer                       7.1
+    Display generated sets in list                                      PARTIAL (need backend to supplement)            7.1
+    Click on puzzleset to reroute to puzzleplayer                       DONE
     Button for generating new puzzleset                                 7.2
 Backend
     Generate new puzzleset and save to user in db                       PARTIAL (not saved to db yet)                   7.3
@@ -115,7 +115,7 @@ UI / Prettification                                                     7.17-7.1
 
 --- Not accounted for in original project plan ---
 
-Error page (<1 day effort)
+Error page (<1 day effort)                                              DONE
 
 --- Future Features ---
 

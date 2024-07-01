@@ -8,6 +8,8 @@ type Puzzle = {
 }
 
 type Puzzleset = {
+    id: string,
+    date: string,
     name: string,
     puzzles: Array<string>
 }
