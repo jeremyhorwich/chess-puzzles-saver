@@ -9,9 +9,9 @@ Week of June 27 - 29 - Finish page 1 functionality
 Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
 
 6.30 Rest day / Catchup
-7.1 Display generated sets in list                                      PARTIAL
+7.1 Display generated sets in list                                      DONE
     Click on puzzleset to reroute to puzzleplayer                       DONE
-7.2 Button for generating new puzzleset (w/ supporting components)
+7.2 Button for generating new puzzleset (w/ supporting components)      DONE
 7.3 Generate new puzzleset and save to user in db
 7.4 Flip board
 7.5 Pawn promotion (promote hover component)
@@ -92,9 +92,9 @@ UI / Prettification                                                     7.10
 
 (2) Puzzle set selector
 Frontend
-    Display generated sets in list                                      PARTIAL (need backend to supplement)            7.1
+    Display generated sets in list                                      DONE
     Click on puzzleset to reroute to puzzleplayer                       DONE
-    Button for generating new puzzleset                                 7.2
+    Button for generating new puzzleset                                 DONE
 Backend
     Generate new puzzleset and save to user in db                       PARTIAL (not saved to db yet)                   7.3
 UI / Prettification                                                     7.11-12                                         
@@ -116,6 +116,8 @@ UI / Prettification                                                     7.17-7.1
 --- Not accounted for in original project plan ---
 
 Error page (<1 day effort)                                              DONE
+Figure out when to use useNavigate vs <Link> and refactor accordingly
+    (<1 day effort)
 
 --- Future Features ---
 
