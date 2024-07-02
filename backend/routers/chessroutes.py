@@ -37,11 +37,16 @@ async def get_puzzleset_from_db(puzzleset_id: str):
 
 
 @router.get("/puzzles/create_puzzles_from_profile")
-async def create_puzzles_from_profile(profile_name: str, 
+async def create_puzzles_from_profile(username: str, 
                                       site: str,
-                                      number_of_puzzles: int):
+                                      numberOfPuzzles: int):
+    #TODO ability to add multiple usernames from different sites. 
+    #Users should have an array of usernames and sites
+    #Then we get the most recent archive of all and generate comparing
+    #dates for most recent from each site. Relatively simple algorithm
+    #just need to consolidate games retrieved
     if site == "chesscom":
-        generated = chesscom_generate(profile_name, number_of_puzzles)
+        generated = chesscom_generate(username, numberOfPuzzles)
         return {"puzzles": generated}
     return {"message": "siteNotRecognized"}
 
