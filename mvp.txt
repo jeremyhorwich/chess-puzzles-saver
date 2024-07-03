@@ -12,7 +12,7 @@ Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
 7.1 Display generated sets in list                                      DONE
     Click on puzzleset to reroute to puzzleplayer                       DONE
 7.2 Button for generating new puzzleset (w/ supporting components)      DONE
-7.3 Generate new puzzleset and save to user in db
+7.3 Generate new puzzleset and save to user in db                       DONE
 7.4 Flip board
 7.5 Pawn promotion (promote hover component)
 7.6 Pawn promotion (change on board)
@@ -96,7 +96,7 @@ Frontend
     Click on puzzleset to reroute to puzzleplayer                       DONE
     Button for generating new puzzleset                                 DONE
 Backend
-    Generate new puzzleset and save to user in db                       PARTIAL (not saved to db yet)                   7.3
+    Generate new puzzleset and save to user in db                       DONE
 UI / Prettification                                                     7.11-12                                         
 
 (3) Puzzle player

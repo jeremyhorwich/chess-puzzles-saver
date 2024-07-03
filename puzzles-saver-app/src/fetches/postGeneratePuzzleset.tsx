@@ -5,7 +5,7 @@ async function postGeneratePuzzleset(username: string, site: string, numberOfPuz
     try {
         const response = 
             await fetch(
-                `${backendBaseURL}/chess/puzzles/create_puzzles_from_profile/${queryParams}`, {
+                `${backendBaseURL}/chess/puzzles/create-puzzles-from-profile/${queryParams}`, {
                     method: "POST"
                 }
             );

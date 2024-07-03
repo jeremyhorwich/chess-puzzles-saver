@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from board import get_piece_coordinates, raw_move_to_san, is_move_legal
-from dbconnect import get_puzzle_set, get_puzzle
+from dbconnect import get_puzzle_set, get_puzzle, store_new_puzzleset
 from chesscom import generate_player_puzzles as chesscom_generate
 
 router = APIRouter(prefix="/chess")
@@ -36,7 +36,7 @@ async def get_puzzleset_from_db(puzzleset_id: str):
     return puzzleset
 
 
-@router.get("/puzzles/create_puzzles_from_profile")
+@router.get("/puzzles/create-puzzles-from-profile")
 async def create_puzzles_from_profile(username: str, 
                                       site: str,
                                       numberOfPuzzles: int):
@@ -47,6 +47,7 @@ async def create_puzzles_from_profile(username: str,
     #just need to consolidate games retrieved
     if site == "chesscom":
         generated = chesscom_generate(username, numberOfPuzzles)
+        store_new_puzzleset(username, generated)
         return {"puzzles": generated}
     return {"message": "siteNotRecognized"}
 

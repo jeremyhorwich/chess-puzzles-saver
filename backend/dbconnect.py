@@ -49,6 +49,25 @@ async def get_user_puzzlesets(username: str) -> User:
     return sets
 
 
+async def store_new_puzzleset(user: str, puzzleset: Puzzleset):
+    set_id = post_puzzleset(puzzleset)
+    add_puzzleset_to_user(user, set_id)
+    pass
+
+
+async def post_puzzleset(puzzleset: Puzzleset) -> str:
+    db = get_puzzleplayer_db()
+    result = await db.Puzzlesets.insert_one(puzzleset)
+    return str(result.inserted_id)
+
+
+async def add_puzzleset_to_user(username: str, puzzleset_id: Puzzleset):
+    db = get_puzzleplayer_db()
+    await db.Users.update_one(
+        {"username": username},
+        {"$push": {"sets": puzzleset_id}})
+
+
 def get_puzzleplayer_db():
     client = AsyncIOMotorClient(mongo_uri)
     return client.PuzzlePlayer
