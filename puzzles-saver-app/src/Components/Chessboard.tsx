@@ -10,6 +10,7 @@ type ChessboardProps = {
     fen: string,
     highlightColor: string
     onMoveEnter: Function
+    flip: boolean
 }
                         
 function Chessboard(props: ChessboardProps) {
@@ -67,7 +68,9 @@ function Chessboard(props: ChessboardProps) {
         
         const clickedColumn = Math.floor((e.clientX - boardRect.left)/(chessBoardSize/8));
         const clickedRow = Math.floor((e.clientY - boardRect.top)/(chessBoardSize/8));
-        const clickedSquare = clickedColumn + (clickedRow*8);
+        let clickedSquare = clickedColumn + (clickedRow*8);
+
+        if (props.flip) clickedSquare = 63 - clickedSquare;
 
         if (isAiming.current && clickedSquare !== originSquare.current) return;
         
@@ -118,7 +121,9 @@ function Chessboard(props: ChessboardProps) {
         
         const hoveredColumn = Math.floor((e.clientX - boardRect.left)/squareSize);
         const hoveredRow = Math.floor((e.clientY - boardRect.top)/squareSize);
-        const hoveredSquare = hoveredColumn + (hoveredRow*8);
+        let hoveredSquare = hoveredColumn + (hoveredRow*8);
+
+        if (props.flip) hoveredSquare = 63 - hoveredSquare;
 
         getIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
             .then((isMoveLegal) => {
@@ -251,7 +256,7 @@ function Chessboard(props: ChessboardProps) {
         onContextMenu={(e) => e.preventDefault()}
         >
             {isDragging && dragPiece}
-            {squares}
+            {!props.flip ? squares : squares.reverse()}
         </div>
     )
 }

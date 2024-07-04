@@ -9,7 +9,8 @@ const correctAnswerHighlight = "#02b802";
 const wrongAnswerHighlight = "#ff0000";
 
 function PuzzlePlayer(props: Puzzle) {
-    const [currentHighlight, setCurrentHighlight] = useState(neutralHighlight);
+    const [currentHighlight, setCurrentHighlight] = useState<string>(neutralHighlight);
+    const [shouldFlip, setShouldFlip] = useState<boolean>(false)
     
     function onMoveEntered(move: string) {
         if (move === props.answer) {
@@ -27,7 +28,16 @@ function PuzzlePlayer(props: Puzzle) {
                 whitePlayer={props.whitePlayer}
                 blackPlayer={props.blackPlayer}
             />  
-            <Chessboard key={props.fen} fen={props.fen} highlightColor={currentHighlight} onMoveEnter={onMoveEntered}/>
+            <Chessboard 
+                key={props.fen + String(shouldFlip)} 
+                fen={props.fen} 
+                highlightColor={currentHighlight} 
+                onMoveEnter={onMoveEntered}
+                flip={shouldFlip}
+            />
+            <button onClick={() => {setShouldFlip(!shouldFlip)}}>
+                Flip
+            </button>
         </div>
     )
 }
