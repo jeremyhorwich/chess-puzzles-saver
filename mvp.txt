@@ -15,7 +15,7 @@ Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
 7.3 Generate new puzzleset and save to user in db                       DONE
 7.4 Flip board                                                          DONE
 7.5 Pawn promotion (promote hover component)
-7.6 Pawn promotion (change on board)
+7.6 Pawn promotion (change on board)                                    PARTIAL (need to add promotion to fsm)
 
 Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
 
