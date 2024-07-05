@@ -3,8 +3,7 @@ import getMoveSANFromCoords from "../fetches/getMoveSANFromCoords";
 import getIsMoveLegal from "../fetches/getIsMoveLegal";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
-
-const backendBaseURL = import.meta.env.VITE_BACKEND_BASE_URL
+import getPositionFromFEN from "../fetches/getPositionFromFEN";
 
 type ChessboardProps = {
     fen: string,
@@ -12,18 +11,26 @@ type ChessboardProps = {
     onMoveEnter: Function
     flip: boolean
 }
+
+enum ChessboardState {
+    neutral,
+    dragging,
+    aiming,
+    promoting
+}
                         
 function Chessboard(props: ChessboardProps) {
     //TODO: Highlight hover squares?
     const [dragPosition, setDragPosition] = useState({x: 0, y: 0});
     const [pieces, setPieces] = useState<Array<string|null>>(Array(64).fill(null));
-    
+
+    const boardState = useRef<ChessboardState>(ChessboardState.neutral)    
     const dragImage = useRef<string|null>(null);
     const originSquare = useRef<number|null>(null);
     const targetSquare = useRef<number|null>(null);
-    const isAiming = useRef<boolean>(false);
+    const shouldResetOnDragEnd = useRef<boolean>(false);
     
-    const isDragging = (dragImage.current !== null);
+    const isDragging = boardState.current === ChessboardState.dragging
     const chessBoardSize = 8*75;    //TODO: Find dynamically
     const darkSquaresColor = "#484848";
     const lightSquaresColor = "#ffffff";
@@ -31,106 +38,72 @@ function Chessboard(props: ChessboardProps) {
     const border = "1px solid " + borderColor;
     
     useEffect(() => {
-        async function getInitialPos() {
-            try {
-                const response = await fetch(`${backendBaseURL}/chess/utils/fen-to-pieces-coords?fen=${props.fen}`);
-                if (!response.ok) {
-                    throw Error(response.statusText);
+        getPositionFromFEN(props.fen)
+            .then((positionJSON) => {
+                const position: Array<string|null> = Array(64).fill(null);
+                for (const location in positionJSON) {
+                    const piece = pieceImages[positionJSON[location]];
+                    position[Number(location)] = piece;
                 }
-
-                const initialPosJSON = await response.json();
-                
-                const initialPos: Array<string|null> = Array(64).fill(null);
-                for (const location in initialPosJSON) {
-                    const piece = pieceImages[initialPosJSON[location]];
-                    initialPos[Number(location)] = piece;
-                }
-
-                setPieces(initialPos)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getInitialPos();
+        
+                setPieces(position)
+            })
     }, [])
 
-    
-    
-    function handleMouseDown(e: React.MouseEvent) {
-        if (e.button === 2) {   //If a right mouse click
-            resetToNeutral();
+    let handleMouseDown = (_e: React.MouseEvent) => {};
+    let handleMouseMove = (_e: React.MouseEvent) => {};
+    let handleMouseUp = (_e: React.MouseEvent) => {}; 
+
+    if (boardState.current === ChessboardState.neutral) {
+        handleMouseDown = (e: React.MouseEvent) => {
+            if (e.button !== 0) return;  //If not a left mouse click
+            
+            const clickedSquare = findInteractedSquare(e);
+            if (pieces[clickedSquare]) {
+                beginDragging(e, clickedSquare);
+            }
+            
             return;
         }
-        
-        if (e.button !== 0) return;  //If not a left mouse click
-        
-        const boardRect = e.currentTarget.getBoundingClientRect();
-        
-        const clickedColumn = Math.floor((e.clientX - boardRect.left)/(chessBoardSize/8));
-        const clickedRow = Math.floor((e.clientY - boardRect.top)/(chessBoardSize/8));
-        let clickedSquare = clickedColumn + (clickedRow*8);
-
-        if (props.flip) clickedSquare = 63 - clickedSquare;
-
-        if (isAiming.current && clickedSquare !== originSquare.current) return;
-        
-        if (pieces[clickedSquare]) {
-            beginDragging();
-            targetSquare.current = null;
-        } 
-        
-        return;
-        
-        
-        function beginDragging() {
-            originSquare.current = clickedSquare;
-            dragImage.current = pieces[clickedSquare];
-            
-            const piecesCopy = pieces.slice();
-            piecesCopy[clickedSquare] = null;
-            
-            setPieces(piecesCopy);
-            setDragPosition({x: e.clientX - 75/2, y: e.clientY - 75/2});
-        }
     }
-    
-    
-    function handleMouseMove(e: React.MouseEvent) {
-        if (!isDragging) return;
-        
-        const boardRect = e.currentTarget.getBoundingClientRect();
-        const outsideXDimensions = e.clientX < boardRect.left || e.clientX > boardRect.right;
-        const outsideYDimensions = e.clientY < boardRect.top || e.clientY > boardRect.bottom;
-        
-        if (outsideXDimensions || outsideYDimensions) { 
-            resetToNeutral();
-            return;
+
+    if (boardState.current === ChessboardState.dragging) {
+        handleMouseDown = (e: React.MouseEvent) => {
+            if (e.button === 2) {   //If a right mouse click
+                resetToNeutral();
+                return;
+            }
         }
-        
-        const pieceSize = (chessBoardSize/8);
-        setDragPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
-        return;      
-    }
-    
-    
-    function handleMouseUp(e: React.MouseEvent) { 
-        if (!isDragging && !isAiming.current) return;
-                
-        const boardRect = e.currentTarget.getBoundingClientRect();
-        const squareSize = chessBoardSize/8;
-        
-        const hoveredColumn = Math.floor((e.clientX - boardRect.left)/squareSize);
-        const hoveredRow = Math.floor((e.clientY - boardRect.top)/squareSize);
-        let hoveredSquare = hoveredColumn + (hoveredRow*8);
 
-        if (props.flip) hoveredSquare = 63 - hoveredSquare;
+        handleMouseMove = (e: React.MouseEvent) => {
+            const boardRect = e.currentTarget.getBoundingClientRect();
+            const outsideXDimensions = e.clientX < boardRect.left || e.clientX > boardRect.right;
+            const outsideYDimensions = e.clientY < boardRect.top || e.clientY > boardRect.bottom;
+            
+            if (outsideXDimensions || outsideYDimensions) { 
+                resetToNeutral();
+                return;
+            }
+            
+            const pieceSize = (chessBoardSize/8);
+            setDragPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
+            return;  
+        }
 
-        getIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
-            .then((isMoveLegal) => {
-                if (isDragging) {
+        handleMouseUp = (e: React.MouseEvent) => {
+            let hoveredSquare = findInteractedSquare(e);
+            if (shouldResetOnDragEnd.current) {
+                resetToNeutral();
+                return;
+            }
+
+            shouldResetOnDragEnd.current = false;
+
+            getIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
+                .then((isMoveLegal) => {
                     if (hoveredSquare === originSquare.current) {
-                        stopDragging();
-                        toggleAiming();
+                        undoDragStart();
+                        boardState.current = ChessboardState.aiming;
                         return;
                     }
 
@@ -139,16 +112,51 @@ function Chessboard(props: ChessboardProps) {
                         return;
                     }
                     
-                    stopDragging();                    
-                    isAiming.current = false;
+                    undoDragStart();                    
                     targetSquare.current = hoveredSquare;
-                    
+                
                     const moveSAN = getMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
                     moveSAN.then((value) => props.onMoveEnter(value))
+
+                    boardState.current = ChessboardState.neutral;
                     return;
-                }
+                })
                 
-                if (isAiming.current) {
+            function undoDragStart() {
+                const piecesCopy = pieces.slice();
+                piecesCopy[hoveredSquare] = dragImage.current;
+                
+                dragImage.current = null;
+                setPieces(piecesCopy);
+            }
+        }
+    }
+
+
+    if (boardState.current === ChessboardState.aiming) {
+        handleMouseDown = (e: React.MouseEvent) => {
+            if (e.button === 2) {   //If a right mouse click
+                resetToNeutral();
+                return;
+            }
+
+            if (e.button !== 0) return;  //If not a left mouse click
+            
+            const clickedSquare = findInteractedSquare(e);
+            if (pieces[clickedSquare]) {
+                if (clickedSquare === originSquare.current) shouldResetOnDragEnd.current = true;
+                beginDragging(e, clickedSquare);
+            }
+
+            return;
+        }
+
+        handleMouseUp = (e: React.MouseEvent) => {
+            let hoveredSquare = findInteractedSquare(e);
+            
+            
+            getIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
+                .then((isMoveLegal) => {
                     if (!isMoveLegal) {
                         resetToNeutral();
                         return;
@@ -160,7 +168,6 @@ function Chessboard(props: ChessboardProps) {
                     piecesCopy[originSquare.current as number] = null;
                     setPieces(piecesCopy);
                     
-                    isAiming.current = false;
                     targetSquare.current = hoveredSquare;
                     
                     const move = getMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
@@ -168,26 +175,22 @@ function Chessboard(props: ChessboardProps) {
                         console.log(value)
                         props.onMoveEnter(value)
                     })
-                }            
-            })
-
-        function stopDragging() {
-            const piecesCopy = pieces.slice();
-            piecesCopy[hoveredSquare] = dragImage.current;
-            
-            dragImage.current = null;
-            setPieces(piecesCopy);
-        }
-        
-        
-        function toggleAiming() {
-            isAiming.current = !isAiming.current;
-            if (!isAiming.current) {
-                originSquare.current = null;
+                    
+                    boardState.current = ChessboardState.neutral
+                })            
             }
         }
-    }
 
+    function findInteractedSquare(e: React.MouseEvent) {
+        const boardRect = e.currentTarget.getBoundingClientRect();
+        const squareSize = chessBoardSize/8;    
+    
+        const column = Math.floor((e.clientX - boardRect.left)/squareSize);
+        const row = Math.floor((e.clientY - boardRect.top)/squareSize);
+
+        if (props.flip) return 63 - column + (row*8);
+        return column + (row*8);
+    }
     
     function resetToNeutral() {
         if (dragImage.current) {
@@ -200,7 +203,21 @@ function Chessboard(props: ChessboardProps) {
         
         dragImage.current = null;
         originSquare.current = null;
-        isAiming.current = false;
+        shouldResetOnDragEnd.current = false;
+        boardState.current = ChessboardState.neutral;
+    }
+
+    
+    function beginDragging(e: React.MouseEvent, clickedSquare: number) {
+        originSquare.current = clickedSquare;
+        dragImage.current = pieces[clickedSquare];
+        
+        const piecesCopy = pieces.slice();
+        piecesCopy[clickedSquare] = null;
+        
+        setPieces(piecesCopy);
+        setDragPosition({x: e.clientX - chessBoardSize/16, y: e.clientY - chessBoardSize/16});
+        boardState.current = ChessboardState.dragging
     }
     
 
@@ -240,7 +257,7 @@ function Chessboard(props: ChessboardProps) {
     
     for (let i = 0; i < 64; i++) {
         const id = columns[i % 8] + (Math.floor(i/8) + 1)
-        if (i === originSquare.current || i === targetSquare.current) {       //Will this cause issues when we flip the board?
+        if (i === originSquare.current || i === targetSquare.current) {
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={props.highlightColor} />
         } else {
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={null} />
