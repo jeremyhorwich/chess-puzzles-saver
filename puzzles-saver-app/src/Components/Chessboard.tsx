@@ -256,7 +256,7 @@ function Chessboard(props: ChessboardProps) {
     const columns = ["a","b","c","d","e","f","g","h"]
     
     for (let i = 0; i < 64; i++) {
-        const id = columns[i % 8] + (Math.floor(i/8) + 1)
+        const id = columns[i % 8] + (Math.floor(i / 8) + 1)
         if (i === originSquare.current || i === targetSquare.current) {
             squares[i] = <Square key={id} index={i} piece={pieces[i]} highlight={props.highlightColor} />
         } else {
