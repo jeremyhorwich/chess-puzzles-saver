@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 import pieceImages from "../assets/pieceImages";
 
 type PawnPromoterProps = {
-    color: "white" | "black"
+    color: "w" | "b"
     handleClick: Function,
     style?: CSSProperties
 }
@@ -30,7 +30,7 @@ function PawnPromoter(props: PawnPromoterProps) {
     let knight = "n";
     let bishop = "b";
 
-    if (props.color === "white") {
+    if (props.color === "w") {
         queen = queen.toUpperCase();
         rook = rook.toUpperCase();
         knight = knight.toUpperCase();

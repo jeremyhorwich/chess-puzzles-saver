@@ -38,6 +38,7 @@ function Chessboard(props: ChessboardProps) {
     const lightSquaresColor = "#ffffff";
     const borderColor = (originSquare.current !== null) ? props.highlightColor : darkSquaresColor;
     const border = "1px solid " + borderColor;
+    const sideToMove: "w" | "b" = props.fen.split(" ")[1] as "w" | "b"; //TODO dragging/aiming if piece isn't from side to move
     let promotionElement: JSX.Element|null = null;
     
     useEffect(() => {
@@ -124,8 +125,8 @@ function Chessboard(props: ChessboardProps) {
                     
                     promotionCapture.current = pieces[hoveredSquare]
                     
-                    undoDragStart();                    
-                    
+                    undoDragStart();
+                                        
                     if (isMoveLegal === "promotion") {
                         boardState.current = ChessboardState.promoting;
                         return;
@@ -216,12 +217,11 @@ function Chessboard(props: ChessboardProps) {
                 return;
             }
         }
+
+        let promotionColumn = (targetSquare.current as number);
+        if (sideToMove === "b") promotionColumn = 63 - (targetSquare.current as number)
         
-        const promotionPosition = `${(targetSquare.current as number) * (chessBoardSize / 8)}px`;
-        let color: "white" | "black" = "white";
-        
-        const pawn = pieces[originSquare.current as number]
-        if (pawn === pawn?.toLowerCase()) color = "black";
+        const promotionPosition = `${promotionColumn  * (chessBoardSize / 8)}px`;
         
         function handlePromotionSubmit(promotionPiece: string) {
             const piecesCopy = pieces.slice();
@@ -233,7 +233,6 @@ function Chessboard(props: ChessboardProps) {
                                               targetSquare.current as number,
                                               promotionPiece.toLowerCase());
             move.then((value) => {
-                console.log(value)
                 props.onMoveEnter(value)
             })
 
@@ -242,7 +241,7 @@ function Chessboard(props: ChessboardProps) {
         } 
 
         promotionElement = <PawnPromoter 
-                            color={color} 
+                            color={sideToMove} 
                             handleClick={handlePromotionSubmit} 
                             style={{ position: "absolute", left: promotionPosition}} 
                             />
@@ -256,7 +255,7 @@ function Chessboard(props: ChessboardProps) {
         const column = Math.floor((e.clientX - boardRect.left)/squareSize);
         const row = Math.floor((e.clientY - boardRect.top)/squareSize);
 
-        if (props.flip) return 63 - column + (row*8);
+        if (props.flip) return 63 - (column + (row*8));
         return column + (row*8);
     }
     
