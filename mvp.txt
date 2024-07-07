@@ -14,7 +14,7 @@ Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
 7.2 Button for generating new puzzleset (w/ supporting components)      DONE
 7.3 Generate new puzzleset and save to user in db                       DONE
 7.4 Flip board                                                          DONE
-7.5 Pawn promotion (promote hover component)
+7.5 Pawn promotion (promote hover component)                            DONE
 7.6 Pawn promotion (change on board)                                    PARTIAL (need to add promotion to fsm)
 
 Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
@@ -101,7 +101,7 @@ UI / Prettification                                                     7.11-12
 
 (3) Puzzle player
 Frontend
-    Play puzzles                                                        PARTIAL (board features - flip and promotion)   7.4 (flip) - 7.5-6 (promotion)
+    Play puzzles                                                        PARTIAL (promotion) 7.6 (promotion)
     Track results                                                       7.8
 Backend
     Retrieve puzzleset and puzzle information                           DONE
