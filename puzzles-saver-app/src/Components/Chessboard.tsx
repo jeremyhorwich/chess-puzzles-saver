@@ -4,6 +4,7 @@ import getIsMoveLegal from "../fetches/getIsMoveLegal";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
 import getPositionFromFEN from "../fetches/getPositionFromFEN";
+import PawnPromoter from "./PawnPromoter";
 
 type ChessboardProps = {
     fen: string,
@@ -28,6 +29,7 @@ function Chessboard(props: ChessboardProps) {
     const dragImage = useRef<string|null>(null);
     const originSquare = useRef<number|null>(null);
     const targetSquare = useRef<number|null>(null);
+    const promotionCapture = useRef<string|null>(null);
     const shouldResetOnDragEnd = useRef<boolean>(false);
     
     const isDragging = boardState.current === ChessboardState.dragging
@@ -36,6 +38,7 @@ function Chessboard(props: ChessboardProps) {
     const lightSquaresColor = "#ffffff";
     const borderColor = (originSquare.current !== null) ? props.highlightColor : darkSquaresColor;
     const border = "1px solid " + borderColor;
+    let promotionElement: JSX.Element|null = null;
     
     useEffect(() => {
         getPositionFromFEN(props.fen)
@@ -55,6 +58,7 @@ function Chessboard(props: ChessboardProps) {
     let handleMouseUp = (_e: React.MouseEvent) => {}; 
 
     if (boardState.current === ChessboardState.neutral) {
+        promotionCapture.current = null;
         handleMouseDown = (e: React.MouseEvent) => {
             if (e.button !== 0) return;  //If not a left mouse click
             
@@ -77,8 +81,12 @@ function Chessboard(props: ChessboardProps) {
 
         handleMouseMove = (e: React.MouseEvent) => {
             const boardRect = e.currentTarget.getBoundingClientRect();
+
             const outsideXDimensions = e.clientX < boardRect.left || e.clientX > boardRect.right;
             const outsideYDimensions = e.clientY < boardRect.top || e.clientY > boardRect.bottom;
+
+            const offsetX = e.clientX - boardRect.left;
+            const offsetY = e.clientY - boardRect.top;
             
             if (outsideXDimensions || outsideYDimensions) { 
                 resetToNeutral();
@@ -86,7 +94,7 @@ function Chessboard(props: ChessboardProps) {
             }
             
             const pieceSize = (chessBoardSize/8);
-            setDragPosition({x: e.clientX - pieceSize/2, y: e.clientY - pieceSize/2});
+            setDragPosition({x: offsetX - pieceSize/2, y: offsetY - pieceSize/2});
             return;  
         }
 
@@ -98,23 +106,31 @@ function Chessboard(props: ChessboardProps) {
             }
 
             shouldResetOnDragEnd.current = false;
-
+            
+            if (hoveredSquare === originSquare.current) {
+                undoDragStart();
+                boardState.current = ChessboardState.aiming;
+                return;
+            }
+            
             getIsMoveLegal(props.fen, originSquare.current as number, hoveredSquare)
                 .then((isMoveLegal) => {
-                    if (hoveredSquare === originSquare.current) {
-                        undoDragStart();
-                        boardState.current = ChessboardState.aiming;
-                        return;
-                    }
-
                     if (!isMoveLegal) {
                         resetToNeutral();
                         return;
                     }
                     
-                    undoDragStart();                    
                     targetSquare.current = hoveredSquare;
-                
+                    
+                    promotionCapture.current = pieces[hoveredSquare]
+                    
+                    undoDragStart();                    
+                    
+                    if (isMoveLegal === "promotion") {
+                        boardState.current = ChessboardState.promoting;
+                        return;
+                    }
+
                     const moveSAN = getMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
                     moveSAN.then((value) => props.onMoveEnter(value))
 
@@ -162,6 +178,8 @@ function Chessboard(props: ChessboardProps) {
                         return;
                     }
 
+                    promotionCapture.current = pieces[hoveredSquare];
+
                     const piecesCopy = pieces.slice();
                     piecesCopy[hoveredSquare] = piecesCopy[originSquare.current as number];
         
@@ -169,6 +187,11 @@ function Chessboard(props: ChessboardProps) {
                     setPieces(piecesCopy);
                     
                     targetSquare.current = hoveredSquare;
+
+                    if (isMoveLegal === "promotion") {
+                        boardState.current = ChessboardState.promoting;
+                        return;
+                    }
                     
                     const move = getMoveSANFromCoords(props.fen, originSquare.current as number, targetSquare.current);
                     move.then((value) => {
@@ -180,6 +203,51 @@ function Chessboard(props: ChessboardProps) {
                 })            
             }
         }
+
+    if (boardState.current === ChessboardState.promoting) {
+        handleMouseDown = (e: React.MouseEvent) => {
+            if (e.button === 2) {   //If a right mouse click
+                const piecesCopy = pieces.slice();
+                piecesCopy[originSquare.current as number] = piecesCopy[targetSquare.current as number];
+                piecesCopy[targetSquare.current as number] = promotionCapture.current;
+                setPieces(piecesCopy)
+                
+                resetToNeutral();
+                return;
+            }
+        }
+        
+        const promotionPosition = `${(targetSquare.current as number) * (chessBoardSize / 8)}px`;
+        let color: "white" | "black" = "white";
+        
+        const pawn = pieces[originSquare.current as number]
+        if (pawn === pawn?.toLowerCase()) color = "black";
+        
+        function handlePromotionSubmit(promotionPiece: string) {
+            const piecesCopy = pieces.slice();
+            piecesCopy[targetSquare.current as number] = pieceImages[promotionPiece];
+            setPieces(piecesCopy);
+
+            const move = getMoveSANFromCoords(props.fen, 
+                                              originSquare.current as number, 
+                                              targetSquare.current as number,
+                                              promotionPiece.toLowerCase());
+            move.then((value) => {
+                console.log(value)
+                props.onMoveEnter(value)
+            })
+
+            //check if we have the right move - send the position + promotion
+            boardState.current = ChessboardState.neutral;
+        } 
+
+        promotionElement = <PawnPromoter 
+                            color={color} 
+                            handleClick={handlePromotionSubmit} 
+                            style={{ position: "absolute", left: promotionPosition}} 
+                            />
+        
+    }
 
     function findInteractedSquare(e: React.MouseEvent) {
         const boardRect = e.currentTarget.getBoundingClientRect();
@@ -203,6 +271,7 @@ function Chessboard(props: ChessboardProps) {
         
         dragImage.current = null;
         originSquare.current = null;
+        targetSquare.current = null;
         shouldResetOnDragEnd.current = false;
         boardState.current = ChessboardState.neutral;
     }
@@ -216,7 +285,14 @@ function Chessboard(props: ChessboardProps) {
         piecesCopy[clickedSquare] = null;
         
         setPieces(piecesCopy);
-        setDragPosition({x: e.clientX - chessBoardSize/16, y: e.clientY - chessBoardSize/16});
+
+        const boardRect = e.currentTarget.getBoundingClientRect()
+
+        const offsetX = e.clientX - boardRect.left;
+        const offsetY = e.clientY - boardRect.top;
+    
+        const pieceSize = (chessBoardSize/8);
+        setDragPosition({x: offsetX - pieceSize/2, y: offsetY - pieceSize/2});
         boardState.current = ChessboardState.dragging
     }
     
@@ -274,6 +350,7 @@ function Chessboard(props: ChessboardProps) {
         >
             {isDragging && dragPiece}
             {!props.flip ? squares : squares.reverse()}
+            {promotionElement}
         </div>
     )
 }

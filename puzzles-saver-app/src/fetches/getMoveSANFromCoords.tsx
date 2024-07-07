@@ -1,7 +1,10 @@
 const backendBaseURL = import.meta.env.VITE_BACKEND_BASE_URL
 
-async function getMoveSANFromCoords(fen: string, origin: number, target: number) {
-    const queryParams = `fen=${fen}&origin=${origin}&target=${target}`
+async function getMoveSANFromCoords(fen: string, origin: number, target: number, promotionPiece: string | null = null) {
+    let queryParams = `fen=${fen}&origin=${origin}&target=${target}`
+    if (promotionPiece) {
+        queryParams = queryParams + `&promotionPiece=${promotionPiece}`
+    }
     try {
         const response = 
             await fetch(

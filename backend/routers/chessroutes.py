@@ -11,10 +11,10 @@ async def get_coords_from(fen: str):
 
 
 @router.get("/utils/move-indices-to-san")
-async def convert_indices_to_san(fen: str, origin: int, target: int):
+async def convert_indices_to_san(fen: str, origin: int, target: int, promotionPiece: str=None):
     back_origin = convert_array_index_to_pychess_square(origin)
     back_target = convert_array_index_to_pychess_square(target)
-    return {"san": raw_move_to_san(fen, back_origin, back_target)}
+    return {"san": raw_move_to_san(fen, back_origin, back_target, promotionPiece)}
 
 
 @router.get("/utils/is-move-legal")

@@ -1,6 +1,7 @@
 
 .chessboard {
-    display: inline-grid; 
+    display: inline-grid;
+    position: relative;
     grid-template-columns: repeat(8,75px);
     grid-template-rows: repeat(8, 75px);
 }
