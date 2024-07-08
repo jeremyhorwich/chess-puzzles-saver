@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Puzzle, Puzzleset } from "../dataTypes/puzzleTypes"; 
 import { PuzzlePlayer } from "./PuzzlePlayer";
 import getPuzzleset from "../fetches/getPuzzleset";
@@ -17,6 +18,8 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
 
     const puzzleIndex = useRef<number>(0);
     const puzzleset = useRef<Puzzleset>({name: "", date: "", puzzles: [""]});
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         getPuzzleset(props.puzzlesetID)
@@ -37,8 +40,8 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
     return (
         <div>
             <PuzzlePlayer key={currentPuzzleObject.fen} {...currentPuzzleObject}/>
-            {puzzleIndex.current > 0 && <button onClick={() => handleClick(-1)}>Button 1</button>}
-            {puzzleIndex.current < puzzleset.current.puzzles.length - 1 && <button onClick={() => handleClick(1)}>Button 2</button>}
+            {puzzleIndex.current < puzzleset.current.puzzles.length - 1 && <button onClick={() => handleClick(1)}>Next</button>}
+            {!(puzzleIndex.current < puzzleset.current.puzzles.length - 1) && <button onClick={() => navigate(-1)}> Return</button>}
         </div>
     )
 }

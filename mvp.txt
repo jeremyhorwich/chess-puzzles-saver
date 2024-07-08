@@ -20,9 +20,9 @@ Week of June 30 - July 6 - Finish page 2 functionality, cont page 3
 Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
 
 7.7 Rest day / Catchup
-7.8 Track puzzle playing results
-    Display correct / incorrect
-7.9 Link back to puzzle set selector (cookies?)
+7.8 Track puzzle playing results                                        N/A
+    Display correct / incorrect                                         N/A
+7.9 Link back to puzzle set selector (cookies?)                         DONE
 
                                 FUNCTIONALITY END, UI DESIGN BEGIN
 
@@ -102,15 +102,15 @@ UI / Prettification                                                     7.11-12
 (3) Puzzle player
 Frontend
     Play puzzles                                                        DONE
-    Track results                                                       7.8
+    Track results                                                       N/A
 Backend
     Retrieve puzzleset and puzzle information                           DONE
 UI / Prettification                                                     7.15-16
 
 (4) Results page
 Frontend
-    Display correct / incorrect                                         7.8
-    Link back to puzzle set selector (cookies?)                         7.9
+    Display correct / incorrect                                         N/A
+    Link back to puzzle set selector (cookies?)                         DONE
 UI / Prettification                                                     7.17-7.18
 
 --- Not accounted for in original project plan ---
