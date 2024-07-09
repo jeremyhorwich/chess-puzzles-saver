@@ -26,8 +26,8 @@ Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
 
                                 FUNCTIONALITY END, UI DESIGN BEGIN
 
-7.10 Page 1 page composition (JSX)
-     Page 1 UI
+7.10 Page 1 page composition (JSX)                                      DONE
+     Page 1 UI                                                          DONE
 7.11 Page 2 page composition (JSX)
 7.12 Page 2 UI
 7.13 Reevaluate project status / timelines
@@ -88,7 +88,7 @@ Frontend
 Backend                                                                 
     Generate new "user" in DB if does not exist                         DONE
         otherwise, retrieve user information                            DONE
-UI / Prettification                                                     7.10
+UI / Prettification                                                     DONE
 
 (2) Puzzle set selector
 Frontend
