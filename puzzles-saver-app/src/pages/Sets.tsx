@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom"
-import UserSetsDisplay from "../components/UserSetsDisplay";
+import UserSetsDisplay from "../Components/UserSetsDisplay";
 
 export function Sets() {
     const navigate = useNavigate();

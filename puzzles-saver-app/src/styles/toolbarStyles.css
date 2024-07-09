@@ -1,0 +1,17 @@
+.toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+  
+.centered-text {
+    font-size: 18px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+}
+
+.link-text {
+    text-decoration: none;
+    color: inherit;
+}

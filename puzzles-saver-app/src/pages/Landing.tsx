@@ -1,5 +1,13 @@
-import ProfileInputter from "../components/ProfileInputter"
+import ProfileInputter from "../Components/ProfileInputter"
+import Toolbar from "../Components/Toolbar"
 
-export function Landing() {
-    return <ProfileInputter />
+function Landing() {
+    return (
+        <div>
+            <Toolbar />
+            <ProfileInputter />
+        </div>
+    )
 }
+
+export default Landing;

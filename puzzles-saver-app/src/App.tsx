@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { Landing } from "./pages/Landing"
+import Landing from "./pages/Landing"
 import { Sets } from "./pages/Sets"
 import { PlayPuzzles } from "./pages/PlayPuzzles"
 import { Results } from "./pages/Results"

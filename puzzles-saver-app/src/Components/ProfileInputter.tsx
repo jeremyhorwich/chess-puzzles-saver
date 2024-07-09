@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom"
 import postOrGetUser from "../fetches/postOrGetUser";
+import "../styles/profileInputterStyles.css";
 
 
 function ProfileInputter() {
@@ -18,16 +19,22 @@ function ProfileInputter() {
     }
 
     return (
-        <div>
-            <p>Get started</p>
-            <input 
-                type="text" 
-                placeholder="http://chess.com/member/yourprofile"
-                onChange={handleInputChange}
-                required
-            />
-            <button onClick={handleSubmission}>Go!</button>
-            
+        <div className="container">
+            <div>
+                <span className="display-text">Get started</span>
+                <div className="input-wrapper">
+                    <input
+                        type="text"
+                        className="input-field"
+                        placeholder="http://chess.com/member/yourprofile"
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <button className="submit-button" onClick={handleSubmission}>
+                        Go!
+                    </button>
+                </div>            
+            </div>
         </div>
     )
 }
