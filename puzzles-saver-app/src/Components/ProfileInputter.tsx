@@ -19,22 +19,20 @@ function ProfileInputter() {
     }
 
     return (
-        <div className="container">
-            <div>
-                <span className="display-text">Get started</span>
-                <div className="input-wrapper">
-                    <input
-                        type="text"
-                        className="input-field"
-                        placeholder="http://chess.com/member/yourprofile"
-                        onChange={handleInputChange}
-                        required
-                    />
-                    <button className="submit-button" onClick={handleSubmission}>
-                        Go!
-                    </button>
-                </div>            
-            </div>
+        <div>
+            <span className="display-text">Get started</span>
+            <div className="input-wrapper">
+                <input
+                    type="text"
+                    className="input-field"
+                    placeholder="http://chess.com/member/yourprofile"
+                    onChange={handleInputChange}
+                    required
+                />
+                <button className="submit-button" onClick={handleSubmission}>
+                    Go!
+                </button>
+            </div>            
         </div>
     )
 }
