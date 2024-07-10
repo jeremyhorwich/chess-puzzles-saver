@@ -4,7 +4,7 @@ import postOrGetUser from "../fetches/postOrGetUser";
 import "../styles/profileInputterStyles.css";
 
 
-function ProfileInputter() {
+function ProfileInput() {
     const inputValue = useRef<string>("")
 
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ function ProfileInputter() {
                     className="input-field"
                     placeholder="http://chess.com/member/yourprofile"
                     onChange={handleInputChange}
+                    title="Copy and paste your profile address"
                     required
                 />
                 <button className="submit-button" onClick={handleSubmission}>
@@ -37,4 +38,4 @@ function ProfileInputter() {
     )
 }
 
-export default ProfileInputter;
+export default ProfileInput;
