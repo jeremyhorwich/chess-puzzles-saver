@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import UserSetsDisplay from "../components/UserSetsDisplay";
 import Toolbar from "../components/Toolbar";
+import '../styles/centering.css';
 
 export function Sets() {
     const navigate = useNavigate();
@@ -15,7 +16,9 @@ export function Sets() {
     return (
         <div>
             <Toolbar />
-            <UserSetsDisplay user="jeremyhorwich" />
+            <div className="centered">
+                <UserSetsDisplay user="jeremyhorwich" />
+            </div>
         </div>
 
     )

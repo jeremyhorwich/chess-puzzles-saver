@@ -1,4 +1,6 @@
 import postGeneratePuzzleset from "../fetches/postGeneratePuzzleset"
+import '../styles/generatePuzzlesetButtonStyles.css';
+
 
 type GeneratePuzzlesetButtonProps = {
     user: string,
@@ -8,8 +10,12 @@ type GeneratePuzzlesetButtonProps = {
 
 function GeneratePuzzlesetButton(props: GeneratePuzzlesetButtonProps) {
     return (
-        <button onSubmit={() => postGeneratePuzzleset(props.user, props.site, props.numberOfPuzzles)}>
-            Generate
+        <button 
+            onSubmit={() => 
+            postGeneratePuzzleset(props.user, props.site, props.numberOfPuzzles)}
+            className="button"
+        >
+            Generate new set
         </button>
     )
 }

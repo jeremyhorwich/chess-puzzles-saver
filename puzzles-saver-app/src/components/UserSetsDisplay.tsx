@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PuzzlesetDataDisplay from "./PuzzlesetDataDisplay";
 import getUserPuzzlesets from "../fetches/getUserPuzzlesets";
 import { Puzzleset } from "../dataTypes/puzzleTypes";
 import GeneratePuzzlesetButton from "./GeneratePuzzlesetButton";
+import '../styles/userSetsDisplayStyles.css';
+
 
 function UserSetsDisplay(props: {user: string}) {
     const navigate = useNavigate()  //TODO change to link
@@ -24,21 +25,31 @@ function UserSetsDisplay(props: {user: string}) {
     return (
         <>
             {displayArray.length === 0 ? (
-                <div> Loading </div>
+                <span className="span-text">Finding sets...</span>
             ) : (
-                <div>
-                    <span>{props.user}</span>
-                    <GeneratePuzzlesetButton user={props.user} site="chesscom" numberOfPuzzles={50} />
-                    <span>date name number of puzzles</span>
-                    {
-                        displayArray.map((set: Puzzleset) => (
-                            <PuzzlesetDataDisplay key={set.name} set={set} handleClick={rerouteToPuzzlePlayer} />
-                        ))
-                    }
+                <div className="user-sets-container">
+                    <div className="table-header">
+                        <span>{props.user}</span>
+                        <GeneratePuzzlesetButton user={props.user} site="chesscom" numberOfPuzzles={50} />
+                    </div>
+                    <div className="user-sets-table">
+                        <div className="table-row header">
+                            <span>Date</span>
+                            <span>Name</span>
+                            <span>Number of Puzzles</span>
+                        </div>
+                        {displayArray.map((set: Puzzleset) => (
+                            <div className="table-row" onClick={() => rerouteToPuzzlePlayer(set.puzzles)}>
+                                <span> {set.date} </span>
+                                <span> {set.name} </span>
+                                <span> {set.puzzles.length} </span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
         </>
-    )
+    );
 }
 
 export default UserSetsDisplay;

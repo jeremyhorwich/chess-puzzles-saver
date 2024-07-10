@@ -1,0 +1,15 @@
+.button {
+    background-color: transparent;
+    border: 1px solid #484848;
+    color: #000;
+    padding: 2px 6px;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+.button:hover {
+    color: #fff;
+    background-color: #484848;
+    border-color: #484848;
+}
