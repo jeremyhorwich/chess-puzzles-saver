@@ -1,20 +1,12 @@
-import { CSSProperties } from "react";
 import ProfileInput from "../components/ProfileInput"
 import Toolbar from "../components/Toolbar"
-
-const centeringStyles: CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "calc(90vh - 50px)"
-};
+import '../styles/centering.css';
 
 function Landing() {
     return (
         <div>
             <Toolbar />
-            <div style={centeringStyles}>
+            <div className="centered">
                 <ProfileInput /> 
             </div>
         </div>
