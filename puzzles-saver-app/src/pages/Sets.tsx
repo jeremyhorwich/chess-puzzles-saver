@@ -1,17 +1,22 @@
 import { useLocation, useNavigate } from "react-router-dom"
-import UserSetsDisplay from "../Components/UserSetsDisplay";
+import UserSetsDisplay from "../components/UserSetsDisplay";
+import Toolbar from "../components/Toolbar";
 
 export function Sets() {
     const navigate = useNavigate();
     const location = useLocation();
-    // const { user } = location.state || {};
+    const { user } = location.state || {};
     
-    // if (!user) {
-    //     navigate("/error");
-    //     return null
-    // }
+    if (!user) {
+        navigate("/error");
+        return null
+    }
 
     return (
-        <UserSetsDisplay user="jeremyhorwich" />
+        <div>
+            <Toolbar />
+            <UserSetsDisplay user="jeremyhorwich" />
+        </div>
+
     )
 }

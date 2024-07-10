@@ -8,7 +8,7 @@ type PuzzlesetDataDisplayProps = {
 function PuzzlesetDataDisplay(props: PuzzlesetDataDisplayProps) {
     return (
         <div onClick={() => props.handleClick(props.set.puzzles)}>
-                {props.set.name}           {props.set.date}
+                {props.set.date} {props.set.name} {props.set.puzzles.length}
         </div>
     )
 }

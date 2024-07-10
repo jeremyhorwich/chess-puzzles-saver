@@ -1,4 +1,4 @@
- --- Project Plan --- 
+--- Project Plan --- 
 
 TARGET DATE - JULY 27
 
@@ -28,7 +28,7 @@ Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
 
 7.10 Page 1 page composition (JSX)                                      DONE
      Page 1 UI                                                          DONE
-7.11 Page 2 page composition (JSX)
+7.11 Page 2 page composition (JSX)                                      DONE
 7.12 Page 2 UI
 7.13 Reevaluate project status / timelines
 
@@ -37,8 +37,8 @@ Week of July 14 - July 20
 7.14 Rest day / Catchup
 7.15 Page 3 page composition (JSX)
 7.16 Page 3 UI
-7.17 Page 4 page composition (JSX)
-7.18 Page 4 UI
+7.17 Page 4 page composition (JSX)                                      N/A
+7.18 Page 4 UI                                                          N/A
 7.19 Research backend deployment options
 7.20 Research frontend deployment options
 
@@ -51,7 +51,7 @@ Week of July 21 - July 27
 
                                 V1 DEPLOYMENT END
 
- --- Minimum viable product ---
+--- Minimum viable product ---
 
 Core description - a site where users can paste in a chess site profile,
 generate puzzles off the site, and play through these puzzles.
@@ -111,7 +111,7 @@ UI / Prettification                                                     7.15-16
 Frontend
     Display correct / incorrect                                         N/A
     Link back to puzzle set selector (cookies?)                         DONE
-UI / Prettification                                                     7.17-7.18
+UI / Prettification                                                     N/A
 
 --- Not accounted for in original project plan ---
 
@@ -134,3 +134,4 @@ Manual creation of own puzzles
 Manual creation of own puzzlesets
 Better/more sophisticated puzzle generation (more than raw eval)
 Support for mobile (via flexbox)
+Demo pictures on landing page

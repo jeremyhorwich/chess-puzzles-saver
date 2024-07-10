@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PuzzlesetDataDisplay from "./PuzzlesetDataDisplay";
 import getUserPuzzlesets from "../fetches/getUserPuzzlesets";
 import { Puzzleset } from "../dataTypes/puzzleTypes";
+import GeneratePuzzlesetButton from "./GeneratePuzzlesetButton";
 
 function UserSetsDisplay(props: {user: string}) {
     const navigate = useNavigate()  //TODO change to link
@@ -25,12 +26,17 @@ function UserSetsDisplay(props: {user: string}) {
             {displayArray.length === 0 ? (
                 <div> Loading </div>
             ) : (
-                displayArray.map((set: Puzzleset) => (
-                    <PuzzlesetDataDisplay key={set.name} set={set} handleClick={rerouteToPuzzlePlayer} />
-                )
-            )
-            )
-        }
+                <div>
+                    <span>{props.user}</span>
+                    <GeneratePuzzlesetButton user={props.user} site="chesscom" numberOfPuzzles={50} />
+                    <span>date name number of puzzles</span>
+                    {
+                        displayArray.map((set: Puzzleset) => (
+                            <PuzzlesetDataDisplay key={set.name} set={set} handleClick={rerouteToPuzzlePlayer} />
+                        ))
+                    }
+                </div>
+            )}
         </>
     )
 }
