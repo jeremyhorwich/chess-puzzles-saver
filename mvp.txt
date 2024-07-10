@@ -29,8 +29,8 @@ Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
 7.10 Page 1 page composition (JSX)                                      DONE
      Page 1 UI                                                          DONE
 7.11 Page 2 page composition (JSX)                                      DONE
-7.12 Page 2 UI
-7.13 Reevaluate project status / timelines
+7.12 Page 2 UI                                                          DONE
+7.13 Reevaluate project status / timelines                              DONE
 
 Week of July 14 - July 20
 
