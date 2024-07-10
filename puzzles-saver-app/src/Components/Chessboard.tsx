@@ -21,7 +21,6 @@ enum ChessboardState {
 }
                         
 function Chessboard(props: ChessboardProps) {
-    //TODO: Highlight hover squares?
     const [dragPosition, setDragPosition] = useState({x: 0, y: 0});
     const [pieces, setPieces] = useState<Array<string|null>>(Array(64).fill(null));
 
