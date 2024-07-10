@@ -341,11 +341,11 @@ function Chessboard(props: ChessboardProps) {
     
     return (
         <div 
-        className="chessboard" style={{ border }} 
-        onMouseMove={handleMouseMove} 
-        onMouseUp={(e) => handleMouseUp(e)}
-        onMouseDown={(e) => handleMouseDown(e)}
-        onContextMenu={(e) => e.preventDefault()}
+            className="chessboard" style={{ border }} 
+            onMouseMove={handleMouseMove} 
+            onMouseUp={(e) => handleMouseUp(e)}
+            onMouseDown={(e) => handleMouseDown(e)}
+            onContextMenu={(e) => e.preventDefault()}
         >
             {isDragging && dragPiece}
             {!props.flip ? squares : squares.reverse()}
