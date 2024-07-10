@@ -97,7 +97,7 @@ Frontend
     Button for generating new puzzleset                                 DONE
 Backend
     Generate new puzzleset and save to user in db                       DONE
-UI / Prettification                                                     7.11-12                                         
+UI / Prettification                                                     DONE                                         
 
 (3) Puzzle player
 Frontend
