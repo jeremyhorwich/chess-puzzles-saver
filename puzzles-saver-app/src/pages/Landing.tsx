@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
-import ProfileInputter from "../Components/ProfileInputter"
-import Toolbar from "../Components/Toolbar"
+import ProfileInput from "../components/ProfileInput"
+import Toolbar from "../components/Toolbar"
 
 const centeringStyles: CSSProperties = {
     display: "flex",
@@ -15,7 +15,7 @@ function Landing() {
         <div>
             <Toolbar />
             <div style={centeringStyles}>
-                <ProfileInputter /> 
+                <ProfileInput /> 
             </div>
         </div>
     )
