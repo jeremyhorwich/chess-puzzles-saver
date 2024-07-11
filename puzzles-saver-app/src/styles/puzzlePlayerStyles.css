@@ -1,0 +1,20 @@
+.display-text {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.top-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.chessboard-wrapper {
+    width: 600px;
+    /* TODO find dynamically (likely with custom hook) */
+}

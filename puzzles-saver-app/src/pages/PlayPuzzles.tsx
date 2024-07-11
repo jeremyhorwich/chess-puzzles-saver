@@ -1,4 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
+import Toolbar from "../Components/Toolbar";
+import PuzzlesetManager from "../Components/PuzzlesetManager";
+import '../styles/centering.css';
 
 export function PlayPuzzles() {
     const location = useLocation();
@@ -10,5 +13,12 @@ export function PlayPuzzles() {
         return null
     }
 
-    return <h1>placeholder2</h1>
+    return (
+        <div>
+            <Toolbar />
+            <div className="centered">
+                <PuzzlesetManager puzzlesetID={puzzles}/>
+            </div>
+        </div>
+    )
 }

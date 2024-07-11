@@ -35,7 +35,7 @@ Week of July 7 - July 13 - Finish page 3, page 4 functionality, start UI
 Week of July 14 - July 20
 
 7.14 Rest day / Catchup
-7.15 Page 3 page composition (JSX)
+7.15 Page 3 page composition (JSX)                                      DONE
 7.16 Page 3 UI
 7.17 Page 4 page composition (JSX)                                      N/A
 7.18 Page 4 UI                                                          N/A
