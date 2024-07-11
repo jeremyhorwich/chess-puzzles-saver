@@ -1,5 +1,5 @@
-import ProfileInput from "../components/ProfileInput"
-import Toolbar from "../components/Toolbar"
+import ProfileInput from "../Components/ProfileInput"
+import Toolbar from "../Components/Toolbar"
 import '../styles/centering.css';
 
 function Landing() {

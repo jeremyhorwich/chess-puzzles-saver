@@ -1,0 +1,30 @@
+.chessboard-wrapper {
+    width: 600px;
+    /* TODO find dynamically (likely with custom hook) */
+}
+
+.next-button {
+    width: 50px;
+    height: 20px;
+    border: 1px solid transparent;
+    display: flex;
+    justify-content: center;
+}
+
+.next-button:hover {
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+.return-button {
+    border: 1px solid #484848;
+    display: flex;
+    justify-content: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.return-button:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #484848;
+}

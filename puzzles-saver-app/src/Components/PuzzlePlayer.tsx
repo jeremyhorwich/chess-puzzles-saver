@@ -6,7 +6,7 @@ import '../styles/puzzlePlayerStyles.css';
 
 const neutralHighlight = "#cccc95";
 const correctAnswerHighlight = "#63c963";
-const wrongAnswerHighlight = "#ff0000";
+const wrongAnswerHighlight = "#f71e1e";
 
 function PuzzlePlayer(props: Puzzle) {
     const [currentHighlight, setCurrentHighlight] = useState<string>(neutralHighlight);
@@ -28,8 +28,8 @@ function PuzzlePlayer(props: Puzzle) {
         <div className="chessboard-wrapper">
             <div className="title">{titleDisplay}</div>
             <div className="top-info">
-                <span className="span-text">{shouldFlip ? whitePlayerDisplay : blackPlayerDisplay}</span>
-                <button className="flip-button" onClick={() => { setShouldFlip(!shouldFlip) }}>{flipIcon}</button>
+                <span>{shouldFlip ? whitePlayerDisplay : blackPlayerDisplay}</span>
+                <img className="flip-button" src={flipIcon} onClick={() => { setShouldFlip(!shouldFlip) }} />
             </div>
             <Chessboard
                 key={props.fen + String(shouldFlip)}

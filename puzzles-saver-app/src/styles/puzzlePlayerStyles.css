@@ -12,9 +12,21 @@
     display: flex;
     justify-content: space-between;
     font-family: 'Courier New', Courier, monospace;
+    align-items: flex-end;
 }
 
 .chessboard-wrapper {
     width: 600px;
     /* TODO find dynamically (likely with custom hook) */
+}
+
+.flip-button {
+    width: 20px;
+    height: 20px;
+    border: 1px solid transparent;
+}
+
+.flip-button:hover {
+    cursor: pointer;
+    border: 1px solid black;
 }

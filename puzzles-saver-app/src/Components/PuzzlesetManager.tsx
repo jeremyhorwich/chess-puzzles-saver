@@ -4,6 +4,8 @@ import { Puzzle, Puzzleset } from "../dataTypes/puzzleTypes";
 import { PuzzlePlayer } from "./PuzzlePlayer";
 import getPuzzleset from "../fetches/getPuzzleset";
 import getPuzzle from "../fetches/getPuzzle";
+import rightArrow from "../assets/right-arrow.svg"
+import "../styles/puzzlePlayerStyles.css";
 
 const startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -38,10 +40,18 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
     }
 
     return (
-        <div>
+        <div className="chessboard-wrapper">
             <PuzzlePlayer key={currentPuzzleObject.fen} {...currentPuzzleObject}/>
-            {puzzleIndex.current < puzzleset.current.puzzles.length - 1 && <button onClick={() => handleClick(1)}>Next</button>}
-            {!(puzzleIndex.current < puzzleset.current.puzzles.length - 1) && <button onClick={() => navigate(-1)}> Return</button>}
+            {puzzleIndex.current < puzzleset.current.puzzles.length - 1 && 
+                <img 
+                    className="next-button"
+                    src={rightArrow} 
+                    onClick={() => handleClick(1)} />}
+            {!(puzzleIndex.current < puzzleset.current.puzzles.length - 1) && 
+                <button 
+                    className="return-button"
+                    onClick={() => navigate(-1)}> Return to User Sets 
+                </button>}
         </div>
     )
 }
