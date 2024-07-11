@@ -105,7 +105,7 @@ Frontend
     Track results                                                       N/A
 Backend
     Retrieve puzzleset and puzzle information                           DONE
-UI / Prettification                                                     7.15-16
+UI / Prettification                                                     DONE
 
 (4) Results page
 Frontend
