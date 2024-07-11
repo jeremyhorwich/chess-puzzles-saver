@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Puzzle } from "../dataTypes/puzzleTypes";
 import Chessboard from "./Chessboard";
+import flipIcon from '../assets/flipboard.svg'
 import '../styles/puzzlePlayerStyles.css';
 
 const neutralHighlight = "#cccc95";
@@ -12,7 +13,7 @@ function PuzzlePlayer(props: Puzzle) {
     const [shouldFlip, setShouldFlip] = useState<boolean>(false)
     const whitePlayerDisplay = props.whitePlayer || "Unknown Player"
     const blackPlayerDisplay = props.blackPlayer || "Unknown Player"
-    const dateDisplay = props.date ? "Date played: " + props.date : null
+    const dateDisplay = props.date ? "From a game on: " + props.date : null
     const titleDisplay = props.title || dateDisplay || "Custom Puzzle";
 
     function onMoveEntered(move: string) {
@@ -28,7 +29,7 @@ function PuzzlePlayer(props: Puzzle) {
             <div className="title">{titleDisplay}</div>
             <div className="top-info">
                 <span className="span-text">{shouldFlip ? whitePlayerDisplay : blackPlayerDisplay}</span>
-                <button className="flip-button" onClick={() => { setShouldFlip(!shouldFlip) }}>Flip</button>
+                <button className="flip-button" onClick={() => { setShouldFlip(!shouldFlip) }}>{flipIcon}</button>
             </div>
             <Chessboard
                 key={props.fen + String(shouldFlip)}
