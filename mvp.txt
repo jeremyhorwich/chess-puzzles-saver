@@ -39,14 +39,14 @@ Week of July 14 - July 20
 7.16 Page 3 UI                                                          DONE
 7.17 Page 4 page composition (JSX)                                      N/A
 7.18 Page 4 UI                                                          N/A
-7.19 Research backend deployment options
-7.20 Research frontend deployment options
+7.19 Research backend deployment options                                DONE
+7.20 Research frontend deployment options                               DONE
 
                                 FEATURE END, DEPLOYMENT BEGIN
 
 Week of July 21 - July 27
 
-- Deploy backend
+- Deploy backend                                                        PARTIAL (Must upload stockfish and configure environment variables)
 - Deploy frontend
 
                                 V1 DEPLOYMENT END
