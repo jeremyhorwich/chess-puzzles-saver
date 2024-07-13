@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom"
-import Toolbar from "../Components/Toolbar";
-import PuzzlesetManager from "../Components/PuzzlesetManager";
+import Toolbar from "../temp_components/Toolbar";
+import PuzzlesetManager from "../temp_components/PuzzlesetManager";
 import '../styles/centering.css';
 
 export function PlayPuzzles() {

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom"
-import UserSetsDisplay from "../Components/UserSetsDisplay";
-import Toolbar from "../Components/Toolbar";
+import UserSetsDisplay from "../temp_components/UserSetsDisplay";
+import Toolbar from "../temp_components/Toolbar";
 import '../styles/centering.css';
 
 export function Sets() {
