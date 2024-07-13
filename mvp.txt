@@ -46,7 +46,7 @@ Week of July 14 - July 20
 
 Week of July 21 - July 27
 
-- Deploy backend                                                        PARTIAL (Must upload stockfish and configure environment variables)
+- Deploy backend                                                        DONE
 - Deploy frontend
 
                                 V1 DEPLOYMENT END
@@ -116,7 +116,7 @@ UI / Prettification                                                     N/A
 --- Not accounted for in original project plan ---
 
 Error page (<1 day effort)                                              DONE
-Figure out when to use useNavigate vs <Link> and refactor accordingly
+Figure out when to use useNavigate vs <Link> and refactor accordingly   DONE
     (<1 day effort)
 
 --- Future Features ---
