@@ -47,7 +47,7 @@ Week of July 14 - July 20
 Week of July 21 - July 27
 
 - Deploy backend                                                        DONE
-- Deploy frontend
+- Deploy frontend                                                       DONE
 
                                 V1 DEPLOYMENT END
 
