@@ -7,7 +7,9 @@ app = FastAPI()
 
 origins = [
     "http://127.0.0.1:8000",
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "https://chess-puzzles-saver-frontend.onrender.com",
+    "https://chess-puzzles-saver.onrender.com"
 ]
 
 app.add_middleware(
