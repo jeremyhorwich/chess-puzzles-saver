@@ -4,7 +4,7 @@ import getIsMoveLegal from "../fetches/getIsMoveLegal";
 import "../styles/chessBoardStyles.css";
 import pieceImages from "../assets/pieceImages";
 import getPositionFromFEN from "../fetches/getPositionFromFEN";
-import PawnPromoter from "../Components/PawnPromoter";
+import PawnPromoter from "./PawnPromoter";
 
 type ChessboardProps = {
     fen: string,
