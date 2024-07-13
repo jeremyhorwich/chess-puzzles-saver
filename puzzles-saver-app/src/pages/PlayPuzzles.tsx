@@ -17,7 +17,7 @@ export function PlayPuzzles() {
         <div>
             <Toolbar />
             <div className="centered">
-                <PuzzlesetManager puzzlesetID={puzzles}/>
+                <PuzzlesetManager puzzleIDs={puzzles}/>
             </div>
         </div>
     )
