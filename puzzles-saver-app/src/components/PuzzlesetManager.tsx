@@ -42,16 +42,18 @@ function PuzzlesetManager(props: PuzzleSetManagerProps) {
     return (
         <div className="chessboard-wrapper">
             <PuzzlePlayer key={currentPuzzleObject.fen} {...currentPuzzleObject}/>
-            {puzzleIndex.current < puzzleset.current.puzzles.length - 1 && 
-                <img 
-                    className="next-button"
-                    src={rightArrow} 
-                    onClick={() => handleClick(1)} />}
-            {!(puzzleIndex.current < puzzleset.current.puzzles.length - 1) && 
-                <button 
-                    className="return-button"
-                    onClick={() => navigate(-1)}> Return to User Sets 
-                </button>}
+            <div className="button-center">
+                {puzzleIndex.current < puzzleset.current.puzzles.length - 1 && 
+                    <img 
+                        className="next-button"
+                        src={rightArrow} 
+                        onClick={() => handleClick(1)} />}
+                {!(puzzleIndex.current < puzzleset.current.puzzles.length - 1) && 
+                    <button 
+                        className="return-button"
+                        onClick={() => navigate(-1)}> Return to User Sets 
+                    </button>}
+            </div>
         </div>
     )
 }

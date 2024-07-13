@@ -16,11 +16,15 @@
     border: 1px solid black;
 }
 
-.return-button {
-    border: 1px solid #484848;
+.button-center {
     display: flex;
     justify-content: center;
+}
+
+.return-button {
+    border: 1px solid #484848;
     font-family: 'Courier New', Courier, monospace;
+    background-color: transparent;
 }
 
 .return-button:hover {
