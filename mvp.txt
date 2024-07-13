@@ -51,6 +51,8 @@ Week of July 21 - July 27
 
                                 V1 DEPLOYMENT END
 
+VERSION 0.1 FINISHED
+
 --- Minimum viable product ---
 
 Core description - a site where users can paste in a chess site profile,
