@@ -11,7 +11,6 @@ function UserSetsDisplay(props: {user: string}) {
     const [displayArray, setDisplayArray] = useState<Puzzleset[]>([])
     
     function rerouteToPuzzlePlayer(puzzles: Array<string>) {
-        console.log(puzzles)
         navigate("/playpuzzles", { state: { puzzles: puzzles } })
     }
 
@@ -39,7 +38,7 @@ function UserSetsDisplay(props: {user: string}) {
                             <span>Number of Puzzles</span>
                         </div>
                         {displayArray.map((set: Puzzleset) => (
-                            <div className="table-row" onClick={() => rerouteToPuzzlePlayer(set.puzzles)}>
+                            <div key={set.name} className="table-row" onClick={() => rerouteToPuzzlePlayer(set.puzzles)}>
                                 <span> {set.date} </span>
                                 <span> {set.name} </span>
                                 <span> {set.puzzles.length} </span>
