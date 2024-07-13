@@ -5,7 +5,7 @@ export default PGNViewer;
 
 //TODO: constant out the highlight and selection colors
 
-function PGNViewer(props: {PGN: string}) {
+function PGNViewer() {
     const testMoves = [
         "d4", "Nc6", "ef", "e6", "Nf3", "Nf6", "Bd3", "d5", "e5", "Nd7",
         "O-O", "b6", "Bg5", "f6", "exf6", "gxf6", "Bh4", "Qe7", "Re1", "Bb7",
