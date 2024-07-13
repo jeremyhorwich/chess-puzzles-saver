@@ -5,7 +5,7 @@ import { PuzzlePlayer } from "./PuzzlePlayer";
 import getPuzzleset from "../fetches/getPuzzleset";
 import getPuzzle from "../fetches/getPuzzle";
 import rightArrow from "../assets/right-arrow.svg"
-import "../styles/puzzlePlayerStyles.css";
+import "../styles/puzzlesetManagerStyles.css";
 
 const startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -15,7 +15,7 @@ type PuzzleSetManagerProps = {
 
 function PuzzlesetManager(props: PuzzleSetManagerProps) {
     const [currentPuzzleObject, setCurrentPuzzleObject] = useState<Puzzle>({
-        fen: startingPosition, answer: "", title: "Loading Puzzle"
+        fen: startingPosition, answer: "", title: ""
     });
 
     const puzzleIndex = useRef<number>(0);
